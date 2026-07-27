@@ -6,9 +6,9 @@ export const GUEST_STORAGE_KEY = '@open-mat/guest-demo-session';
 export const COACH_GUEST_STORAGE_KEY = '@open-mat/coach-guest-demo-session';
 
 export const GUEST_USER: AuthUser = {
-  id: 'guest-demo-user',
-  email: 'guest@openmat.demo',
-  fullName: 'Demo Athlete',
+  id: 'member-1',
+  email: 'alex@openmat.demo',
+  fullName: 'Alex Chen',
   role: 'member',
 };
 

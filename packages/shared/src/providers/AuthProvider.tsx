@@ -19,6 +19,10 @@ import {
   writeGuestFlag,
 } from '../auth';
 import {
+  createDemoSession,
+  findDemoAccount,
+} from '../demo/accounts';
+import {
   getSession,
   onAuthStateChange,
   resetPasswordForEmail,
@@ -147,6 +151,23 @@ export function AuthProvider({
 
   const signIn = useCallback(async (credentials: AuthCredentials) => {
     await clearGuestMode();
+
+    const demo = findDemoAccount(credentials.email, credentials.password, appRole);
+    if (demo) {
+      setUser(demo.user);
+      setSession(createDemoSession(demo.user.id));
+      setStatus('authenticated');
+      return;
+    }
+
+    if (!isConfigured) {
+      throw new Error(
+        appRole === 'coach'
+          ? 'Use coach@openmat.demo / demo1234 or Continue as Coach Guest.'
+          : 'Use alex@openmat.demo / demo1234 or Continue as Guest.',
+      );
+    }
+
     const result = await signInWithEmail(credentials);
     setSession(result.session);
     setUser(
@@ -155,7 +176,7 @@ export function AuthProvider({
         : result.user,
     );
     setStatus('authenticated');
-  }, [appRole, clearGuestMode]);
+  }, [appRole, clearGuestMode, isConfigured]);
 
   const signUp = useCallback(
     async (payload: RegisterPayload) => {

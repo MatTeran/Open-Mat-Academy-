@@ -5,6 +5,8 @@ import { StyleSheet, View } from 'react-native';
 import {
   Banner,
   Button,
+  DEMO_HINT_COACH,
+  DEMO_PASSWORD,
   Input,
   Screen,
   Spacer,
@@ -18,9 +20,9 @@ import type { AuthStackParamList } from '../../navigation/types';
 type Props = NativeStackScreenProps<AuthStackParamList, 'Login'>;
 
 export function LoginScreen(_props: Props) {
-  const { signIn, continueAsGuest, isConfigured } = useAuth();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const { signIn, continueAsGuest } = useAuth();
+  const [email, setEmail] = useState('coach@openmat.demo');
+  const [password, setPassword] = useState(DEMO_PASSWORD);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [guestLoading, setGuestLoading] = useState(false);
@@ -53,7 +55,7 @@ export function LoginScreen(_props: Props) {
     <Screen scroll keyboard>
       <View style={styles.hero}>
         <Text variant="brand" gold>
-          DARK MAT
+          OPEN MAT
         </Text>
         <Text variant="hero">Coach</Text>
         <Text variant="body" muted>
@@ -63,15 +65,11 @@ export function LoginScreen(_props: Props) {
 
       <Spacer size="xl" />
 
-      {!isConfigured ? (
-        <>
-          <Banner
-            tone="info"
-            message="Supabase is not configured. Continue as guest to explore Phase 1."
-          />
-          <Spacer size="md" />
-        </>
-      ) : null}
+      <Banner
+        tone="info"
+        message="Friend demo ready — Coach Rivera is prefilled. Owner: owner@openmat.demo / demo1234."
+      />
+      <Spacer size="md" />
 
       {error ? (
         <>
@@ -86,7 +84,7 @@ export function LoginScreen(_props: Props) {
         keyboardType="email-address"
         value={email}
         onChangeText={setEmail}
-        placeholder="coach@openmat.com"
+        placeholder="coach@openmat.demo"
       />
       <Spacer size="md" />
       <Input
@@ -94,7 +92,7 @@ export function LoginScreen(_props: Props) {
         secureTextEntry
         value={password}
         onChangeText={setPassword}
-        placeholder="••••••••"
+        placeholder="demo1234"
       />
       <Spacer size="lg" />
       <Button
@@ -110,6 +108,10 @@ export function LoginScreen(_props: Props) {
         loading={guestLoading}
         onPress={onGuest}
       />
+      <Spacer size="xs" />
+      <Text variant="caption" muted style={styles.hint}>
+        {DEMO_HINT_COACH}
+      </Text>
     </Screen>
   );
 }
@@ -118,5 +120,8 @@ const styles = StyleSheet.create({
   hero: {
     marginTop: spacing.xl,
     gap: spacing.sm,
+  },
+  hint: {
+    textAlign: 'center',
   },
 });

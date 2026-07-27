@@ -15,6 +15,7 @@ import {
   readGuestFlag,
   writeGuestFlag,
 } from '../auth/guest';
+import { createDemoSession, findDemoAccount } from '../demo/accounts';
 import {
   getSession,
   onAuthStateChange,
@@ -139,12 +140,27 @@ export function AuthProvider({ children }: PropsWithChildren) {
   const signIn = useCallback(
     async (credentials: AuthCredentials) => {
       await clearGuestMode();
+
+      const demo = findDemoAccount(credentials.email, credentials.password);
+      if (demo) {
+        setUser(demo.user);
+        setSession(createDemoSession(demo.user.id));
+        setStatus('authenticated');
+        return;
+      }
+
+      if (!isConfigured) {
+        throw new Error(
+          'Use a demo account (alex@openmat.demo / demo1234) or Continue as Guest.',
+        );
+      }
+
       const result = await signInWithEmail(credentials);
       setSession(result.session);
       setUser(result.user);
       setStatus('authenticated');
     },
-    [clearGuestMode],
+    [clearGuestMode, isConfigured],
   );
 
   const signUp = useCallback(

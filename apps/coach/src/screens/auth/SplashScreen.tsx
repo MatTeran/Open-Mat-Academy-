@@ -39,7 +39,7 @@ export function SplashScreen({ navigation }: Props) {
           resizeMode="contain"
         />
         <Text variant="brand" gold>
-          DARK MAT
+          OPEN MAT
         </Text>
         <Text variant="caption" muted>
           Coach

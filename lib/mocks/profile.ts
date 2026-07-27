@@ -11,8 +11,8 @@ export const DEFAULT_ATHLETE_HUB: AthleteHub = {
   membership: {
     plan: 'unlimited',
     status: 'active',
-    academyName: 'Open Mat · Tracy',
-    memberSince: '2024-03-01T00:00:00.000Z',
+    academyName: 'Open Mat Academy',
+    memberSince: '2023-04-12T00:00:00.000Z',
     renewsOn: '2026-08-01T00:00:00.000Z',
     priceLabel: '$179 / month',
   },
@@ -36,13 +36,13 @@ export const DEFAULT_ATHLETE_HUB: AthleteHub = {
       id: 'att-1',
       date: '2026-07-24T18:30:00.000Z',
       classTitle: 'Advanced Gi',
-      instructor: 'Coach Mat',
+      instructor: 'Coach Rivera',
     },
     {
       id: 'att-2',
       date: '2026-07-22T19:00:00.000Z',
       classTitle: 'Fundamentals',
-      instructor: 'Coach Ana',
+      instructor: 'Coach Silva',
     },
     {
       id: 'att-3',
@@ -54,13 +54,13 @@ export const DEFAULT_ATHLETE_HUB: AthleteHub = {
       id: 'att-4',
       date: '2026-07-19T10:00:00.000Z',
       classTitle: 'Competition Class',
-      instructor: 'Coach Mat',
+      instructor: 'Coach Rivera',
     },
     {
       id: 'att-5',
       date: '2026-07-17T18:30:00.000Z',
       classTitle: 'No-Gi Intermediate',
-      instructor: 'Coach Luis',
+      instructor: 'Coach Mendes',
     },
   ],
   notifications: {
@@ -78,7 +78,7 @@ export const DEFAULT_ATHLETE_HUB: AthleteHub = {
   familyMembers: [
     {
       id: 'fam-1',
-      fullName: 'Mia Teran',
+      fullName: 'Mia Chen',
       relationship: 'Daughter',
       belt: 'white',
       stripes: 3,
@@ -86,7 +86,7 @@ export const DEFAULT_ATHLETE_HUB: AthleteHub = {
     },
     {
       id: 'fam-2',
-      fullName: 'Sofia Teran',
+      fullName: 'Jamie Chen',
       relationship: 'Spouse',
       belt: 'white',
       stripes: 1,

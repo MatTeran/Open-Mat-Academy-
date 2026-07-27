@@ -15,7 +15,8 @@
     "./services/auth": "./src/services/supabase/auth.ts",
     "./services/mobile": "./src/services/supabase/mobile.ts",
     "./providers": "./src/providers/index.ts",
-    "./hooks": "./src/hooks/index.ts"
+    "./hooks": "./src/hooks/index.ts",
+    "./demo": "./src/demo/index.ts"
   },
   "peerDependencies": {
     "@expo/vector-icons": "*",

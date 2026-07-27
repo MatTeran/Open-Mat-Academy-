@@ -4,10 +4,11 @@ import type { AuthSession, AuthUser } from '../../types';
 
 export const GUEST_STORAGE_KEY = '@open-mat/guest-demo-session';
 
+/** Guest explores as Alex Chen — same athlete shown in the Coach roster. */
 export const GUEST_USER: AuthUser = {
-  id: 'guest-demo-user',
-  email: 'guest@openmat.demo',
-  fullName: 'Demo Athlete',
+  id: 'member-1',
+  email: 'alex@openmat.demo',
+  fullName: 'Alex Chen',
 };
 
 export function createGuestSession(): AuthSession {

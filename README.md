@@ -48,6 +48,10 @@ docs/                 Architecture notes
 - `npm run typecheck:all` — Member + Coach + Coach Web TypeScript
 - `npm run test:coach-web` — Coach Web unit tests
 
+## Friend demo
+
+See [DEMO.md](./DEMO.md) for sample users, walkthrough tips, and Expo Go QR codes.
+
 ## Getting started
 
 ```bash
