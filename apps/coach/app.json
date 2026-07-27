@@ -1,0 +1,45 @@
+{
+  "expo": {
+    "name": "Open Mat Coach",
+    "slug": "open-mat-coach",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "scheme": "openmat-coach",
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#070D18"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.openmat.coach"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#070D18",
+        "foregroundImage": "./assets/adaptive-icon.png"
+      },
+      "package": "com.openmat.coach"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro"
+    },
+    "plugins": [
+      "expo-font",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#070D18",
+          "image": "./assets/splash-icon.png",
+          "imageWidth": 200
+        }
+      ]
+    ],
+    "experiments": {
+      "autolinkingModuleResolution": true
+    }
+  }
+}

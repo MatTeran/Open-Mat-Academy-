@@ -1,0 +1,111 @@
+import type { ClassLevel, Weekday } from '@openmat/shared';
+
+export const WEEKDAYS: { key: Weekday; label: string; short: string }[] = [
+  { key: 'mon', label: 'Monday', short: 'Mon' },
+  { key: 'tue', label: 'Tuesday', short: 'Tue' },
+  { key: 'wed', label: 'Wednesday', short: 'Wed' },
+  { key: 'thu', label: 'Thursday', short: 'Thu' },
+  { key: 'fri', label: 'Friday', short: 'Fri' },
+  { key: 'sat', label: 'Saturday', short: 'Sat' },
+  { key: 'sun', label: 'Sunday', short: 'Sun' },
+];
+
+export type CoachScheduleFilter =
+  | 'all'
+  | 'kids'
+  | 'fundamentals'
+  | 'advanced'
+  | 'competition'
+  | 'open_mat'
+  | 'seminar';
+
+export const SCHEDULE_FILTERS: { key: CoachScheduleFilter; label: string }[] = [
+  { key: 'all', label: 'All' },
+  { key: 'kids', label: 'Kids' },
+  { key: 'fundamentals', label: 'Fundamentals' },
+  { key: 'advanced', label: 'Advanced' },
+  { key: 'competition', label: 'Competition' },
+  { key: 'open_mat', label: 'Open Mat' },
+  { key: 'seminar', label: 'Seminar' },
+];
+
+export const CLASS_LEVEL_LABELS: Record<ClassLevel, string> = {
+  kids: 'Kids',
+  fundamentals: 'Fundamentals',
+  advanced: 'Advanced',
+  competition: 'Competition',
+  open_mat: 'Open Mat',
+  seminar: 'Seminar',
+};
+
+const WEEKDAY_BY_JS_DAY: Weekday[] = [
+  'sun',
+  'mon',
+  'tue',
+  'wed',
+  'thu',
+  'fri',
+  'sat',
+];
+
+export function getWeekdayFromDate(date: Date): Weekday {
+  return WEEKDAY_BY_JS_DAY[date.getDay()] ?? 'mon';
+}
+
+export function getWeekdayLabel(day: Weekday): string {
+  return WEEKDAYS.find((item) => item.key === day)?.label ?? day;
+}
+
+export function toISODate(date: Date): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+/** Dates for the week containing `anchor` (Mon–Sun). */
+export function getWeekDates(anchor = new Date()): Record<Weekday, Date> {
+  const date = new Date(anchor);
+  date.setHours(12, 0, 0, 0);
+  const jsDay = date.getDay();
+  const mondayOffset = jsDay === 0 ? -6 : 1 - jsDay;
+
+  const monday = new Date(date);
+  monday.setDate(date.getDate() + mondayOffset);
+
+  return WEEKDAYS.reduce(
+    (acc, day, index) => {
+      const value = new Date(monday);
+      value.setDate(monday.getDate() + index);
+      acc[day.key] = value;
+      return acc;
+    },
+    {} as Record<Weekday, Date>,
+  );
+}
+
+function parseTimeToMinutes(time: string): number {
+  const [hours, minutes] = time.split(':').map(Number);
+  return hours * 60 + minutes;
+}
+
+export function formatClock(time: string): string {
+  const [hourRaw, minuteRaw] = time.split(':').map(Number);
+  const period = hourRaw >= 12 ? 'PM' : 'AM';
+  const hour12 = hourRaw % 12 || 12;
+  return `${hour12}:${String(minuteRaw).padStart(2, '0')} ${period}`;
+}
+
+export function formatTimeRange(startTime: string, endTime: string): string {
+  return `${formatClock(startTime)} – ${formatClock(endTime)}`;
+}
+
+export function formatGiType(giType: 'gi' | 'no_gi'): string {
+  return giType === 'gi' ? 'Gi' : 'No-Gi';
+}
+
+export function sortByStartTime<T extends { startTime: string }>(items: T[]): T[] {
+  return [...items].sort(
+    (a, b) => parseTimeToMinutes(a.startTime) - parseTimeToMinutes(b.startTime),
+  );
+}

@@ -1,0 +1,162 @@
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useState } from 'react';
+import { StyleSheet, View } from 'react-native';
+
+import { AuthScreen, Banner, Button, Input, Spacer, Text } from '../../components';
+import { useAuth } from '../../hooks';
+import { APP_NAME } from '../../lib/constants';
+import { spacing } from '../../lib/theme';
+import type { AuthStackParamList } from '../../types';
+import { getAuthErrorMessage, getEmailError, getPasswordError } from '../../utils';
+
+type Props = NativeStackScreenProps<AuthStackParamList, 'Login'>;
+
+export function LoginScreen({ navigation }: Props) {
+  const { signIn, continueAsGuest, isConfigured } = useAuth();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [guestLoading, setGuestLoading] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
+
+  const emailError = submitted ? getEmailError(email) : null;
+  const passwordError = submitted ? getPasswordError(password) : null;
+  const busy = loading || guestLoading;
+
+  const handleLogin = async () => {
+    setSubmitted(true);
+    setFormError(null);
+
+    const nextEmailError = getEmailError(email);
+    const nextPasswordError = getPasswordError(password);
+    if (nextEmailError || nextPasswordError) {
+      return;
+    }
+
+    if (!isConfigured) {
+      setFormError(
+        'Supabase is not configured. Add EXPO_PUBLIC_SUPABASE_URL and EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY to .env, or continue as guest.',
+      );
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await signIn({ email, password });
+    } catch (error) {
+      setFormError(getAuthErrorMessage(error));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGuest = async () => {
+    setFormError(null);
+    setGuestLoading(true);
+    try {
+      await continueAsGuest();
+    } catch (error) {
+      setFormError(getAuthErrorMessage(error));
+    } finally {
+      setGuestLoading(false);
+    }
+  };
+
+  return (
+    <AuthScreen
+      title={APP_NAME.toUpperCase()}
+      subtitle="Sign in to your academy."
+      brand
+      footer={
+        <View>
+          <Button label="Sign In" loading={loading} disabled={busy} onPress={handleLogin} />
+          <Spacer size="sm" />
+          <Button
+            label="Continue as Guest"
+            variant="secondary"
+            loading={guestLoading}
+            disabled={busy}
+            onPress={() => {
+              void handleGuest();
+            }}
+            accessibilityHint="Opens Open Mat in demo mode without an account"
+          />
+          <Spacer size="xs" />
+          <Text variant="caption" style={styles.guestHint}>
+            Demo only — explores the app with sample data.
+          </Text>
+          <Spacer size="sm" />
+          <Button
+            label="Forgot password?"
+            variant="ghost"
+            disabled={busy}
+            onPress={() => navigation.navigate('ForgotPassword')}
+          />
+          <Button
+            label="Create account"
+            variant="ghost"
+            disabled={busy}
+            onPress={() => navigation.navigate('Register')}
+          />
+        </View>
+      }
+    >
+      {!isConfigured ? (
+        <>
+          <Banner
+            tone="info"
+            message="Connect Supabase via .env for live auth, or continue as guest for a demo."
+          />
+          <Spacer size="md" />
+        </>
+      ) : null}
+
+      {formError ? (
+        <>
+          <Banner message={formError} />
+          <Spacer size="md" />
+        </>
+      ) : null}
+
+      <View style={styles.form}>
+        <Input
+          label="Email"
+          autoCapitalize="none"
+          autoComplete="email"
+          keyboardType="email-address"
+          textContentType="emailAddress"
+          value={email}
+          onChangeText={setEmail}
+          error={emailError}
+          placeholder="you@email.com"
+          editable={!busy}
+          returnKeyType="next"
+        />
+        <Spacer size="md" />
+        <Input
+          label="Password"
+          secureTextEntry
+          autoComplete="password"
+          textContentType="password"
+          value={password}
+          onChangeText={setPassword}
+          error={passwordError}
+          placeholder="••••••••"
+          editable={!busy}
+          returnKeyType="done"
+          onSubmitEditing={handleLogin}
+        />
+      </View>
+    </AuthScreen>
+  );
+}
+
+const styles = StyleSheet.create({
+  form: {
+    marginBottom: spacing.md,
+  },
+  guestHint: {
+    textAlign: 'center',
+  },
+});
