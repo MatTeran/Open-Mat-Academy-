@@ -47,7 +47,18 @@ export function formatClock(time: string): string {
 }
 
 export function formatGiType(giType: GiType): string {
-  return giType === 'gi' ? 'Gi' : 'No-Gi';
+  switch (giType) {
+    case 'gi':
+      return 'Gi';
+    case 'no_gi':
+      return 'No-Gi';
+    case 'both':
+      return 'Gi / No-Gi';
+    case 'none':
+      return '—';
+    default:
+      return giType;
+  }
 }
 
 export function getClassesForDay(
@@ -136,7 +147,10 @@ export function toNextClassCardModel(now = new Date()): NextClass | null {
     title: next.classItem.title,
     coach: next.classItem.instructor,
     startsAt: next.startsAt.toISOString(),
-    room: `${formatGiType(next.classItem.giType)} · Tracy`,
+    room:
+      next.classItem.giType === 'none'
+        ? 'Tracy'
+        : `${formatGiType(next.classItem.giType)} · Tracy`,
     durationMinutes: durationMinutes(
       next.classItem.startTime,
       next.classItem.endTime,
@@ -146,10 +160,15 @@ export function toNextClassCardModel(now = new Date()): NextClass | null {
 
 export function isClassLevel(value: string): value is ClassLevel {
   return (
-    value === 'kids' ||
-    value === 'fundamentals' ||
-    value === 'advanced' ||
-    value === 'competition' ||
+    value === 'adult_bjj' ||
+    value === 'youth_bjj' ||
+    value === 'pee_wee' ||
+    value === 'womens_bjj' ||
+    value === 'boxing' ||
+    value === 'muay_thai' ||
+    value === 'wrestling' ||
+    value === 'peak_performance' ||
+    value === 'taekwondo' ||
     value === 'open_mat'
   );
 }

@@ -10,7 +10,6 @@ import {
   Text,
   WeeklyCalendar,
 } from '../../components';
-import { APP_NAME } from '../../lib/constants';
 import { spacing } from '../../lib/theme';
 import type { ScheduleFilter, Weekday } from '../../types/schedule';
 import {
@@ -54,7 +53,11 @@ export function ScheduleScreen() {
       <Text variant="hero">Schedule</Text>
       <Spacer size="sm" />
       <Text variant="bodyMuted">
-        {APP_NAME} · Tracy, California
+        Open Mat Academy · Tracy, California
+      </Text>
+      <Spacer size="xxs" />
+      <Text variant="caption">
+        3200 Naglee Rd, STE #106 · (209) 752-8013
       </Text>
 
       <Spacer size="lg" />

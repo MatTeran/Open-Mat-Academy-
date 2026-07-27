@@ -7,14 +7,21 @@ export type Weekday =
   | 'sat'
   | 'sun';
 
-export type GiType = 'gi' | 'no_gi';
+export type GiType = 'gi' | 'no_gi' | 'both' | 'none';
 
-/** Filterable class tracks on the Schedule screen */
+/**
+ * Filterable class tracks matching the Open Mat Academy board.
+ */
 export type ClassLevel =
-  | 'kids'
-  | 'fundamentals'
-  | 'advanced'
-  | 'competition'
+  | 'adult_bjj'
+  | 'youth_bjj'
+  | 'pee_wee'
+  | 'womens_bjj'
+  | 'boxing'
+  | 'muay_thai'
+  | 'wrestling'
+  | 'peak_performance'
+  | 'taekwondo'
   | 'open_mat';
 
 export type ScheduleFilter = ClassLevel | 'all';
@@ -29,4 +36,6 @@ export interface ScheduleClass {
   giType: GiType;
   level: ClassLevel;
   spotsLeft?: number;
+  /** Optional flyer note (e.g. Band App roll call). */
+  note?: string;
 }
