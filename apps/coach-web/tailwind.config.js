@@ -4,14 +4,14 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        ink: '#070D18',
-        surface: '#101C2E',
-        elevated: '#172538',
-        gold: '#2DD4BF',
-        'gold-bright': '#5EEAD4',
-        'gold-pressed': '#14B8A6',
+        ink: '#000000',
+        surface: '#141414',
+        elevated: '#1A1A1A',
+        gold: '#FFFFFF',
+        'gold-bright': '#F5F5F5',
+        'gold-pressed': '#D4D4D4',
         mute: '#A8A8A8',
-        line: '#243447',
+        line: '#2A2A2A',
       },
       fontFamily: {
         display: ['var(--font-syne)', 'system-ui', 'sans-serif'],

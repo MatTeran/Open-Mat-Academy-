@@ -43,14 +43,14 @@ const LINKS: Array<{
     title: 'Command Center',
     subtitle: 'Mission control · what needs attention now',
     icon: 'pulse-outline',
-    tint: '#5EEAD4',
+    tint: '#F5F5F5',
     onPress: (navigation) => navigation.navigate('CommandCenter'),
   },
   {
     title: 'Announcements',
     subtitle: 'Draft, schedule, and publish',
     icon: 'megaphone-outline',
-    tint: '#5EEAD4',
+    tint: '#F5F5F5',
     onPress: (navigation) => navigation.navigate('Announcements'),
   },
   {
@@ -68,7 +68,7 @@ const LINKS: Array<{
     title: 'Class Management',
     subtitle: 'Schedule and roster tools',
     icon: 'calendar-outline',
-    tint: '#2DD4BF',
+    tint: '#FFFFFF',
     onPress: (navigation) =>
       (navigation.navigate as (name: string) => void)('Schedule'),
   },
@@ -98,7 +98,7 @@ const LINKS: Array<{
     title: 'Achievements',
     subtitle: 'Badge catalog and awards',
     icon: 'ribbon-outline',
-    tint: '#2DD4BF',
+    tint: '#FFFFFF',
     onPress: (navigation) => navigation.navigate('Achievements'),
   },
   {

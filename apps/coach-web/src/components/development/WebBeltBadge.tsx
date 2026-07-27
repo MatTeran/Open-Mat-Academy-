@@ -4,7 +4,7 @@ const BELT_COLORS: Record<
 > = {
   white: {
     fill: '#F2F2F0',
-    stripe: '#101C2E',
+    stripe: '#141414',
     border: 'rgba(212,175,55,0.55)',
     label: '#FFFFFF',
   },
@@ -30,7 +30,7 @@ const BELT_COLORS: Record<
     fill: '#0E0E0E',
     stripe: '#F4F4F4',
     border: 'rgba(212,175,55,0.75)',
-    label: '#5EEAD4',
+    label: '#F5F5F5',
   },
 };
 

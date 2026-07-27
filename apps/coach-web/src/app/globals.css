@@ -4,14 +4,14 @@
 
 :root {
   color-scheme: dark;
-  --ink: #070D18;
-  --surface: #101C2E;
-  --elevated: #172538;
-  --gold: #2dd4bf;
-  --gold-bright: #5eead4;
+  --ink: #000000;
+  --surface: #141414;
+  --elevated: #1A1A1A;
+  --gold: #ffffff;
+  --gold-bright: #f5f5f5;
   --text: #ffffff;
   --mute: #a8a8a8;
-  --line: #243447;
+  --line: #2A2A2A;
 }
 
 html,
@@ -31,5 +31,5 @@ body {
 }
 
 ::selection {
-  background: rgba(45, 212, 191, 0.35);
+  background: rgba(255, 255, 255, 0.35);
 }

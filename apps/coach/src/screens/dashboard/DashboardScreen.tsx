@@ -145,7 +145,7 @@ export function DashboardScreen({ navigation }: Props) {
     >
       <FadeInHero>
         <LinearGradient
-          colors={['#172538', '#101C2E', '#070D18']}
+          colors={['#1A1A1A', '#141414', '#000000']}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={[styles.hero, { borderColor: colors.border }]}

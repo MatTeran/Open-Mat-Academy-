@@ -65,7 +65,7 @@ export function JourneyMemberScreen({ route }: Props) {
       <Spacer size="lg" />
       <Card elevated>
         <View style={styles.row}>
-          <IconBadge name={'ribbon-outline' as IconName} tint="#2DD4BF" />
+          <IconBadge name={'ribbon-outline' as IconName} tint="#FFFFFF" />
           <View style={styles.copy}>
             <Text variant="subtitle">Level {member.level}</Text>
             <Text variant="title">{member.totalXP.toLocaleString()} XP</Text>
@@ -122,7 +122,7 @@ export function JourneyMemberScreen({ route }: Props) {
         <MiniMetric
           label="Best"
           value={`${member.bestStreak} days`}
-          tint="#2DD4BF"
+          tint="#FFFFFF"
           icon="medal-outline"
         />
       </View>
@@ -169,14 +169,14 @@ export function JourneyMemberScreen({ route }: Props) {
             <FadeInItem key={achievement.id} index={index}>
               <Card elevated>
                 <View style={styles.row}>
-                  <IconBadge name={'star-outline' as IconName} tint="#2DD4BF" />
+                  <IconBadge name={'star-outline' as IconName} tint="#FFFFFF" />
                   <View style={styles.copy}>
                     <Text variant="subtitle">{achievement.title}</Text>
                     <Text variant="caption" muted>
                       Earned {achievement.earnedAt}
                     </Text>
                   </View>
-                  <StatusPill label="earned" color="#2DD4BF" />
+                  <StatusPill label="earned" color="#FFFFFF" />
                 </View>
               </Card>
             </FadeInItem>

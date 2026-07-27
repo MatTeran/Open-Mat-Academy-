@@ -77,7 +77,7 @@ export function MemberDetailScreen({ navigation, route }: Props) {
           <Spacer size="xs" />
           <StatusPill
             label={`${profile.belt} · ${profile.stripes} stripes`}
-            color="#2DD4BF"
+            color="#FFFFFF"
           />
         </View>
       </View>
@@ -240,7 +240,7 @@ const styles = StyleSheet.create({
     borderRadius: 36,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgba(45, 212, 191, 0.16)',
+    backgroundColor: 'rgba(255, 255, 255, 0.14)',
   },
   headerCopy: {
     flex: 1,

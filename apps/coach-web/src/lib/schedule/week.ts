@@ -91,7 +91,7 @@ export const SCHEDULE_FILTERS: Array<{
 }> = [
   { key: 'fundamentals', label: 'Fundamentals', color: '#38BDF8' },
   { key: 'advanced', label: 'Advanced', color: '#F59E0B' },
-  { key: 'gi', label: 'Gi', color: '#2DD4BF' },
+  { key: 'gi', label: 'Gi', color: '#FFFFFF' },
   { key: 'no_gi', label: 'No-Gi', color: '#A78BFA' },
   { key: 'kids', label: 'Kids', color: '#FB7185' },
   { key: 'open_mat', label: 'Open Mat', color: '#22C55E' },
@@ -112,7 +112,7 @@ export function classAccent(input: {
   if (input.level === 'advanced') return '#F59E0B';
   if (input.giType === 'no_gi') return '#A78BFA';
   if (input.level === 'fundamentals') return '#38BDF8';
-  return '#2DD4BF';
+  return '#FFFFFF';
 }
 
 export function classMatchesFilters(

@@ -31,7 +31,7 @@ type Props = NativeStackScreenProps<MoreStackParamList, 'Achievements'>;
 const RARITY_TINT: Record<AchievementRarity, string> = {
   common: '#B8B8B8',
   rare: '#38BDF8',
-  elite: '#2DD4BF',
+  elite: '#FFFFFF',
   legendary: '#A78BFA',
 };
 

@@ -65,7 +65,7 @@ export function AnnouncementsScreen({ navigation }: Props) {
                   <StatusPill
                     label={item.status}
                     color={
-                      item.status === 'published' ? '#22C55E' : '#5EEAD4'
+                      item.status === 'published' ? '#22C55E' : '#F5F5F5'
                     }
                   />
                 </View>

@@ -27,7 +27,7 @@ export function Banner({ message, tone = 'error' }: BannerProps) {
           }
         : {
             backgroundColor: colors.goldMuted,
-            borderColor: 'rgba(45, 212, 191, 0.35)',
+            borderColor: 'rgba(255, 255, 255, 0.35)',
           };
 
   const textColor =

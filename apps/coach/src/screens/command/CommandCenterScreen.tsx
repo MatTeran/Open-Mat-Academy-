@@ -155,7 +155,7 @@ export function CommandCenterScreen({ navigation }: Props) {
     <Screen scroll>
       <FadeInHero>
         <LinearGradient
-          colors={['#172538', '#101C2E', '#070D18']}
+          colors={['#1A1A1A', '#141414', '#000000']}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={[styles.hero, { borderColor: colors.border }]}
@@ -388,10 +388,10 @@ export function CommandCenterScreen({ navigation }: Props) {
             <Card
               elevated
               style={{
-                borderColor: 'rgba(45, 212, 191, 0.35)',
+                borderColor: 'rgba(255, 255, 255, 0.35)',
               }}
             >
-              <IconBadge name="sparkles" tint="#5EEAD4" />
+              <IconBadge name="sparkles" tint="#F5F5F5" />
               <Spacer size="sm" />
               <Text variant="body">{insight.suggestion}</Text>
               <Spacer size="xs" />

@@ -14,7 +14,7 @@ const BELT_COLORS: Record<
 > = {
   white: {
     fill: '#F2F2F0',
-    stripe: '#101C2E',
+    stripe: '#141414',
     border: 'rgba(212,175,55,0.55)',
   },
   blue: {

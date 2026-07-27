@@ -837,7 +837,7 @@ const commandCenter: CommandCenterData = {
       label: 'Weekly Goals',
       value: '63%',
       icon: 'locate',
-      tint: '#2DD4BF',
+      tint: '#FFFFFF',
     },
     {
       id: 'pulse-waitlist',
@@ -859,7 +859,7 @@ const commandCenter: CommandCenterData = {
       label: "Today's Classes",
       value: '3',
       icon: 'calendar',
-      tint: '#2DD4BF',
+      tint: '#FFFFFF',
     },
   ],
   attention: [
@@ -907,7 +907,7 @@ const commandCenter: CommandCenterData = {
       progressLabel: '96%',
       progressPercent: 96,
       icon: 'ribbon',
-      tint: '#2DD4BF',
+      tint: '#FFFFFF',
     },
     {
       id: 'mom-2',
@@ -968,13 +968,13 @@ const commandCenter: CommandCenterData = {
       id: 'createClass',
       label: 'Add Class',
       icon: 'calendar',
-      tint: '#2DD4BF',
+      tint: '#FFFFFF',
     },
     {
       id: 'manageMembers',
       label: 'Members',
       icon: 'people',
-      tint: '#5EEAD4',
+      tint: '#F5F5F5',
     },
   ],
   aiInsights: [
@@ -991,7 +991,7 @@ const commandCenter: CommandCenterData = {
       value: '148',
       helper: '+6% vs prior week',
       points: [12, 18, 15, 22, 19, 24, 20],
-      tint: '#2DD4BF',
+      tint: '#FFFFFF',
     },
     {
       id: 'snap-2',

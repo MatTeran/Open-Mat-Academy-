@@ -162,7 +162,7 @@ export const MOCK_ACHIEVEMENTS: CoachAchievement[] = [
     category: 'attendance',
     rarity: 'elite',
     icon: 'ribbon',
-    tint: '#2DD4BF',
+    tint: '#FFFFFF',
     xpReward: 500,
     requirementLabel: '100 classes',
     awardedCount: 9,
@@ -483,14 +483,14 @@ export const MOCK_COMMAND_CENTER: CommandCenterData = {
       label: 'Weekly Goals',
       value: '63%',
       icon: 'locate',
-      tint: '#2DD4BF',
+      tint: '#FFFFFF',
     },
     {
       id: 'pulse-streaks',
       label: 'Active Streaks',
       value: '41',
       icon: 'trophy',
-      tint: '#5EEAD4',
+      tint: '#F5F5F5',
     },
     {
       id: 'pulse-messages',
@@ -519,7 +519,7 @@ export const MOCK_COMMAND_CENTER: CommandCenterData = {
       label: "Today's Classes",
       value: '3',
       icon: 'calendar',
-      tint: '#2DD4BF',
+      tint: '#FFFFFF',
     },
     {
       id: 'pulse-seminars',
@@ -561,7 +561,7 @@ export const MOCK_COMMAND_CENTER: CommandCenterData = {
       actionLabel: 'Approve Waitlist',
       entityId: 'class-mon-am',
       icon: 'checkmark-done',
-      tint: '#5EEAD4',
+      tint: '#F5F5F5',
     },
     {
       id: 'att-4',
@@ -596,7 +596,7 @@ export const MOCK_COMMAND_CENTER: CommandCenterData = {
       progressLabel: '96%',
       progressPercent: 96,
       icon: 'ribbon',
-      tint: '#2DD4BF',
+      tint: '#FFFFFF',
     },
     {
       id: 'mom-2',
@@ -656,7 +656,7 @@ export const MOCK_COMMAND_CENTER: CommandCenterData = {
       timestamp: `${TODAY}T08:00:00.000Z`,
       category: 'announcement',
       icon: 'megaphone',
-      tint: '#5EEAD4',
+      tint: '#F5F5F5',
     },
   ],
   upcoming: [
@@ -690,7 +690,7 @@ export const MOCK_COMMAND_CENTER: CommandCenterData = {
       id: 'createAnnouncement',
       label: 'Create Announcement',
       icon: 'megaphone-outline',
-      tint: '#5EEAD4',
+      tint: '#F5F5F5',
     },
     {
       id: 'startCheckIn',
@@ -702,7 +702,7 @@ export const MOCK_COMMAND_CENTER: CommandCenterData = {
       id: 'createClass',
       label: 'Create Class',
       icon: 'calendar-outline',
-      tint: '#2DD4BF',
+      tint: '#FFFFFF',
     },
     {
       id: 'uploadTechnique',
@@ -732,7 +732,7 @@ export const MOCK_COMMAND_CENTER: CommandCenterData = {
       id: 'manageMembers',
       label: 'Manage Members',
       icon: 'people-outline',
-      tint: '#2DD4BF',
+      tint: '#FFFFFF',
     },
   ],
   aiInsights: [
@@ -775,7 +775,7 @@ export const MOCK_COMMAND_CENTER: CommandCenterData = {
       value: '91%',
       helper: 'Active 30-day',
       points: [88, 89, 90, 90, 91, 91, 91],
-      tint: '#2DD4BF',
+      tint: '#FFFFFF',
     },
     {
       id: 'snap-popular',
@@ -791,7 +791,7 @@ export const MOCK_COMMAND_CENTER: CommandCenterData = {
       value: '14.6',
       helper: 'Across all tracks',
       points: [12, 13, 14, 15, 14, 15, 16],
-      tint: '#5EEAD4',
+      tint: '#F5F5F5',
     },
     {
       id: 'snap-challenges',

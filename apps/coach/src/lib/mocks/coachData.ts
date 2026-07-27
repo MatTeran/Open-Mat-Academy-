@@ -888,7 +888,7 @@ export const QUICK_CARDS: CoachQuickCard[] = [
     subtitle: 'Live in community',
     value: '2',
     icon: 'megaphone',
-    tint: '#5EEAD4',
+    tint: '#F5F5F5',
   },
   {
     id: 'academyActivity',
@@ -905,7 +905,7 @@ export const QUICK_ACTIONS: CoachQuickAction[] = [
     id: 'openCommandCenter',
     label: 'Command Center',
     icon: 'pulse',
-    tint: '#5EEAD4',
+    tint: '#F5F5F5',
   },
   {
     id: 'manageCheckIn',
@@ -917,13 +917,13 @@ export const QUICK_ACTIONS: CoachQuickAction[] = [
     id: 'createAnnouncement',
     label: 'Create Announcement',
     icon: 'megaphone-outline',
-    tint: '#5EEAD4',
+    tint: '#F5F5F5',
   },
   {
     id: 'addClass',
     label: 'Add Class',
     icon: 'add-circle-outline',
-    tint: '#2DD4BF',
+    tint: '#FFFFFF',
   },
   {
     id: 'manageMembers',
@@ -945,7 +945,7 @@ export const CREATE_SHEET_ACTIONS: CreateSheetAction[] = [
     title: 'New Class',
     subtitle: 'Schedule a class or open mat',
     icon: 'calendar-outline',
-    tint: '#2DD4BF',
+    tint: '#FFFFFF',
     available: true,
   },
   {
@@ -953,7 +953,7 @@ export const CREATE_SHEET_ACTIONS: CreateSheetAction[] = [
     title: 'Announcement',
     subtitle: 'Post to the community feed',
     icon: 'megaphone-outline',
-    tint: '#5EEAD4',
+    tint: '#F5F5F5',
     available: true,
   },
   {

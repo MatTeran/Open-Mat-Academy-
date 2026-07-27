@@ -52,7 +52,7 @@ export function AchievementFormScreen({ navigation, route }: Props) {
     existing?.rarity ?? 'common',
   );
   const [icon, setIcon] = useState(existing?.icon ?? 'ribbon');
-  const [tint, setTint] = useState(existing?.tint ?? '#2DD4BF');
+  const [tint, setTint] = useState(existing?.tint ?? '#FFFFFF');
   const [xpReward, setXpReward] = useState(
     String(existing?.xpReward ?? 100),
   );
@@ -70,7 +70,7 @@ export function AchievementFormScreen({ navigation, route }: Props) {
       category,
       rarity,
       icon: icon.trim() || 'ribbon',
-      tint: tint.trim() || '#2DD4BF',
+      tint: tint.trim() || '#FFFFFF',
       xpReward: Number(xpReward) || 0,
       requirementLabel,
       isActive,
@@ -163,7 +163,7 @@ export function AchievementFormScreen({ navigation, route }: Props) {
         value={tint}
         onChangeText={setTint}
         autoCapitalize="none"
-        placeholder="#2DD4BF"
+        placeholder="#FFFFFF"
       />
       <Spacer size="md" />
       <Input

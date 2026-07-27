@@ -10,7 +10,7 @@
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#070D18"
+      "backgroundColor": "#000000"
     },
     "ios": {
       "supportsTablet": true,
@@ -18,7 +18,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#070D18",
+        "backgroundColor": "#000000",
         "foregroundImage": "./assets/adaptive-icon.png"
       },
       "package": "com.openmat.coach"
@@ -32,7 +32,7 @@
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#070D18",
+          "backgroundColor": "#000000",
           "image": "./assets/splash-icon.png",
           "imageWidth": 200
         }

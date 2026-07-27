@@ -86,7 +86,7 @@ function AlbumCard({ album }: { album: MediaAlbum }) {
   return (
     <Card elevated>
       <View style={styles.row}>
-        <IconBadge name={'albums-outline' as IconName} tint="#2DD4BF" />
+        <IconBadge name={'albums-outline' as IconName} tint="#FFFFFF" />
         <View style={styles.copy}>
           <Text variant="subtitle">{album.title}</Text>
           <Text variant="caption" muted>

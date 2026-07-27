@@ -12,9 +12,9 @@ module.exports = {
     extend: {
       colors: {
         mat: {
-          bg: '#0B1220',
-          surface: '#132337',
-          gold: '#2DD4BF',
+          bg: '#000000',
+          surface: '#111111',
+          gold: '#FFFFFF',
           text: '#FFFFFF',
           muted: '#A0A0A0',
           error: '#FF4D4D',

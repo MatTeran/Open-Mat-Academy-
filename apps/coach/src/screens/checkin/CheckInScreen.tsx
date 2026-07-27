@@ -37,7 +37,7 @@ const STATUS_COLOR: Record<string, string> = {
   walk_in: '#A78BFA',
   absent: '#FF4D4D',
   reserved: '#B8B8B8',
-  waitlist: '#5EEAD4',
+  waitlist: '#F5F5F5',
 };
 
 export function CheckInScreen({ route }: Props) {

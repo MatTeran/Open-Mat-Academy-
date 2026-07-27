@@ -59,7 +59,7 @@ export function JourneyScreen({ navigation }: Props) {
         <KpiCard
           label="Active Challenges"
           value={String(journey.activeChallenges)}
-          tint="#2DD4BF"
+          tint="#FFFFFF"
           icon="trophy-outline"
         />
       </View>
@@ -153,13 +153,13 @@ function MemberSnapshotCard({
   return (
     <Card elevated onPress={onPress}>
       <View style={styles.row}>
-        <IconBadge name={'person-circle-outline' as IconName} tint="#2DD4BF" />
+        <IconBadge name={'person-circle-outline' as IconName} tint="#FFFFFF" />
         <View style={styles.copy}>
           <View style={styles.titleRow}>
             <Text variant="subtitle" style={styles.flex}>
               {snapshot.memberName}
             </Text>
-            <StatusPill label={`Level ${snapshot.level}`} color="#2DD4BF" />
+            <StatusPill label={`Level ${snapshot.level}`} color="#FFFFFF" />
           </View>
           <Text variant="caption" muted>
             {snapshot.totalXP.toLocaleString()} XP · {snapshot.currentStreak}
