@@ -1,11 +1,12 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import { useAppTheme, fontFamilies } from '@openmat/shared';
+import { useAppTheme } from '@openmat/shared';
 
 import { AnnouncementFormScreen } from '../screens/announcements/AnnouncementFormScreen';
 import { CheckInScreen } from '../screens/checkin/CheckInScreen';
 import { DashboardScreen } from '../screens/dashboard/DashboardScreen';
 import { ClassFormScreen } from '../screens/schedule/ClassFormScreen';
+import { coachStackScreenOptions } from './stackScreenOptions';
 import type { DashboardStackParamList } from './types';
 
 const Stack = createNativeStackNavigator<DashboardStackParamList>();
@@ -14,17 +15,7 @@ export function DashboardNavigator() {
   const { colors } = useAppTheme();
 
   return (
-    <Stack.Navigator
-      screenOptions={{
-        headerStyle: { backgroundColor: colors.primaryBackground },
-        headerTintColor: colors.goldAccent,
-        headerTitleStyle: {
-          fontFamily: fontFamilies.semibold,
-          color: colors.text,
-        },
-        contentStyle: { backgroundColor: colors.primaryBackground },
-      }}
-    >
+    <Stack.Navigator screenOptions={coachStackScreenOptions(colors)}>
       <Stack.Screen
         name="DashboardHome"
         component={DashboardScreen}

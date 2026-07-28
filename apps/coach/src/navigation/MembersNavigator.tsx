@@ -1,13 +1,14 @@
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import { useAppTheme, fontFamilies } from '@openmat/shared';
+import { useAppTheme } from '@openmat/shared';
 
 import { AddStripeScreen } from '../screens/members/AddStripeScreen';
 import { CompetitionProfileEditScreen } from '../screens/members/CompetitionProfileEditScreen';
 import { MemberDetailScreen } from '../screens/members/MemberDetailScreen';
 import { MembersScreen } from '../screens/members/MembersScreen';
 import { PromoteBeltScreen } from '../screens/members/PromoteBeltScreen';
+import { coachStackScreenOptions } from './stackScreenOptions';
 import type { MembersStackParamList } from './types';
 
 const Stack = createNativeStackNavigator<MembersStackParamList>();
@@ -16,17 +17,7 @@ export function MembersNavigator() {
   const { colors } = useAppTheme();
 
   return (
-    <Stack.Navigator
-      screenOptions={{
-        headerStyle: { backgroundColor: colors.primaryBackground },
-        headerTintColor: colors.goldAccent,
-        headerTitleStyle: {
-          fontFamily: fontFamilies.semibold,
-          color: colors.text,
-        },
-        contentStyle: { backgroundColor: colors.primaryBackground },
-      }}
-    >
+    <Stack.Navigator screenOptions={coachStackScreenOptions(colors)}>
       <Stack.Screen
         name="MembersHome"
         component={MembersScreen}

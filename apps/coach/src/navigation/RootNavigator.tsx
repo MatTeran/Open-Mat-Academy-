@@ -8,6 +8,7 @@ import { View } from 'react-native';
 
 import { useAuth, useAppTheme } from '@openmat/shared';
 
+import { HeaderBackButton } from '../components/layout/HeaderBackButton';
 import { CreateSheetScreen } from '../screens/create/CreateSheetScreen';
 import { AuthNavigator } from './AuthNavigator';
 import { MainTabNavigator } from './MainTabNavigator';
@@ -72,6 +73,8 @@ export function RootNavigator() {
                 headerStyle: { backgroundColor: colors.elevatedSurface },
                 headerTintColor: colors.goldAccent,
                 headerTitleStyle: { color: colors.text },
+                headerShadowVisible: false,
+                headerLeft: () => <HeaderBackButton label="Close" />,
               }}
             />
           </>

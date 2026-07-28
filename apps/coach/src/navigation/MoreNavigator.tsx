@@ -1,7 +1,7 @@
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import { useAppTheme, fontFamilies } from '@openmat/shared';
+import { useAppTheme } from '@openmat/shared';
 
 import { AchievementFormScreen } from '../screens/achievements/AchievementFormScreen';
 import { AchievementsScreen } from '../screens/achievements/AchievementsScreen';
@@ -22,6 +22,7 @@ import { NotificationFormScreen } from '../screens/notifications/NotificationFor
 import { NotificationsScreen } from '../screens/notifications/NotificationsScreen';
 import { TechniqueFormScreen } from '../screens/techniques/TechniqueFormScreen';
 import { TechniquesScreen } from '../screens/techniques/TechniquesScreen';
+import { coachStackScreenOptions } from './stackScreenOptions';
 import type { MoreStackParamList } from './types';
 
 const Stack = createNativeStackNavigator<MoreStackParamList>();
@@ -30,17 +31,7 @@ export function MoreNavigator() {
   const { colors } = useAppTheme();
 
   return (
-    <Stack.Navigator
-      screenOptions={{
-        headerStyle: { backgroundColor: colors.primaryBackground },
-        headerTintColor: colors.goldAccent,
-        headerTitleStyle: {
-          fontFamily: fontFamilies.semibold,
-          color: colors.text,
-        },
-        contentStyle: { backgroundColor: colors.primaryBackground },
-      }}
-    >
+    <Stack.Navigator screenOptions={coachStackScreenOptions(colors)}>
       <Stack.Screen
         name="MoreHome"
         component={MoreScreen}
