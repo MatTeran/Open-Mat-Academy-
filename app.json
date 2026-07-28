@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "Open Mat",
-    "slug": "open-mat",
+    "name": "Open Mat Academy",
+    "slug": "open-mat-academy",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "automatic",
+    "userInterfaceStyle": "dark",
     "scheme": "openmat",
     "splash": {
       "image": "./assets/splash-icon.png",
@@ -14,11 +14,11 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.openmat.app",
+      "bundleIdentifier": "com.openmat.academy",
       "infoPlist": {
-        "UIBackgroundModes": [],
-        "NSCameraUsageDescription": "Open Mat uses the camera so you can set a profile photo.",
-        "NSPhotoLibraryUsageDescription": "Open Mat uses your photo library so you can set a profile photo."
+        "NSLocationWhenInUseUsageDescription": "Open Mat Academy uses your location to send reminders when you are near the gym for class.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "Open Mat Academy uses your location to send reminders when you are near the gym for class.",
+        "UIBackgroundModes": ["location"]
       }
     },
     "android": {
@@ -28,39 +28,34 @@
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
-      "package": "com.openmat.app",
-      "predictiveBackGestureEnabled": false,
+      "package": "com.openmat.academy",
       "permissions": [
-        "android.permission.CAMERA",
-        "android.permission.READ_MEDIA_IMAGES"
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_BACKGROUND_LOCATION",
+        "RECEIVE_BOOT_COMPLETED",
+        "VIBRATE",
+        "SCHEDULE_EXACT_ALARM"
       ]
     },
     "web": {
-      "favicon": "./assets/favicon.png",
-      "bundler": "metro"
+      "favicon": "./assets/favicon.png"
     },
     "plugins": [
       "expo-font",
       [
-        "expo-splash-screen",
+        "expo-notifications",
         {
-          "backgroundColor": "#000000",
-          "image": "./assets/splash-icon.png",
-          "imageWidth": 200
+          "icon": "./assets/icon.png",
+          "color": "#FFFFFF",
+          "sounds": []
         }
       ],
       [
-        "expo-image-picker",
+        "expo-location",
         {
-          "photosPermission": "Allow Open Mat to access your photos for a profile picture.",
-          "cameraPermission": "Allow Open Mat to use the camera for a profile picture."
-        }
-      ],
-      [
-        "@stripe/stripe-react-native",
-        {
-          "merchantIdentifier": "merchant.com.openmat.app",
-          "enableGooglePay": true
+          "locationAlwaysAndWhenInUsePermission": "Allow Open Mat Academy to use your location to remind you when you are near the gym.",
+          "isAndroidBackgroundLocationEnabled": true
         }
       ]
     ]

@@ -28,7 +28,7 @@ export interface ButtonProps extends Omit<PressableProps, 'children'> {
 }
 
 /**
- * Primary interaction control — gold CTA matches Open Mat black & white branding.
+ * Primary interaction control — gold CTA matches Open Mat branding.
  * Background is painted on an inner View for NativeWind Pressable safety.
  */
 export function Button({

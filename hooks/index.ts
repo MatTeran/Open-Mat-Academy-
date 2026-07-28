@@ -4,5 +4,7 @@ export { useTheme, useAppTheme } from './useTheme';
 export type { AppearancePreference } from './useTheme';
 export { useCommunity } from '../lib/providers/CommunityProvider';
 export { useJourney } from '../lib/providers/JourneyProvider';
+export { useNotifications } from '../lib/providers/NotificationProvider';
+export type { DevTestKind } from '../lib/providers/NotificationProvider';
 export { useProfile } from '../lib/providers/ProfileProvider';
 export { useWorkouts } from '../lib/providers/WorkoutProvider';

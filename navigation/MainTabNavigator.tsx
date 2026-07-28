@@ -1,7 +1,7 @@
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import { TabBarIcon } from '../components';
+import { CenterLogTabIcon, TabBarIcon } from '../components';
 import { useAppTheme } from '../hooks';
 import { fontFamilies } from '../lib/theme';
 import { ScheduleScreen } from '../screens';
@@ -25,9 +25,9 @@ export function MainTabNavigator() {
   const tabBarStyle = {
     backgroundColor: colors.primaryBackground,
     borderTopColor: colors.border,
-    height: 64,
-    paddingTop: 6,
-    paddingBottom: 8,
+    height: 72,
+    paddingTop: 8,
+    paddingBottom: 10,
   };
 
   return (
@@ -52,7 +52,10 @@ export function MainTabNavigator() {
             ? { display: 'none' }
             : tabBarStyle,
           tabBarIcon: ({ focused }) => (
-            <TabBarIcon name={focused ? 'home' : 'home-outline'} focused={focused} />
+            <TabBarIcon
+              name={focused ? 'home' : 'home-outline'}
+              focused={focused}
+            />
           ),
         })}
       />
@@ -69,6 +72,24 @@ export function MainTabNavigator() {
         }}
       />
       <Tab.Screen
+        name="WorkoutLog"
+        component={WorkoutLogNavigator}
+        options={({ route }) => {
+          const routeName =
+            getFocusedRouteNameFromRoute(route) ?? 'WorkoutList';
+          const hideTabBar = routeName === 'WorkoutDetails';
+
+          return {
+            title: 'Log',
+            tabBarLabel: 'Log',
+            tabBarStyle: hideTabBar ? { display: 'none' } : tabBarStyle,
+            tabBarIcon: ({ focused }) => (
+              <CenterLogTabIcon focused={focused} />
+            ),
+          };
+        }}
+      />
+      <Tab.Screen
         name="Community"
         component={CommunityNavigator}
         options={({ route }) => ({
@@ -82,26 +103,6 @@ export function MainTabNavigator() {
             />
           ),
         })}
-      />
-      <Tab.Screen
-        name="WorkoutLog"
-        component={WorkoutLogNavigator}
-        options={({ route }) => {
-          const routeName =
-            getFocusedRouteNameFromRoute(route) ?? 'WorkoutList';
-          const hideTabBar = routeName === 'WorkoutDetails';
-
-          return {
-            title: 'Log',
-            tabBarStyle: hideTabBar ? { display: 'none' } : tabBarStyle,
-            tabBarIcon: ({ focused }) => (
-              <TabBarIcon
-                name={focused ? 'barbell' : 'barbell-outline'}
-                focused={focused}
-              />
-            ),
-          };
-        }}
       />
       <Tab.Screen
         name="Profile"

@@ -56,9 +56,8 @@ export const ANNOUNCEMENTS: Announcement[] = [
 
 export const BIRTHDAYS: MemberBirthday[] = [
   { id: 'b-1', name: 'Diego Alvarez', dateLabel: 'Jul 26', belt: 'Purple' },
-  { id: 'b-2', name: 'Sam Ortiz', dateLabel: 'Jul 28', belt: 'Purple' },
-  { id: 'b-3', name: 'Riley Brooks', dateLabel: 'Jul 30', belt: 'White' },
-  { id: 'b-4', name: 'Ava Park', dateLabel: 'Aug 2', belt: 'White' },
+  { id: 'b-2', name: 'Sam Ortiz', dateLabel: 'Jul 28', belt: 'Blue' },
+  { id: 'b-3', name: 'Riley Quinn', dateLabel: 'Jul 30', belt: 'White' },
 ];
 
 export const SEMINARS: Seminar[] = [

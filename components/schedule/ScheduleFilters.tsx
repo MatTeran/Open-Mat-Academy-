@@ -16,7 +16,6 @@ export function ScheduleFilters({ selected, onSelect }: ScheduleFiltersProps) {
     row: {
       gap: spacing.xs,
       paddingRight: spacing.md,
-      alignItems: 'center' as const,
     },
     chip: {
       height: 36,
@@ -44,8 +43,6 @@ export function ScheduleFilters({ selected, onSelect }: ScheduleFiltersProps) {
   return (
     <ScrollView
       horizontal
-      nestedScrollEnabled
-      keyboardShouldPersistTaps="handled"
       showsHorizontalScrollIndicator={false}
       contentContainerStyle={styles.row}
     >
@@ -55,8 +52,6 @@ export function ScheduleFilters({ selected, onSelect }: ScheduleFiltersProps) {
           <Pressable
             key={filter.key}
             onPress={() => onSelect(filter.key)}
-            accessibilityRole="button"
-            accessibilityState={{ selected: active }}
             style={[styles.chip, active && styles.chipActive]}
           >
             <Text

@@ -1,4 +1,4 @@
-import { Pressable, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 
 import { WEEKDAYS } from '../../lib/data/schedule';
 import { radii, spacing } from '../../lib/theme';
@@ -11,15 +11,14 @@ interface WeeklyCalendarProps {
   selected: Weekday;
   onSelect: (day: Weekday) => void;
   weekAnchor?: Date;
-  /** Optional filtered class counts shown under each day. */
-  classCounts?: Partial<Record<Weekday, number>>;
+  headerLabel?: string;
 }
 
 export function WeeklyCalendar({
   selected,
   onSelect,
   weekAnchor = new Date(),
-  classCounts,
+  headerLabel = 'This Week',
 }: WeeklyCalendarProps) {
   const styles = useThemedStyles((colors) => ({
     card: {
@@ -38,9 +37,6 @@ export function WeeklyCalendar({
     header: {
       paddingHorizontal: spacing.sm,
       marginBottom: spacing.sm,
-      flexDirection: 'row' as const,
-      alignItems: 'center' as const,
-      justifyContent: 'space-between' as const,
     },
     row: {
       flexDirection: 'row' as const,
@@ -79,17 +75,6 @@ export function WeeklyCalendar({
       backgroundColor: colors.goldAccent,
       marginTop: 2,
     },
-    count: {
-      color: colors.secondaryText,
-      fontSize: 10,
-      marginTop: 2,
-    },
-    countActive: {
-      color: colors.goldAccent,
-    },
-    countEmpty: {
-      opacity: 0.35,
-    },
   }));
 
   const weekDates = getWeekDates(weekAnchor);
@@ -98,37 +83,23 @@ export function WeeklyCalendar({
       weekDates[day.key].toDateString() === new Date().toDateString(),
   )?.key;
 
-  const weekTotal = WEEKDAYS.reduce(
-    (sum, day) => sum + (classCounts?.[day.key] ?? 0),
-    0,
-  );
-
   return (
     <View style={styles.card}>
       <View style={styles.header}>
         <Text variant="label" gold>
-          This Week
+          {headerLabel}
         </Text>
-        {classCounts ? (
-          <Text variant="caption">{weekTotal} classes</Text>
-        ) : null}
       </View>
       <View style={styles.row}>
         {WEEKDAYS.map((day) => {
           const active = day.key === selected;
           const isToday = day.key === todayKey;
           const dateNumber = weekDates[day.key].getDate();
-          const count = classCounts?.[day.key];
 
           return (
             <Pressable
               key={day.key}
               onPress={() => onSelect(day.key)}
-              accessibilityRole="button"
-              accessibilityState={{ selected: active }}
-              accessibilityLabel={`${day.label} ${dateNumber}${
-                typeof count === 'number' ? `, ${count} classes` : ''
-              }`}
               style={[styles.day, active && styles.dayActive]}
             >
               <Text
@@ -143,20 +114,7 @@ export function WeeklyCalendar({
               >
                 {dateNumber}
               </Text>
-              {typeof count === 'number' ? (
-                <Text
-                  variant="caption"
-                  style={[
-                    styles.count,
-                    active && styles.countActive,
-                    count === 0 && styles.countEmpty,
-                  ]}
-                >
-                  {count}
-                </Text>
-              ) : isToday && !active ? (
-                <View style={styles.todayDot} />
-              ) : null}
+              {isToday && !active ? <View style={styles.todayDot} /> : null}
             </Pressable>
           );
         })}

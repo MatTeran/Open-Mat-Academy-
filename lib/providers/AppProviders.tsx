@@ -7,6 +7,7 @@ import { queryClient } from '../queryClient';
 import { AuthProvider } from './AuthProvider';
 import { CommunityProvider } from './CommunityProvider';
 import { JourneyProvider } from './JourneyProvider';
+import { NotificationProvider } from './NotificationProvider';
 import { ProfileProvider } from './ProfileProvider';
 import { ThemeProvider, useAppTheme } from './ThemeProvider';
 import { WorkoutProvider } from './WorkoutProvider';
@@ -20,13 +21,15 @@ function ThemedRoot({ children }: PropsWithChildren) {
       <SafeAreaProvider>
         <QueryClientProvider client={queryClient}>
           <AuthProvider>
-            <CommunityProvider>
-              <WorkoutProvider>
-                <ProfileProvider>
-                  <JourneyProvider>{children}</JourneyProvider>
-                </ProfileProvider>
-              </WorkoutProvider>
-            </CommunityProvider>
+            <NotificationProvider>
+              <CommunityProvider>
+                <WorkoutProvider>
+                  <ProfileProvider>
+                    <JourneyProvider>{children}</JourneyProvider>
+                  </ProfileProvider>
+                </WorkoutProvider>
+              </CommunityProvider>
+            </NotificationProvider>
           </AuthProvider>
         </QueryClientProvider>
       </SafeAreaProvider>

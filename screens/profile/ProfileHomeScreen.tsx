@@ -152,8 +152,8 @@ export function ProfileHomeScreen({ navigation }: Props) {
         <LinearGradient
           colors={
             isDark
-              ? ['rgba(212,175,55,0.18)', 'rgba(13,13,13,0)']
-              : ['rgba(196,160,53,0.16)', 'rgba(245,245,243,0)']
+              ? ['rgba(255,255,255,0.18)', 'rgba(13,13,13,0)']
+              : ['rgba(0,0,0,0.08)', 'rgba(245,245,243,0)']
           }
           start={{ x: 0.5, y: 0 }}
           end={{ x: 0.5, y: 1 }}
@@ -341,7 +341,7 @@ export function ProfileHomeScreen({ navigation }: Props) {
           <ProfileMenuRow
             icon="notifications-outline"
             label="Notifications"
-            value="Manage alerts"
+            value="Inbox & alerts"
             onPress={() => navigation.navigate('Notifications')}
           />
         </ProfileMenuGroup>

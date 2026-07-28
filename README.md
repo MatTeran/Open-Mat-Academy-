@@ -2,7 +2,7 @@
 
 Premium Brazilian Jiu-Jitsu academy apps for **Open Mat Academy** (Tracy, CA).
 
-Cloned and rebranded from Dark Mat with the official Gracie Fighter / Open Mat Academy black-and-white identity. Built with React Native, Expo SDK 54, TypeScript, Supabase, NativeWind, React Navigation, Stripe, and React Query.
+Cloned and rebranded from Open Mat with the official Gracie Fighter / Open Mat Academy black-and-white identity. Built with React Native, Expo SDK 54, TypeScript, Supabase, NativeWind, React Navigation, Stripe, and React Query.
 
 > **Note:** Mobile apps target **Expo SDK 54** so they open in the App Store / Play Store Expo Go app.
 

@@ -8,14 +8,14 @@ import type {
 import { toNextClassCardModel } from '../../utils/schedule';
 
 export const HOME_USER_SUMMARY: HomeUserSummary = {
-  firstName: 'Alex',
-  level: 8,
+  firstName: 'Mat',
+  level: 14,
   currentXP: 4820,
   nextLevelXP: 5000,
   weeklyClassesCompleted: 3,
   weeklyClassGoal: 4,
   weeklyTrainingDays: 4,
-  currentStreak: 5,
+  currentStreak: 7,
   bestStreak: 30,
 };
 

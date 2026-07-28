@@ -6,6 +6,7 @@ import {
   BeltRankScreen,
   LinkedFamilyScreen,
   MembershipScreen,
+  NotificationSettingsScreen,
   NotificationsScreen,
   PaymentMethodScreen,
   ProfileHomeScreen,
@@ -23,6 +24,7 @@ const DETAIL_ROUTES: Array<keyof ProfileStackParamList> = [
   'Attendance',
   'Settings',
   'Notifications',
+  'NotificationSettings',
   'LinkedFamily',
 ];
 
@@ -44,6 +46,10 @@ export function ProfileNavigator() {
       <Stack.Screen name="Attendance" component={AttendanceScreen} />
       <Stack.Screen name="Settings" component={SettingsScreen} />
       <Stack.Screen name="Notifications" component={NotificationsScreen} />
+      <Stack.Screen
+        name="NotificationSettings"
+        component={NotificationSettingsScreen}
+      />
       <Stack.Screen name="LinkedFamily" component={LinkedFamilyScreen} />
     </Stack.Navigator>
   );

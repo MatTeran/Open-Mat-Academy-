@@ -11,6 +11,11 @@ export {
 export { JourneyProvider, useJourney } from './providers/JourneyProvider';
 export { ProfileProvider, useProfile } from './providers/ProfileProvider';
 export {
+  NotificationProvider,
+  useNotifications,
+} from './providers/NotificationProvider';
+export type { DevTestKind } from './providers/NotificationProvider';
+export {
   ThemeProvider,
   useAppTheme,
 } from './providers/ThemeProvider';

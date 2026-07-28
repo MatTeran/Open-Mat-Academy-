@@ -5,6 +5,7 @@ import { useMemo, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import {
+  Button,
   FadeIn,
   FloatingActionButton,
   LogSegmentControl,
@@ -51,15 +52,30 @@ export function WorkoutLogListScreen({ navigation }: Props) {
     setSegment('sessions');
   };
 
+  const createNewLog = () => {
+    navigation.navigate('WorkoutDetails', {});
+  };
+
   return (
     <View style={styles.root}>
       <Screen scroll contentStyle={styles.content}>
         <FadeIn>
-          <Text variant="hero">Workout Log</Text>
-          <Spacer size="sm" />
-          <Text variant="bodyMuted">
-            Track mat time, rounds, and every session.
-          </Text>
+          <View style={styles.headerRow}>
+            <View style={styles.headerCopy}>
+              <Text variant="hero">Workout Log</Text>
+              <Spacer size="sm" />
+              <Text variant="bodyMuted">
+                Track mat time, rounds, and every session.
+              </Text>
+            </View>
+            <Button
+              label="New Log"
+              variant="primaryGold"
+              fullWidth={false}
+              onPress={createNewLog}
+              accessibilityLabel="Create a new training log"
+            />
+          </View>
         </FadeIn>
 
         <Spacer size="lg" />
@@ -105,8 +121,15 @@ export function WorkoutLogListScreen({ navigation }: Props) {
               </Text>
               <Spacer size="xs" />
               <Text variant="bodyMuted" style={styles.center}>
-                Tap + to log your first training session.
+                Tap New Log to record your first training session.
               </Text>
+              <Spacer size="md" />
+              <Button
+                label="Create New Log"
+                variant="outlineGold"
+                onPress={createNewLog}
+                accessibilityLabel="Create a new training log"
+              />
             </View>
           </FadeIn>
         ) : (
@@ -129,9 +152,7 @@ export function WorkoutLogListScreen({ navigation }: Props) {
         <View style={styles.bottomSpace} />
       </Screen>
 
-      <FloatingActionButton
-        onPress={() => navigation.navigate('WorkoutDetails', {})}
-      />
+      <FloatingActionButton onPress={createNewLog} />
     </View>
   );
 }
@@ -141,6 +162,14 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   content: {},
+  headerRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: spacing.md,
+  },
+  headerCopy: {
+    flex: 1,
+  },
   miniRow: {
     flexDirection: 'row',
     gap: spacing.md,

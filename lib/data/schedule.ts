@@ -2,6 +2,7 @@ import type {
   ClassLevel,
   ScheduleClass,
   ScheduleFilter,
+  ScheduleGiFilter,
   Weekday,
 } from '../../types/schedule';
 
@@ -19,7 +20,7 @@ export const SCHEDULE_FILTERS: { key: ScheduleFilter; label: string }[] = [
   { key: 'all', label: 'All' },
   { key: 'adult_bjj', label: 'Adult BJJ' },
   { key: 'youth_bjj', label: 'Youth BJJ' },
-  { key: 'pee_wee', label: 'Pee Wee' },
+  { key: 'pee_wee_bjj', label: 'Pee Wee' },
   { key: 'womens_bjj', label: "Women's BJJ" },
   { key: 'boxing', label: 'Boxing' },
   { key: 'muay_thai', label: 'Muay Thai' },
@@ -29,10 +30,19 @@ export const SCHEDULE_FILTERS: { key: ScheduleFilter; label: string }[] = [
   { key: 'open_mat', label: 'Open Mat' },
 ];
 
+export const SCHEDULE_GI_FILTERS: {
+  key: ScheduleGiFilter;
+  label: string;
+}[] = [
+  { key: 'all', label: 'All formats' },
+  { key: 'gi', label: 'BJJ · Gi' },
+  { key: 'no_gi', label: 'BJJ · No-Gi' },
+];
+
 export const CLASS_LEVEL_LABELS: Record<ClassLevel, string> = {
   adult_bjj: 'Adult BJJ',
   youth_bjj: 'Youth BJJ',
-  pee_wee: 'Pee Wee BJJ',
+  pee_wee_bjj: 'Pee Wee BJJ',
   womens_bjj: "Women's BJJ",
   boxing: 'Boxing',
   muay_thai: 'Muay Thai',
@@ -40,6 +50,20 @@ export const CLASS_LEVEL_LABELS: Record<ClassLevel, string> = {
   peak_performance: 'Peak Performance',
   taekwondo: 'Tae Kwon Do',
   open_mat: 'Open Mat / Gym',
+};
+
+/** Flyer legend colors for schedule chips. */
+export const CLASS_LEVEL_COLORS: Record<ClassLevel, string> = {
+  adult_bjj: '#3B82F6',
+  youth_bjj: '#14B8A6',
+  pee_wee_bjj: '#166534',
+  womens_bjj: '#EC4899',
+  boxing: '#EF4444',
+  muay_thai: '#FB923C',
+  wrestling: '#8B5CF6',
+  peak_performance: '#86EFAC',
+  taekwondo: '#FDE047',
+  open_mat: '#EAB308',
 };
 
 function cls(
@@ -86,7 +110,7 @@ export const WEEKLY_SCHEDULE: ScheduleClass[] = [
     id: 'mon-1100-jiu-jitsu-gi',
     spotsLeft: 14,
   }),
-  cls('mon', '16:00', '16:30', 'Pee Wee BJJ (Ages 4–7)', 'pee_wee', 'gi', 'Coach Park', {
+  cls('mon', '16:00', '16:30', 'Pee Wee BJJ (Ages 4–7)', 'pee_wee_bjj', 'gi', 'Coach Park', {
     spotsLeft: 8,
   }),
   cls('mon', '16:30', '17:30', 'Youth BJJ (Ages 8–12)', 'youth_bjj', 'gi', 'Coach Park', {
@@ -130,7 +154,7 @@ export const WEEKLY_SCHEDULE: ScheduleClass[] = [
 
   // —— Tuesday ——
   cls('tue', '10:00', '11:00', 'Peak Performance', 'peak_performance', 'none', 'Open Mat Staff'),
-  cls('tue', '16:00', '16:30', 'Pee Wee BJJ (Ages 4–7)', 'pee_wee', 'gi', 'Coach Park', {
+  cls('tue', '16:00', '16:30', 'Pee Wee BJJ (Ages 4–7)', 'pee_wee_bjj', 'gi', 'Coach Park', {
     spotsLeft: 8,
   }),
   cls('tue', '16:30', '17:30', 'Youth BJJ (Ages 8–12)', 'youth_bjj', 'gi', 'Coach Park', {
@@ -173,7 +197,7 @@ export const WEEKLY_SCHEDULE: ScheduleClass[] = [
     id: 'wed-1100-jiu-jitsu-gi',
     spotsLeft: 14,
   }),
-  cls('wed', '16:00', '16:30', 'Pee Wee BJJ (Ages 4–7)', 'pee_wee', 'gi', 'Coach Park', {
+  cls('wed', '16:00', '16:30', 'Pee Wee BJJ (Ages 4–7)', 'pee_wee_bjj', 'gi', 'Coach Park', {
     spotsLeft: 8,
   }),
   cls('wed', '16:30', '17:30', 'Youth BJJ (Ages 8–12)', 'youth_bjj', 'gi', 'Coach Park', {
@@ -213,7 +237,7 @@ export const WEEKLY_SCHEDULE: ScheduleClass[] = [
 
   // —— Thursday ——
   cls('thu', '10:00', '11:00', 'Peak Performance', 'peak_performance', 'none', 'Open Mat Staff'),
-  cls('thu', '16:00', '16:30', 'Pee Wee BJJ (No GI Ages 4–7)', 'pee_wee', 'no_gi', 'Coach Park', {
+  cls('thu', '16:00', '16:30', 'Pee Wee BJJ (No GI Ages 4–7)', 'pee_wee_bjj', 'no_gi', 'Coach Park', {
     spotsLeft: 8,
   }),
   cls('thu', '16:30', '17:30', 'Youth BJJ (No GI Ages 8–12)', 'youth_bjj', 'no_gi', 'Coach Park', {
@@ -255,7 +279,7 @@ export const WEEKLY_SCHEDULE: ScheduleClass[] = [
     id: 'fri-1100-jiu-jitsu-gi',
     spotsLeft: 14,
   }),
-  cls('fri', '16:00', '16:30', 'Pee Wee BJJ (Ages 4–7)', 'pee_wee', 'gi', 'Coach Park', {
+  cls('fri', '16:00', '16:30', 'Pee Wee BJJ (Ages 4–7)', 'pee_wee_bjj', 'gi', 'Coach Park', {
     spotsLeft: 8,
   }),
   cls('fri', '16:30', '17:30', 'Youth BJJ (Ages 8–12)', 'youth_bjj', 'gi', 'Coach Park', {
@@ -276,7 +300,7 @@ export const WEEKLY_SCHEDULE: ScheduleClass[] = [
     id: 'fri-1815-tkd-adv',
     spotsLeft: 10,
   }),
-  cls('fri', '19:00', '20:30', 'Adult/Teen Takedown', 'adult_bjj', 'both', 'Coach Rivera', {
+  cls('fri', '19:00', '20:30', 'Adult/Teen Takedown', 'adult_bjj', 'gi_no_gi', 'Coach Rivera', {
     spotsLeft: 12,
   }),
   cls('fri', '19:30', '20:30', 'Boxing Class', 'boxing', 'none', 'Coach Boxing', {
@@ -288,7 +312,7 @@ export const WEEKLY_SCHEDULE: ScheduleClass[] = [
   cls('sat', '09:00', '10:00', 'Wrestling', 'wrestling', 'none', 'Coach Wrestling', {
     spotsLeft: 16,
   }),
-  cls('sat', '10:00', '12:00', 'Open Mat (GI / No GI)', 'open_mat', 'both', 'Coach Silva', {
+  cls('sat', '10:00', '12:00', 'Open Mat (GI / No GI)', 'open_mat', 'gi_no_gi', 'Coach Silva', {
     spotsLeft: 30,
   }),
   cls('sat', '10:00', '17:30', 'Open Gym', 'open_mat', 'none', 'Open Mat Staff', {

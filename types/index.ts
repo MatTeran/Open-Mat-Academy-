@@ -4,7 +4,6 @@ export type {
   AuthStatus,
   AuthUser,
   RegisterPayload,
-  UserRole,
 } from './auth';
 export type {
   ActivityItem,
@@ -72,6 +71,8 @@ export type {
   GiType as ScheduleGiType,
   ScheduleClass,
   ScheduleFilter,
+  ScheduleGiFilter,
+  ScheduleViewMode,
   Weekday,
 } from './schedule';
 export type { BeltRank, UserProfile } from './user';
@@ -92,4 +93,11 @@ export type {
   WorkoutProgressMetrics,
   WorkoutWeekSummary,
 } from './workoutMetrics';
+export type {
+  LocalEvent,
+  LocalEventFilter,
+  LocalEventKind,
+  LocalEventsSearchResult,
+  UserGeoLocation,
+} from './localEvents';
 

@@ -7,9 +7,13 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 
-import { Text } from '../components';
+import { NotificationHost, Text } from '../components';
 import { useAuth, useAppTheme } from '../hooks';
 import { APP_NAME } from '../lib/constants';
+import {
+  navigationRef,
+  setNavigationReady,
+} from '../lib/notifications';
 import { spacing } from '../lib/theme';
 import { AuthNavigator } from './AuthNavigator';
 import { MainTabNavigator } from './MainTabNavigator';
@@ -55,16 +59,25 @@ export function RootNavigator() {
   }
 
   return (
-    <NavigationContainer theme={navigationTheme}>
-      <StatusBar style={isDark ? 'light' : 'dark'} />
-      <Stack.Navigator screenOptions={{ headerShown: false, animation: 'fade' }}>
-        {isAuthenticated ? (
-          <Stack.Screen name="Main" component={MainTabNavigator} />
-        ) : (
-          <Stack.Screen name="Auth" component={AuthNavigator} />
-        )}
-      </Stack.Navigator>
-    </NavigationContainer>
+    <View style={{ flex: 1, backgroundColor: colors.primaryBackground }}>
+      <NavigationContainer
+        ref={navigationRef}
+        theme={navigationTheme}
+        onReady={() => setNavigationReady(true)}
+      >
+        <StatusBar style={isDark ? 'light' : 'dark'} />
+        <Stack.Navigator
+          screenOptions={{ headerShown: false, animation: 'fade' }}
+        >
+          {isAuthenticated ? (
+            <Stack.Screen name="Main" component={MainTabNavigator} />
+          ) : (
+            <Stack.Screen name="Auth" component={AuthNavigator} />
+          )}
+        </Stack.Navigator>
+      </NavigationContainer>
+      {isAuthenticated ? <NotificationHost /> : null}
+    </View>
   );
 }
 

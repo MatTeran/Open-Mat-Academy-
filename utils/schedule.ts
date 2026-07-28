@@ -1,10 +1,15 @@
-import { WEEKDAYS, WEEKLY_SCHEDULE } from '../lib/data/schedule';
+import {
+  CLASS_LEVEL_LABELS,
+  WEEKDAYS,
+  WEEKLY_SCHEDULE,
+} from '../lib/data/schedule';
 import type { NextClass } from '../types/home';
 import type {
   ClassLevel,
   GiType,
   ScheduleClass,
   ScheduleFilter,
+  ScheduleGiFilter,
   Weekday,
 } from '../types/schedule';
 
@@ -52,30 +57,98 @@ export function formatGiType(giType: GiType): string {
       return 'Gi';
     case 'no_gi':
       return 'No-Gi';
-    case 'both':
+    case 'gi_no_gi':
       return 'Gi / No-Gi';
     case 'none':
-      return '—';
+      return 'No gi required';
     default:
       return giType;
   }
 }
 
+/** Monday of the upcoming week (if today is Monday, returns next Monday). */
+export function getNextWeekAnchor(from = new Date()): Date {
+  const date = new Date(from);
+  date.setHours(12, 0, 0, 0);
+  const jsDay = date.getDay();
+  const daysUntilNextMonday = jsDay === 0 ? 1 : 8 - jsDay;
+  date.setDate(date.getDate() + daysUntilNextMonday);
+  return date;
+}
+
+function matchesGiFilter(
+  giType: GiType,
+  giFilter: ScheduleGiFilter,
+): boolean {
+  if (giFilter === 'all') {
+    return true;
+  }
+  if (giFilter === 'gi') {
+    return giType === 'gi' || giType === 'gi_no_gi';
+  }
+  return giType === 'no_gi' || giType === 'gi_no_gi';
+}
+
+function matchesProgramFilter(
+  level: ClassLevel,
+  filter: ScheduleFilter,
+): boolean {
+  if (filter === 'all') {
+    return true;
+  }
+  return level === filter;
+}
+
 export function getClassesForDay(
   day: Weekday,
   filter: ScheduleFilter = 'all',
+  giFilter: ScheduleGiFilter = 'all',
 ): ScheduleClass[] {
   return WEEKLY_SCHEDULE.filter((item) => {
     if (item.day !== day) {
       return false;
     }
-    if (filter === 'all') {
-      return true;
+    if (!matchesProgramFilter(item.level, filter)) {
+      return false;
     }
-    return item.level === filter;
+    return matchesGiFilter(item.giType, giFilter);
   }).sort(
     (a, b) => parseTimeToMinutes(a.startTime) - parseTimeToMinutes(b.startTime),
   );
+}
+
+export function getClassesForWeek(
+  filter: ScheduleFilter = 'all',
+  giFilter: ScheduleGiFilter = 'all',
+): ScheduleClass[] {
+  return WEEKLY_SCHEDULE.filter((item) => {
+    if (!matchesProgramFilter(item.level, filter)) {
+      return false;
+    }
+    return matchesGiFilter(item.giType, giFilter);
+  }).sort((a, b) => {
+    const dayDiff =
+      WEEKDAYS.findIndex((day) => day.key === a.day) -
+      WEEKDAYS.findIndex((day) => day.key === b.day);
+    if (dayDiff !== 0) {
+      return dayDiff;
+    }
+    return parseTimeToMinutes(a.startTime) - parseTimeToMinutes(b.startTime);
+  });
+}
+
+export function groupClassesByDay(
+  classes: ScheduleClass[],
+): Array<{ day: Weekday; classes: ScheduleClass[] }> {
+  return WEEKDAYS.map((day) => ({
+    day: day.key,
+    classes: classes
+      .filter((item) => item.day === day.key)
+      .sort(
+        (a, b) =>
+          parseTimeToMinutes(a.startTime) - parseTimeToMinutes(b.startTime),
+      ),
+  }));
 }
 
 /** Dates for the week containing `anchor` (Mon–Sun). */
@@ -142,15 +215,17 @@ export function toNextClassCardModel(now = new Date()): NextClass | null {
     return null;
   }
 
+  const giLabel =
+    next.classItem.giType === 'none'
+      ? CLASS_LEVEL_LABELS[next.classItem.level]
+      : formatGiType(next.classItem.giType);
+
   return {
     id: next.classItem.id,
     title: next.classItem.title,
     coach: next.classItem.instructor,
     startsAt: next.startsAt.toISOString(),
-    room:
-      next.classItem.giType === 'none'
-        ? 'Tracy'
-        : `${formatGiType(next.classItem.giType)} · Tracy`,
+    room: `${giLabel} · Tracy`,
     durationMinutes: durationMinutes(
       next.classItem.startTime,
       next.classItem.endTime,
@@ -162,7 +237,7 @@ export function isClassLevel(value: string): value is ClassLevel {
   return (
     value === 'adult_bjj' ||
     value === 'youth_bjj' ||
-    value === 'pee_wee' ||
+    value === 'pee_wee_bjj' ||
     value === 'womens_bjj' ||
     value === 'boxing' ||
     value === 'muay_thai' ||

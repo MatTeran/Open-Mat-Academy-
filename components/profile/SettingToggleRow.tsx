@@ -30,6 +30,8 @@ export function SettingToggleRow({
       <Switch
         value={value}
         onValueChange={onValueChange}
+        accessibilityLabel={label}
+        accessibilityHint={description}
         trackColor={{ false: colors.border, true: colors.goldMuted }}
         thumbColor={value ? colors.goldAccent : colors.secondaryText}
       />
