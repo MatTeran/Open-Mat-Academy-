@@ -39,7 +39,7 @@ export function getDemoSession(): CoachSession {
   return {
     user: DEMO_USER,
     academyId: 'academy-open-mat',
-    academyName: 'Open Mat HQ',
+    academyName: 'Open Mat Academy',
   };
 }
 

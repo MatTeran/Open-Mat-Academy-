@@ -171,6 +171,11 @@ export function CommandCenterScreen({ navigation }: Props) {
       </FadeInHero>
 
       <Spacer size="lg" />
+      <SectionHeader
+        title="Academy Pulse"
+        subtitle="Tap any tile for graphs and filters"
+      />
+      <Spacer size="sm" />
       <View style={styles.kpiGrid}>
         {pulse.map((metric, index) => (
           <KpiCard
@@ -181,6 +186,9 @@ export function CommandCenterScreen({ navigation }: Props) {
             icon={metric.icon as IconName}
             tint={metric.tint}
             trendLabel={metric.trendLabel}
+            onPress={() =>
+              navigation.navigate('PulseInsight', { pulseId: metric.id })
+            }
           />
         ))}
       </View>

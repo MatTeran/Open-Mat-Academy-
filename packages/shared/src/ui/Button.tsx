@@ -98,7 +98,7 @@ export function Button({
             isDisabled &&
               resolvedVariant === 'primaryGold' && {
                 backgroundColor: colors.goldTintSurface,
-                borderColor: 'rgba(45, 212, 191, 0.45)',
+                borderColor: 'rgba(255, 255, 255, 0.45)',
               },
           ]}
         >

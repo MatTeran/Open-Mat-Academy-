@@ -11,6 +11,7 @@ import type {
 } from '@openmat/shared';
 
 import { TODAY } from './coachData';
+import { MOCK_PULSE_INSIGHTS } from './pulseInsights';
 
 function addDays(isoDate: string, days: number) {
   const date = new Date(`${isoDate}T12:00:00`);
@@ -229,7 +230,7 @@ export const MOCK_EVENTS: CoachEvent[] = [
     description: 'Inter-academy competition showcase.',
     type: 'competition',
     status: 'published',
-    location: 'Open Mat HQ',
+    location: 'Open Mat Academy',
     startAt: `${addDays(TODAY, 12)}T18:00:00.000Z`,
     endAt: `${addDays(TODAY, 12)}T22:00:00.000Z`,
     capacity: 120,
@@ -802,4 +803,5 @@ export const MOCK_COMMAND_CENTER: CommandCenterData = {
       tint: '#FB7185',
     },
   ],
+  pulseInsights: MOCK_PULSE_INSIGHTS,
 };

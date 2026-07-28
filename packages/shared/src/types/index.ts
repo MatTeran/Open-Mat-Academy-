@@ -138,6 +138,7 @@ export type {
   NotificationKind,
 } from './notifications';
 export type {
+  AcademyPulseInsight,
   AcademyPulseMetric,
   AiInsightCard,
   AnalyticsSnapshot,
@@ -147,6 +148,12 @@ export type {
   CommandCenterData,
   LiveFeedItem,
   MomentumCard,
+  PulseChartPoint,
+  PulseInsightBeltFilter,
+  PulseInsightChartSet,
+  PulseInsightClassFilter,
+  PulseInsightRange,
+  PulseInsightRow,
   QuickCommand,
   QuickCommandId,
   UpcomingCommandEvent,

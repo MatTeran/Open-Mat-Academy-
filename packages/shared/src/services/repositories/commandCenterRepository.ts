@@ -13,6 +13,7 @@ const emptyCommandCenterData: CommandCenterData = {
   quickCommands: [],
   aiInsights: [],
   snapshots: [],
+  pulseInsights: [],
 };
 
 export function createMemoryCommandCenterRepository(
@@ -37,6 +38,28 @@ export function createMemoryCommandCenterRepository(
         snapshots: commandCenter.snapshots.map((snapshot) => ({
           ...snapshot,
           points: [...snapshot.points],
+        })),
+        pulseInsights: commandCenter.pulseInsights.map((insight) => ({
+          ...insight,
+          charts: {
+            '7d': {
+              ...insight.charts['7d'],
+              line: insight.charts['7d'].line.map((point) => ({ ...point })),
+              bars: insight.charts['7d'].bars.map((point) => ({ ...point })),
+            },
+            '30d': {
+              ...insight.charts['30d'],
+              line: insight.charts['30d'].line.map((point) => ({ ...point })),
+              bars: insight.charts['30d'].bars.map((point) => ({ ...point })),
+            },
+            '90d': {
+              ...insight.charts['90d'],
+              line: insight.charts['90d'].line.map((point) => ({ ...point })),
+              bars: insight.charts['90d'].bars.map((point) => ({ ...point })),
+            },
+          },
+          rows: insight.rows.map((row) => ({ ...row })),
+          takeaways: [...insight.takeaways],
         })),
       };
     },

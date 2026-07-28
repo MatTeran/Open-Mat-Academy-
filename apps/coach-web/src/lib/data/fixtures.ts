@@ -1002,6 +1002,7 @@ const commandCenter: CommandCenterData = {
       tint: '#22C55E',
     },
   ],
+  pulseInsights: [],
 };
 
 export const webFixtures = {

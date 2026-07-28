@@ -15,27 +15,27 @@ const BELT_COLORS: Record<
   white: {
     fill: '#F2F2F0',
     stripe: '#141414',
-    border: 'rgba(212,175,55,0.55)',
+    border: 'rgba(255,255,255,0.55)',
   },
   blue: {
     fill: '#1A4F9C',
     stripe: '#F4F4F4',
-    border: 'rgba(212,175,55,0.4)',
+    border: 'rgba(255,255,255,0.4)',
   },
   purple: {
     fill: '#5A2D82',
     stripe: '#F4F4F4',
-    border: 'rgba(212,175,55,0.4)',
+    border: 'rgba(255,255,255,0.4)',
   },
   brown: {
     fill: '#6B3F24',
     stripe: '#F4F4F4',
-    border: 'rgba(212,175,55,0.4)',
+    border: 'rgba(255,255,255,0.4)',
   },
   black: {
     fill: '#0E0E0E',
     stripe: '#F4F4F4',
-    border: 'rgba(212,175,55,0.75)',
+    border: 'rgba(255,255,255,0.75)',
   },
 };
 
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
     width: 4,
     height: '55%',
     borderRadius: 2,
-    backgroundColor: 'rgba(212,175,55,0.65)',
+    backgroundColor: 'rgba(255,255,255,0.65)',
   },
   bodySpacer: {
     flex: 1,

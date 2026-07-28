@@ -85,6 +85,7 @@ export {
   type TechniquesRepository,
 } from './repositories/techniquesRepository';
 export type {
+  AcademyPulseInsight,
   AcademyPulseMetric,
   AcademyRoleAssignment,
   AcademyRoleKey,

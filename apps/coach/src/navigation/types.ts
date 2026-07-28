@@ -33,6 +33,7 @@ export type MoreStackParamList = {
   Announcements: undefined;
   AnnouncementForm: { announcementId?: string } | undefined;
   CommandCenter: undefined;
+  PulseInsight: { pulseId: string };
   Techniques: undefined;
   TechniqueForm: { techniqueId?: string } | undefined;
   Challenges: undefined;

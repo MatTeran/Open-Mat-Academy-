@@ -7,6 +7,61 @@ export interface AcademyPulseMetric {
   trendLabel?: string;
 }
 
+export type PulseInsightRange = '7d' | '30d' | '90d';
+
+export type PulseInsightClassFilter =
+  | 'all'
+  | 'gi'
+  | 'no_gi'
+  | 'kids'
+  | 'open_mat';
+
+export type PulseInsightBeltFilter =
+  | 'all'
+  | 'white'
+  | 'blue'
+  | 'purple'
+  | 'brown'
+  | 'black';
+
+export interface PulseChartPoint {
+  label: string;
+  value: number;
+}
+
+export interface PulseInsightChartSet {
+  summaryValue: string;
+  summaryHelper: string;
+  trendLabel: string;
+  line: PulseChartPoint[];
+  bars: PulseChartPoint[];
+  lineTitle: string;
+  barsTitle: string;
+}
+
+export interface PulseInsightRow {
+  id: string;
+  label: string;
+  value: string;
+  helper?: string;
+  classType?: Exclude<PulseInsightClassFilter, 'all'>;
+  belt?: Exclude<PulseInsightBeltFilter, 'all'>;
+  tint?: string;
+}
+
+export interface AcademyPulseInsight {
+  pulseId: string;
+  title: string;
+  description: string;
+  icon: string;
+  tint: string;
+  supportsClassFilter: boolean;
+  supportsBeltFilter: boolean;
+  charts: Record<PulseInsightRange, PulseInsightChartSet>;
+  rows: PulseInsightRow[];
+  takeaways: string[];
+}
+
 export type AttentionPriority = 'high' | 'medium' | 'low';
 
 export type AttentionActionId =
@@ -110,4 +165,5 @@ export interface CommandCenterData {
   quickCommands: QuickCommand[];
   aiInsights: AiInsightCard[];
   snapshots: AnalyticsSnapshot[];
+  pulseInsights: AcademyPulseInsight[];
 }

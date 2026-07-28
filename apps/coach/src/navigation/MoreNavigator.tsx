@@ -10,6 +10,7 @@ import { AnnouncementsScreen } from '../screens/announcements/AnnouncementsScree
 import { ChallengeFormScreen } from '../screens/challenges/ChallengeFormScreen';
 import { ChallengesScreen } from '../screens/challenges/ChallengesScreen';
 import { CommandCenterScreen } from '../screens/command/CommandCenterScreen';
+import { PulseInsightScreen } from '../screens/command/PulseInsightScreen';
 import { EventFormScreen } from '../screens/events/EventFormScreen';
 import { EventsScreen } from '../screens/events/EventsScreen';
 import { JourneyMemberScreen } from '../screens/journey/JourneyMemberScreen';
@@ -59,6 +60,11 @@ export function MoreNavigator() {
         name="CommandCenter"
         component={CommandCenterScreen}
         options={{ title: 'Command Center' }}
+      />
+      <Stack.Screen
+        name="PulseInsight"
+        component={PulseInsightScreen}
+        options={{ title: 'Pulse Insights' }}
       />
       <Stack.Screen
         name="Techniques"
