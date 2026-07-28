@@ -25,11 +25,13 @@ docs/                 Architecture notes
 
 ## Brand
 
+Member app matches the latest **Dark Mat User App** look (charcoal + gold). Logo remains the official Gracie Fighter / Open Mat Academy seal.
+
 | Token | Value |
 | --- | --- |
-| Primary background | `#000000` |
-| Secondary background | `#111111` |
-| Accent | `#FFFFFF` |
+| Primary background | `#0D0D0D` |
+| Secondary background | `#181818` |
+| Gold accent | `#D4AF37` |
 | Text | `#FFFFFF` |
 | Secondary text | `#A0A0A0` |
 | Error | `#FF4D4D` |
@@ -37,7 +39,7 @@ docs/                 Architecture notes
 
 - **Brand name:** Open Mat  
 - **Academy:** Open Mat Academy  
-- **Logo:** Official Gracie Fighter / Open Mat Academy seal (black & white)  
+- **Logo:** Official Gracie Fighter / Open Mat Academy seal  
 - **Typography:** Syne (display) + Outfit (UI)
 
 ## Scripts
