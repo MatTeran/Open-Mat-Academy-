@@ -28,7 +28,7 @@ export interface ButtonProps extends Omit<PressableProps, 'children'> {
 }
 
 /**
- * Primary interaction control — gold CTA matches Dark Mat User App look.
+ * Primary interaction control — gold CTA matches Open Mat black & white branding.
  * Background is painted on an inner View for NativeWind Pressable safety.
  */
 export function Button({
@@ -102,7 +102,7 @@ export function Button({
             isDisabled &&
               resolvedVariant === 'primaryGold' && {
                 backgroundColor: colors.goldTintSurface,
-                borderColor: 'rgba(212, 175, 55, 0.45)',
+                borderColor: 'rgba(255, 255, 255, 0.45)',
               },
           ]}
         >

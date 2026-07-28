@@ -1,16 +1,16 @@
 /**
  * Open Mat brand color palettes.
- * Matches the Dark Mat User App premium athletic look — gold accents on charcoal.
+ * Black & white athletic identity matching the official academy seal.
  */
 
 export const darkColors = {
-  primaryBackground: '#0D0D0D',
-  secondaryBackground: '#181818',
+  primaryBackground: '#000000',
+  secondaryBackground: '#111111',
   cardBackground: '#141414',
-  elevatedSurface: '#1D1D1D',
-  goldAccent: '#D4AF37',
-  highlightGold: '#F4D35E',
-  goldPressed: '#B8952F',
+  elevatedSurface: '#1C1C1C',
+  goldAccent: '#FFFFFF',
+  highlightGold: '#F5F5F5',
+  goldPressed: '#D4D4D4',
   text: '#FFFFFF',
   secondaryText: '#B8B8B8',
   error: '#FF4D4D',
@@ -18,9 +18,9 @@ export const darkColors = {
   warning: '#F59E0B',
   info: '#38BDF8',
   border: '#2A2A2A',
-  overlay: 'rgba(13, 13, 13, 0.72)',
-  goldMuted: 'rgba(212, 175, 55, 0.16)',
-  goldTintSurface: '#2A2414',
+  overlay: 'rgba(0, 0, 0, 0.72)',
+  goldMuted: 'rgba(255, 255, 255, 0.14)',
+  goldTintSurface: '#1A1A1A',
 } as const;
 
 export const lightColors = {
@@ -28,10 +28,10 @@ export const lightColors = {
   secondaryBackground: '#FFFFFF',
   cardBackground: '#FFFFFF',
   elevatedSurface: '#FFFFFF',
-  goldAccent: '#C4A035',
-  highlightGold: '#D4AF37',
-  goldPressed: '#A8882A',
-  text: '#0D0D0D',
+  goldAccent: '#111111',
+  highlightGold: '#FFFFFF',
+  goldPressed: '#000000',
+  text: '#000000',
   secondaryText: '#6B6B6B',
   error: '#DC2626',
   success: '#16A34A',
@@ -39,8 +39,8 @@ export const lightColors = {
   info: '#0284C7',
   border: '#E4E4E0',
   overlay: 'rgba(245, 245, 243, 0.82)',
-  goldMuted: 'rgba(196, 160, 53, 0.14)',
-  goldTintSurface: '#F3EBD4',
+  goldMuted: 'rgba(0, 0, 0, 0.08)',
+  goldTintSurface: '#F0F0F0',
 } as const;
 
 /** Default export remains the dark palette for static fallbacks. */
