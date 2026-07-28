@@ -8,7 +8,7 @@ import { View } from 'react-native';
 
 import { useAuth, useAppTheme } from '@openmat/shared';
 
-import { HeaderBackButton } from '../components/layout/HeaderBackButton';
+import { HeaderBackButton } from './HeaderBackButton';
 import { CreateSheetScreen } from '../screens/create/CreateSheetScreen';
 import { AuthNavigator } from './AuthNavigator';
 import { MainTabNavigator } from './MainTabNavigator';

@@ -2,7 +2,7 @@ import type { ThemeColors } from '@openmat/shared';
 import { fontFamilies } from '@openmat/shared';
 import type { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 
-import { HeaderBackButton } from '../components/layout/HeaderBackButton';
+import { HeaderBackButton } from './HeaderBackButton';
 
 /** Shared native-stack chrome for Coach nested screens, with a visible Back control. */
 export function coachStackScreenOptions(
