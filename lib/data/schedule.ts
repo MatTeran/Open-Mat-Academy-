@@ -42,20 +42,6 @@ export const CLASS_LEVEL_LABELS: Record<ClassLevel, string> = {
   open_mat: 'Open Mat / Gym',
 };
 
-/** Flyer legend colors for schedule chips. */
-export const CLASS_LEVEL_COLORS: Record<ClassLevel, string> = {
-  adult_bjj: '#3B82F6',
-  youth_bjj: '#14B8A6',
-  pee_wee: '#166534',
-  womens_bjj: '#EC4899',
-  boxing: '#EF4444',
-  muay_thai: '#FB923C',
-  wrestling: '#8B5CF6',
-  peak_performance: '#86EFAC',
-  taekwondo: '#FDE047',
-  open_mat: '#EAB308',
-};
-
 function cls(
   day: Weekday,
   startTime: string,
