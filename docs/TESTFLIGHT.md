@@ -2,10 +2,12 @@
 
 This repo is wired for **EAS Build + EAS Submit** so both iOS apps can land on TestFlight:
 
-| App | Path | Bundle ID |
-| --- | --- | --- |
-| Member (User) | repo root | `com.openmat.academy` |
-| Coach | `apps/coach` | `com.openmat.coach` |
+| App | Path | iOS Bundle ID | ASC App ID |
+| --- | --- | --- | --- |
+| Member (User) | repo root | `com.openmat.academy` | `6797066496` |
+| Coach | `apps/coach` | `OpenMatCoach` | `6797064049` |
+
+> Coach Android package remains `com.openmat.coach`. iOS uses `OpenMatCoach` to match the existing App Store Connect app.
 
 ## What you need (credentials)
 

@@ -14,7 +14,7 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.openmat.coach",
+      "bundleIdentifier": "OpenMatCoach",
       "buildNumber": "1",
       "infoPlist": {
         "UIBackgroundModes": [

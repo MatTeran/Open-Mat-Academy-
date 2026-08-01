@@ -45,3 +45,7 @@ yarn-error.*
 apps/coach-web/.next/
 apps/coach-web/out/
 
+
+# App Store Connect API keys
+AuthKey_*.p8
+**/*.p8
