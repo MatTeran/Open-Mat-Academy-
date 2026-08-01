@@ -10,7 +10,7 @@ import type {
   MemberDevelopmentSummary,
   PromotionHistoryEntry,
 } from '@openmat/shared/types';
-import { buildWeeklyCoachClasses } from '@openmat/shared';
+import { buildWeeklyCoachClasses } from '@openmat/shared/data';
 
 function todayISO() {
   return new Date().toISOString().slice(0, 10);

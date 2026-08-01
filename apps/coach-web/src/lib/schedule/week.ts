@@ -2,7 +2,7 @@ import {
   CLASS_LEVEL_COLORS,
   type ClassLevel,
   type GiType,
-} from '@openmat/shared';
+} from '@openmat/shared/types';
 
 /** Week-calendar helpers for Coach Web schedule. */
 

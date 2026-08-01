@@ -9,6 +9,7 @@
     "./theme": "./src/theme/index.ts",
     "./ui": "./src/ui/index.ts",
     "./types": "./src/types/index.ts",
+    "./data": "./src/data/index.ts",
     "./auth": "./src/auth/index.ts",
     "./auth/roles": "./src/auth/roles.ts",
     "./services": "./src/services/index.ts",

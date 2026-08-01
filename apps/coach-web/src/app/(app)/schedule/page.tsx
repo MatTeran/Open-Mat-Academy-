@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { CLASS_LEVEL_LABELS } from '@openmat/shared';
+import { CLASS_LEVEL_LABELS } from '@openmat/shared/types';
 
 import { WeekCalendar } from '@/components/schedule/WeekCalendar';
 import { getCoachWebData } from '@/lib/data';
