@@ -11,6 +11,7 @@ import {
   type CoachMemberProfile,
 } from '@openmat/shared';
 
+import { BeltBadge } from '../../components/development/BeltBadge';
 import { MemberDevelopmentPanel } from '../../components/development/MemberDevelopmentPanel';
 import { SectionHeader, StatusPill } from '../../components/ui/Motion';
 import { useCoachData } from '../../lib/providers/CoachDataProvider';
@@ -59,32 +60,36 @@ export function MemberDetailScreen({ navigation, route }: Props) {
 
   return (
     <Screen scroll keyboard>
-      <View style={styles.header}>
-        <View style={styles.avatar}>
-          <Text variant="title" gold>
-            {profile.fullName
-              .split(' ')
-              .map((part) => part[0])
-              .join('')
-              .slice(0, 2)}
-          </Text>
+      <View style={styles.headerBlock}>
+        <View style={styles.header}>
+          <View style={styles.avatar}>
+            <Text variant="title" gold>
+              {profile.fullName
+                .split(' ')
+                .map((part) => part[0])
+                .join('')
+                .slice(0, 2)}
+            </Text>
+          </View>
+          <View style={styles.headerCopy}>
+            <Text variant="hero">{profile.fullName}</Text>
+            <Text variant="body" muted>
+              {profile.email}
+            </Text>
+          </View>
         </View>
-        <View style={styles.headerCopy}>
-          <Text variant="hero">{profile.fullName}</Text>
-          <Text variant="body" muted>
-            {profile.email}
-          </Text>
-          <Spacer size="xs" />
-          <StatusPill
-            label={`${profile.belt} · ${profile.stripes} stripes`}
-            color="#FFFFFF"
-          />
-        </View>
+        <Spacer size="md" />
+        <BeltBadge
+          belt={profile.belt}
+          stripes={profile.stripes}
+          fullWidth
+        />
       </View>
 
       <Spacer size="lg" />
       <MemberDevelopmentPanel
         memberId={profile.id}
+        showBeltVisual={false}
         onAddStripe={() =>
           navigation.navigate('AddStripe', { memberId: profile.id })
         }
@@ -229,6 +234,9 @@ export function MemberDetailScreen({ navigation, route }: Props) {
 }
 
 const styles = StyleSheet.create({
+  headerBlock: {
+    width: '100%',
+  },
   header: {
     flexDirection: 'row',
     gap: spacing.md,

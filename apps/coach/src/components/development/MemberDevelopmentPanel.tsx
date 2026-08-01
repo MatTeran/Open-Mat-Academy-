@@ -32,6 +32,8 @@ interface MemberDevelopmentPanelProps {
   onAddStripe: () => void;
   onPromoteBelt: () => void;
   onEditCompetition: () => void;
+  /** When false, hide the belt visual (shown in the member header instead). */
+  showBeltVisual?: boolean;
 }
 
 export function MemberDevelopmentPanel({
@@ -39,6 +41,7 @@ export function MemberDevelopmentPanel({
   onAddStripe,
   onPromoteBelt,
   onEditCompetition,
+  showBeltVisual = true,
 }: MemberDevelopmentPanelProps) {
   const { colors } = useAppTheme();
   const { user } = useAuth();
@@ -100,8 +103,12 @@ export function MemberDevelopmentPanel({
           title="Member Development"
           subtitle="Official academy progression record"
         />
-        <Spacer size="md" />
-        <BeltBadge belt={development.belt} stripes={development.stripes} />
+        {showBeltVisual ? (
+          <>
+            <Spacer size="md" />
+            <BeltBadge belt={development.belt} stripes={development.stripes} />
+          </>
+        ) : null}
         <Spacer size="md" />
         <View style={styles.metaGrid}>
           <Meta

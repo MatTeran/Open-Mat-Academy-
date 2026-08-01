@@ -44,6 +44,8 @@ interface BeltBadgeProps {
   stripes: BeltStripeCount;
   size?: 'md' | 'lg';
   showLabel?: boolean;
+  /** Stretch the cloth bar across the available width (profile header). */
+  fullWidth?: boolean;
 }
 
 /** Authentic BJJ belt: cloth body + right rank sleeve with tape stripes. */
@@ -52,19 +54,21 @@ export function BeltBadge({
   stripes,
   size = 'lg',
   showLabel = true,
+  fullWidth = false,
 }: BeltBadgeProps) {
   const palette = BELT_COLORS[belt];
-  const width = size === 'lg' ? 236 : 180;
+  const width = fullWidth ? ('100%' as const) : size === 'lg' ? 236 : 180;
   const height = size === 'lg' ? 28 : 22;
   const sleeve = size === 'lg' ? 64 : 52;
   const tapeWidth = size === 'lg' ? 6 : 5;
   const tapeHeight = height - 10;
 
   return (
-    <View style={styles.wrap}>
+    <View style={[styles.wrap, fullWidth && styles.wrapFull]}>
       <View
         style={[
           styles.belt,
+          fullWidth && styles.beltFull,
           {
             width,
             height,
@@ -126,12 +130,18 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
     alignItems: 'flex-start',
   },
+  wrapFull: {
+    width: '100%',
+  },
   belt: {
     borderRadius: 3,
     borderWidth: 1,
     flexDirection: 'row',
     alignItems: 'center',
     overflow: 'hidden',
+  },
+  beltFull: {
+    alignSelf: 'stretch',
   },
   tip: {
     marginLeft: 6,
