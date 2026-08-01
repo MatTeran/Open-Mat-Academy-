@@ -78,4 +78,6 @@ After Apple finishes processing (often 5–30 minutes), open **App Store Connect
 
 - Build numbers auto-increment via `"autoIncrement": true` + `"appVersionSource": "remote"`.
 - Native signing credentials can be managed by EAS (recommended) the first time you build.
+- If capability sync fails against Apple, retry with `EXPO_NO_CAPABILITY_SYNC=1`.
 - Coach-web is **not** a TestFlight target (it's Next.js). Only Member + Coach mobile go to TestFlight.
+- Rotate Expo tokens and ASC API keys after sharing them in chat.
