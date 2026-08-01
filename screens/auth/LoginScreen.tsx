@@ -98,7 +98,7 @@ export function LoginScreen({ navigation }: Props) {
     >
       <Banner
         tone="info"
-        message="Sign in with your email (prefilled) or use alex@openmat.demo / demo1234."
+        message="Supabase sign-in enabled. Use your email (prefilled) or alex@openmat.demo / demo1234."
       />
       <Spacer size="md" />
 

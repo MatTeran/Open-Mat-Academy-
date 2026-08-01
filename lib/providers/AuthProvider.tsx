@@ -141,7 +141,11 @@ export function AuthProvider({ children }: PropsWithChildren) {
     async (credentials: AuthCredentials) => {
       await clearGuestMode();
 
-      const demo = findDemoAccount(credentials.email, credentials.password);
+      // Offline @openmat.demo personas always work. Owner env fallback only
+      // when Supabase is not configured — real emails hit Supabase Auth.
+      const demo = findDemoAccount(credentials.email, credentials.password, {
+        includeOwnerFallback: !isConfigured,
+      });
       if (demo) {
         setUser(demo.user);
         setSession(createDemoSession(demo.user.id));
@@ -151,7 +155,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
 
       if (!isConfigured) {
         throw new Error(
-          'Supabase is not connected in this build. Use the prefilled login, alex@openmat.demo / demo1234, or Continue as Guest.',
+          'Supabase is not connected in this build. Use alex@openmat.demo / demo1234 or Continue as Guest.',
         );
       }
 
