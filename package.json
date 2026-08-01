@@ -24,7 +24,13 @@
     "lint:all": "npm run typecheck:all",
     "start:member:tunnel": "expo start --tunnel --port 8081",
     "start:coach:tunnel": "npm run start --workspace=@openmat/coach -- --tunnel --port 8082",
-    "demo:qr": "node scripts/generate-demo-qr.js"
+    "demo:qr": "node scripts/generate-demo-qr.js",
+    "eas:member:build:ios": "npx eas-cli build --platform ios --profile production --non-interactive",
+    "eas:member:submit:ios": "npx eas-cli submit --platform ios --profile production --latest --non-interactive",
+    "eas:member:testflight": "npx eas-cli build --platform ios --profile production --auto-submit --non-interactive",
+    "eas:coach:build:ios": "npm run eas:build:ios --workspace=@openmat/coach",
+    "eas:coach:submit:ios": "npm run eas:submit:ios --workspace=@openmat/coach",
+    "eas:coach:testflight": "npm run eas:testflight --workspace=@openmat/coach"
   },
   "dependencies": {
     "@expo-google-fonts/outfit": "^0.4.3",

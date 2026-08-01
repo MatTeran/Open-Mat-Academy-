@@ -9,7 +9,10 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "typecheck": "tsc --noEmit",
-    "lint": "tsc --noEmit"
+    "lint": "tsc --noEmit",
+    "eas:build:ios": "npx eas-cli build --platform ios --profile production --non-interactive",
+    "eas:submit:ios": "npx eas-cli submit --platform ios --profile production --latest --non-interactive",
+    "eas:testflight": "npx eas-cli build --platform ios --profile production --auto-submit --non-interactive"
   },
   "dependencies": {
     "@openmat/shared": "*",

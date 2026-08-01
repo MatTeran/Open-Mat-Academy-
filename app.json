@@ -15,10 +15,11 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.openmat.academy",
+      "buildNumber": "1",
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "Open Mat Academy uses your location to send reminders when you are near the gym for class.",
         "NSLocationAlwaysAndWhenInUseUsageDescription": "Open Mat Academy uses your location to send reminders when you are near the gym for class.",
-        "UIBackgroundModes": ["location"]
+        "UIBackgroundModes": ["location", "remote-notification"]
       }
     },
     "android": {
@@ -58,6 +59,18 @@
           "isAndroidBackgroundLocationEnabled": true
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "REPLACE_AFTER_EAS_INIT"
+      }
+    },
+    "owner": "REPLACE_WITH_EXPO_ACCOUNT",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/REPLACE_AFTER_EAS_INIT"
+    }
   }
 }
