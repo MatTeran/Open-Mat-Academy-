@@ -1,0 +1,12 @@
+# Keep EAS uploads lean
+**/node_modules/**
+**/.expo/**
+**/.git/**
+**/dist/**
+**/web-build/**
+apps/coach-web/.next/**
+apps/coach-web/out/**
+**/*.md
+!docs/TESTFLIGHT.md
+agent-transcripts/**
+.tmp/**
