@@ -67,7 +67,15 @@ export function ClassDetailScreen({ navigation, route }: Props) {
           }
         />
         <StatusPill
-          label={classItem.giType === 'gi' ? 'Gi' : 'No-Gi'}
+          label={
+            classItem.giType === 'gi'
+              ? 'Gi'
+              : classItem.giType === 'no_gi'
+                ? 'No-Gi'
+                : classItem.giType === 'gi_no_gi'
+                  ? 'Gi / No-Gi'
+                  : 'Open format'
+          }
           color={colors.info}
         />
         <StatusPill label={classItem.audience} color={colors.highlightGold} />

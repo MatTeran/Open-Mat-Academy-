@@ -1,4 +1,5 @@
-import type { ClassLevel, Weekday } from '@openmat/shared';
+import type { ClassLevel, GiType, Weekday } from '@openmat/shared';
+import { CLASS_LEVEL_LABELS as SHARED_LEVEL_LABELS } from '@openmat/shared';
 
 export const WEEKDAYS: { key: Weekday; label: string; short: string }[] = [
   { key: 'mon', label: 'Monday', short: 'Mon' },
@@ -12,31 +13,36 @@ export const WEEKDAYS: { key: Weekday; label: string; short: string }[] = [
 
 export type CoachScheduleFilter =
   | 'all'
-  | 'kids'
-  | 'fundamentals'
-  | 'advanced'
-  | 'competition'
+  | 'adult_bjj'
+  | 'youth_bjj'
+  | 'pee_wee_bjj'
+  | 'womens_bjj'
+  | 'boxing'
+  | 'muay_thai'
+  | 'wrestling'
+  | 'peak_performance'
+  | 'taekwondo'
   | 'open_mat'
-  | 'seminar';
+  | 'seminar'
+  | 'kids';
 
 export const SCHEDULE_FILTERS: { key: CoachScheduleFilter; label: string }[] = [
   { key: 'all', label: 'All' },
-  { key: 'kids', label: 'Kids' },
-  { key: 'fundamentals', label: 'Fundamentals' },
-  { key: 'advanced', label: 'Advanced' },
-  { key: 'competition', label: 'Competition' },
+  { key: 'adult_bjj', label: 'Adult BJJ' },
+  { key: 'youth_bjj', label: 'Youth BJJ' },
+  { key: 'pee_wee_bjj', label: 'Pee Wee' },
+  { key: 'womens_bjj', label: "Women's" },
+  { key: 'boxing', label: 'Boxing' },
+  { key: 'muay_thai', label: 'Muay Thai' },
+  { key: 'wrestling', label: 'Wrestling' },
+  { key: 'peak_performance', label: 'Peak Perf.' },
+  { key: 'taekwondo', label: 'TKD' },
   { key: 'open_mat', label: 'Open Mat' },
+  { key: 'kids', label: 'Kids' },
   { key: 'seminar', label: 'Seminar' },
 ];
 
-export const CLASS_LEVEL_LABELS: Record<ClassLevel, string> = {
-  kids: 'Kids',
-  fundamentals: 'Fundamentals',
-  advanced: 'Advanced',
-  competition: 'Competition',
-  open_mat: 'Open Mat',
-  seminar: 'Seminar',
-};
+export const CLASS_LEVEL_LABELS: Record<ClassLevel, string> = SHARED_LEVEL_LABELS;
 
 const WEEKDAY_BY_JS_DAY: Weekday[] = [
   'sun',
@@ -100,8 +106,19 @@ export function formatTimeRange(startTime: string, endTime: string): string {
   return `${formatClock(startTime)} – ${formatClock(endTime)}`;
 }
 
-export function formatGiType(giType: 'gi' | 'no_gi'): string {
-  return giType === 'gi' ? 'Gi' : 'No-Gi';
+export function formatGiType(giType: GiType): string {
+  switch (giType) {
+    case 'gi':
+      return 'Gi';
+    case 'no_gi':
+      return 'No-Gi';
+    case 'gi_no_gi':
+      return 'Gi / No-Gi';
+    case 'none':
+      return 'Open format';
+    default:
+      return giType;
+  }
 }
 
 export function sortByStartTime<T extends { startTime: string }>(items: T[]): T[] {

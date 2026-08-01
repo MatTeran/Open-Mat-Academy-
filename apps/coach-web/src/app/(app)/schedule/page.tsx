@@ -1,8 +1,9 @@
 import Link from 'next/link';
+import { CLASS_LEVEL_LABELS } from '@openmat/shared';
 
 import { WeekCalendar } from '@/components/schedule/WeekCalendar';
 import { getCoachWebData } from '@/lib/data';
-import { startOfWeek, toISODate } from '@/lib/schedule/week';
+import { formatGiType, startOfWeek, toISODate } from '@/lib/schedule/week';
 
 export default async function SchedulePage({
   searchParams,
@@ -119,9 +120,11 @@ export default async function SchedulePage({
                   <td className="px-4 py-3 text-white">{item.title}</td>
                   <td className="px-4 py-3 text-mute">{item.instructorName}</td>
                   <td className="px-4 py-3 text-mute">
-                    {item.giType === 'gi' ? 'Gi' : 'No-Gi'}
+                    {formatGiType(item.giType)}
                   </td>
-                  <td className="px-4 py-3 capitalize text-mute">{item.level}</td>
+                  <td className="px-4 py-3 text-mute">
+                    {CLASS_LEVEL_LABELS[item.level] ?? item.level}
+                  </td>
                   <td className="px-4 py-3 text-mute">
                     {item.reservedCount}/{item.capacity}
                   </td>

@@ -1,5 +1,6 @@
 export * from './theme';
 export * from './types';
+export * from './data';
 export * from './auth';
 export * from './services';
 export * from './providers';

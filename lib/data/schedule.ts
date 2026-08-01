@@ -54,16 +54,16 @@ export const CLASS_LEVEL_LABELS: Record<ClassLevel, string> = {
 
 /** Flyer legend colors for schedule chips. */
 export const CLASS_LEVEL_COLORS: Record<ClassLevel, string> = {
-  adult_bjj: '#3B82F6',
+  adult_bjj: '#1E3A8A',
   youth_bjj: '#14B8A6',
-  pee_wee_bjj: '#166534',
+  pee_wee_bjj: '#86EFAC',
   womens_bjj: '#EC4899',
   boxing: '#EF4444',
   muay_thai: '#FB923C',
   wrestling: '#8B5CF6',
-  peak_performance: '#86EFAC',
+  peak_performance: '#166534',
   taekwondo: '#FDE047',
-  open_mat: '#EAB308',
+  open_mat: '#FEF3C7',
 };
 
 function cls(
@@ -166,7 +166,7 @@ export const WEEKLY_SCHEDULE: ScheduleClass[] = [
   cls('tue', '17:00', '18:30', 'Muay Thai (Youth/Adults)', 'muay_thai', 'none', 'Coach MT', {
     spotsLeft: 14,
   }),
-  cls('tue', '17:30', '18:30', 'Wrestling (Ages 5–11)', 'wrestling', 'none', 'Coach Wrestling', {
+  cls('tue', '17:30', '18:00', 'Wrestling (Ages 5–11)', 'wrestling', 'none', 'Coach Wrestling', {
     spotsLeft: 12,
   }),
   cls('tue', '17:30', '18:30', 'Peak Performance', 'peak_performance', 'none', 'Open Mat Staff', {

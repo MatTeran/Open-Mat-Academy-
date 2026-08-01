@@ -9,6 +9,7 @@ import type {
   CreateSheetAction,
   DashboardOverview,
 } from '@openmat/shared';
+import { buildWeeklyCoachClasses } from '@openmat/shared';
 
 function todayISO() {
   return new Date().toISOString().slice(0, 10);
@@ -24,313 +25,11 @@ const TODAY = todayISO();
 
 export const COACH_ACADEMY_ID = 'academy-open-mat';
 
-function dateForWeekday(weekday: number): string {
-  // 0 = Sunday ... 6 = Saturday, matching Date#getDay()
-  const now = new Date(`${TODAY}T12:00:00`);
-  const current = now.getDay();
-  const mondayBasedCurrent = current === 0 ? 6 : current - 1;
-  const mondayBasedTarget = weekday === 0 ? 6 : weekday - 1;
-  const delta = mondayBasedTarget - mondayBasedCurrent;
-  return addDays(TODAY, delta);
-}
-
-const MON = dateForWeekday(1);
-const TUE = dateForWeekday(2);
-const WED = dateForWeekday(3);
-const THU = dateForWeekday(4);
-const FRI = dateForWeekday(5);
-const SAT = dateForWeekday(6);
-const SUN = dateForWeekday(0);
-
-function makeClass(
-  partial: Omit<CoachClass, 'academyId' | 'createdAt' | 'updatedAt' | 'cancelledAt'> &
-    Partial<Pick<CoachClass, 'academyId' | 'createdAt' | 'updatedAt' | 'cancelledAt'>>,
-): CoachClass {
-  return {
-    academyId: COACH_ACADEMY_ID,
-    createdAt: `${TODAY}T01:00:00.000Z`,
-    updatedAt: `${TODAY}T01:00:00.000Z`,
-    cancelledAt: null,
-    ...partial,
-  };
-}
-
-export const MOCK_CLASSES: CoachClass[] = [
-  makeClass({
-    id: 'class-mon-am',
-    title: 'Morning GI Fundamentals',
-    description: 'Positional control and escapes for white–blue belts.',
-    date: MON,
-    startTime: '05:30',
-    endTime: '06:30',
-    instructorId: 'guest-coach-user',
-    instructorName: 'Coach Rivera',
-    giType: 'gi',
-    level: 'fundamentals',
-    audience: 'adults',
-    capacity: 24,
-    reservedCount: 18,
-    checkedInCount: MON === TODAY ? 11 : 0,
-    waitlistCount: 2,
-    firstTimeVisitorCount: MON === TODAY ? 1 : 0,
-    status: 'scheduled',
-    isOpenMat: false,
-    isSeminar: false,
-    recurrence: 'weekly',
-  }),
-  makeClass({
-    id: 'class-mon-kids',
-    title: 'Kids BJJ',
-    date: MON,
-    startTime: '16:00',
-    endTime: '16:45',
-    instructorId: 'coach-park',
-    instructorName: 'Coach Park',
-    giType: 'gi',
-    level: 'kids',
-    audience: 'kids',
-    capacity: 16,
-    reservedCount: 14,
-    checkedInCount: 0,
-    waitlistCount: 1,
-    firstTimeVisitorCount: 2,
-    status: 'scheduled',
-    isOpenMat: false,
-    isSeminar: false,
-    recurrence: 'weekly',
-  }),
-  makeClass({
-    id: 'class-mon-adv',
-    title: 'Adult Advanced No-Gi',
-    date: MON,
-    startTime: '19:00',
-    endTime: '20:30',
-    instructorId: 'guest-coach-user',
-    instructorName: 'Coach Rivera',
-    giType: 'no_gi',
-    level: 'advanced',
-    audience: 'adults',
-    capacity: 20,
-    reservedCount: 16,
-    checkedInCount: 0,
-    waitlistCount: 3,
-    firstTimeVisitorCount: 0,
-    status: 'scheduled',
-    isOpenMat: false,
-    isSeminar: false,
-    recurrence: 'weekly',
-  }),
-  makeClass({
-    id: 'class-tue-fund',
-    title: 'Fundamentals Gi',
-    date: TUE,
-    startTime: '18:00',
-    endTime: '19:00',
-    instructorId: 'coach-silva',
-    instructorName: 'Coach Silva',
-    giType: 'gi',
-    level: 'fundamentals',
-    audience: 'adults',
-    capacity: 22,
-    reservedCount: 15,
-    checkedInCount: 0,
-    waitlistCount: 0,
-    firstTimeVisitorCount: 1,
-    status: 'scheduled',
-    isOpenMat: false,
-    isSeminar: false,
-    recurrence: 'weekly',
-  }),
-  makeClass({
-    id: 'class-tue-comp',
-    title: 'Competition Training',
-    date: TUE,
-    startTime: '19:15',
-    endTime: '20:45',
-    instructorId: 'guest-coach-user',
-    instructorName: 'Coach Rivera',
-    giType: 'no_gi',
-    level: 'competition',
-    audience: 'adults',
-    capacity: 16,
-    reservedCount: 12,
-    checkedInCount: 0,
-    waitlistCount: 2,
-    firstTimeVisitorCount: 0,
-    status: 'scheduled',
-    isOpenMat: false,
-    isSeminar: false,
-    recurrence: 'weekly',
-  }),
-  makeClass({
-    id: 'class-wed-kids',
-    title: 'Kids BJJ',
-    date: WED,
-    startTime: '16:00',
-    endTime: '16:45',
-    instructorId: 'coach-park',
-    instructorName: 'Coach Park',
-    giType: 'gi',
-    level: 'kids',
-    audience: 'kids',
-    capacity: 16,
-    reservedCount: 11,
-    checkedInCount: 0,
-    waitlistCount: 0,
-    firstTimeVisitorCount: 0,
-    status: 'scheduled',
-    isOpenMat: false,
-    isSeminar: false,
-    recurrence: 'weekly',
-  }),
-  makeClass({
-    id: 'class-wed-adv',
-    title: 'Adult Advanced Gi',
-    date: WED,
-    startTime: '19:00',
-    endTime: '20:30',
-    instructorId: 'coach-silva',
-    instructorName: 'Coach Silva',
-    giType: 'gi',
-    level: 'advanced',
-    audience: 'adults',
-    capacity: 20,
-    reservedCount: 17,
-    checkedInCount: 0,
-    waitlistCount: 1,
-    firstTimeVisitorCount: 0,
-    status: 'scheduled',
-    isOpenMat: false,
-    isSeminar: false,
-    recurrence: 'weekly',
-  }),
-  makeClass({
-    id: 'class-thu-fund',
-    title: 'Morning GI Fundamentals',
-    date: THU,
-    startTime: '05:30',
-    endTime: '06:30',
-    instructorId: 'guest-coach-user',
-    instructorName: 'Coach Rivera',
-    giType: 'gi',
-    level: 'fundamentals',
-    audience: 'adults',
-    capacity: 24,
-    reservedCount: 10,
-    checkedInCount: 0,
-    waitlistCount: 0,
-    firstTimeVisitorCount: 0,
-    status: 'scheduled',
-    isOpenMat: false,
-    isSeminar: false,
-    recurrence: 'weekly',
-  }),
-  makeClass({
-    id: 'class-thu-nogi',
-    title: 'Adult Advanced No-Gi',
-    date: THU,
-    startTime: '19:00',
-    endTime: '20:30',
-    instructorId: 'guest-coach-user',
-    instructorName: 'Coach Rivera',
-    giType: 'no_gi',
-    level: 'advanced',
-    audience: 'adults',
-    capacity: 20,
-    reservedCount: 14,
-    checkedInCount: 0,
-    waitlistCount: 2,
-    firstTimeVisitorCount: 1,
-    status: 'scheduled',
-    isOpenMat: false,
-    isSeminar: false,
-    recurrence: 'weekly',
-  }),
-  makeClass({
-    id: 'class-fri-fund',
-    title: 'Fundamentals Gi',
-    date: FRI,
-    startTime: '18:00',
-    endTime: '19:00',
-    instructorId: 'coach-park',
-    instructorName: 'Coach Park',
-    giType: 'gi',
-    level: 'fundamentals',
-    audience: 'adults',
-    capacity: 22,
-    reservedCount: 13,
-    checkedInCount: 0,
-    waitlistCount: 0,
-    firstTimeVisitorCount: 0,
-    status: 'scheduled',
-    isOpenMat: false,
-    isSeminar: false,
-    recurrence: 'weekly',
-  }),
-  makeClass({
-    id: 'class-sat-open',
-    title: 'Open Mat',
-    date: SAT,
-    startTime: '11:00',
-    endTime: '13:00',
-    instructorId: 'guest-coach-user',
-    instructorName: 'Coach Rivera',
-    giType: 'gi',
-    level: 'open_mat',
-    audience: 'all',
-    capacity: 40,
-    reservedCount: 12,
-    checkedInCount: 0,
-    waitlistCount: 0,
-    firstTimeVisitorCount: 0,
-    status: 'scheduled',
-    isOpenMat: true,
-    isSeminar: false,
-    recurrence: 'weekly',
-  }),
-  makeClass({
-    id: 'class-sat-seminar',
-    title: 'Guard Retention Seminar',
-    date: SAT,
-    startTime: '14:00',
-    endTime: '17:00',
-    instructorId: 'coach-silva',
-    instructorName: 'Coach Silva',
-    giType: 'gi',
-    level: 'seminar',
-    audience: 'adults',
-    capacity: 30,
-    reservedCount: 22,
-    checkedInCount: 0,
-    waitlistCount: 4,
-    firstTimeVisitorCount: 3,
-    status: 'scheduled',
-    isOpenMat: false,
-    isSeminar: true,
-    recurrence: 'none',
-  }),
-  makeClass({
-    id: 'class-sun-open',
-    title: 'Sunday Open Mat',
-    date: SUN,
-    startTime: '10:00',
-    endTime: '12:00',
-    instructorId: 'coach-silva',
-    instructorName: 'Coach Silva',
-    giType: 'no_gi',
-    level: 'open_mat',
-    audience: 'all',
-    capacity: 35,
-    reservedCount: 8,
-    checkedInCount: 0,
-    waitlistCount: 0,
-    firstTimeVisitorCount: 0,
-    status: 'scheduled',
-    isOpenMat: true,
-    isSeminar: false,
-    recurrence: 'weekly',
-  }),
-];
+/** Full Open Mat Academy Tracy flyer board for the current week. */
+export const MOCK_CLASSES: CoachClass[] = buildWeeklyCoachClasses({
+  academyId: COACH_ACADEMY_ID,
+  todayISO: TODAY,
+});
 
 function findTodayClassId(
   matcher: (item: CoachClass) => boolean,
@@ -340,16 +39,20 @@ function findTodayClassId(
 }
 
 const TODAY_AM_ID = findTodayClassId(
-  (item) => item.startTime === '05:30' || item.level === 'fundamentals',
-  'class-mon-am',
+  (item) => item.startTime === '05:30' && item.level === 'adult_bjj',
+  MOCK_CLASSES[0]?.id ?? 'class-mon-0530-jiu-jitsu-gi',
 );
 const TODAY_KIDS_ID = findTodayClassId(
-  (item) => item.level === 'kids',
-  'class-mon-kids',
+  (item) =>
+    item.audience === 'kids' &&
+    (item.level === 'pee_wee_bjj' || item.level === 'youth_bjj'),
+  MOCK_CLASSES.find((item) => item.audience === 'kids')?.id ??
+    'class-mon-1600-pee-wee-bjj-ages-4-7',
 );
 const TODAY_ADV_ID = findTodayClassId(
-  (item) => item.level === 'advanced' || item.giType === 'no_gi',
-  'class-mon-adv',
+  (item) => item.giType === 'no_gi' && item.level === 'adult_bjj',
+  MOCK_CLASSES.find((item) => item.giType === 'no_gi')?.id ??
+    'class-mon-1900-adult-teen-bjj-no-gi',
 );
 
 export const MOCK_ATTENDANCE: AttendanceRecord[] = [

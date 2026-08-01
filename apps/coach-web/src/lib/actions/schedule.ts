@@ -99,12 +99,21 @@ export async function createClassAction(formData: FormData) {
       startTime: String(formData.get('startTime') ?? ''),
       endTime: String(formData.get('endTime') ?? ''),
       instructorName: String(formData.get('instructorName') ?? session.user.fullName ?? 'Coach'),
-      giType: String(formData.get('giType') ?? 'gi') as 'gi' | 'no_gi',
-      level: String(formData.get('level') ?? 'fundamentals') as
-        | 'kids'
-        | 'fundamentals'
-        | 'advanced'
-        | 'competition'
+      giType: String(formData.get('giType') ?? 'gi') as
+        | 'gi'
+        | 'no_gi'
+        | 'gi_no_gi'
+        | 'none',
+      level: String(formData.get('level') ?? 'adult_bjj') as
+        | 'adult_bjj'
+        | 'youth_bjj'
+        | 'pee_wee_bjj'
+        | 'womens_bjj'
+        | 'boxing'
+        | 'muay_thai'
+        | 'wrestling'
+        | 'peak_performance'
+        | 'taekwondo'
         | 'open_mat'
         | 'seminar',
       audience: String(formData.get('audience') ?? 'adults') as

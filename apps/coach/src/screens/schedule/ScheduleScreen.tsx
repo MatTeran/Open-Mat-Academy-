@@ -54,7 +54,11 @@ export function ScheduleScreen({ navigation }: Props) {
         return item.isSeminar || item.level === 'seminar';
       }
       if (filter === 'kids') {
-        return item.level === 'kids' || item.audience === 'kids';
+        return (
+          item.audience === 'kids' ||
+          item.level === 'youth_bjj' ||
+          item.level === 'pee_wee_bjj'
+        );
       }
       return item.level === filter;
     });

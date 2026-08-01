@@ -28,15 +28,20 @@ type Props =
   | NativeStackScreenProps<DashboardStackParamList, 'ClassForm'>;
 
 const LEVELS: ClassLevel[] = [
-  'fundamentals',
-  'advanced',
-  'kids',
-  'competition',
+  'adult_bjj',
+  'youth_bjj',
+  'pee_wee_bjj',
+  'womens_bjj',
+  'boxing',
+  'muay_thai',
+  'wrestling',
+  'peak_performance',
+  'taekwondo',
   'open_mat',
   'seminar',
 ];
 const AUDIENCES: ClassAudience[] = ['adults', 'kids', 'all'];
-const GI_TYPES: GiType[] = ['gi', 'no_gi'];
+const GI_TYPES: GiType[] = ['gi', 'no_gi', 'gi_no_gi', 'none'];
 const RECURRENCE: RecurrenceRule[] = ['none', 'weekly', 'biweekly', 'daily'];
 
 export function ClassFormScreen({ navigation, route }: Props) {
@@ -57,7 +62,7 @@ export function ClassFormScreen({ navigation, route }: Props) {
   );
   const [capacity, setCapacity] = useState(String(existing?.capacity ?? 20));
   const [level, setLevel] = useState<ClassLevel>(
-    existing?.level ?? 'fundamentals',
+    existing?.level ?? 'adult_bjj',
   );
   const [audience, setAudience] = useState<ClassAudience>(
     existing?.audience ?? 'adults',

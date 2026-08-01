@@ -7,13 +7,21 @@ export type Weekday =
   | 'sat'
   | 'sun';
 
-export type GiType = 'gi' | 'no_gi';
+export type GiType = 'gi' | 'no_gi' | 'gi_no_gi' | 'none';
 
+/**
+ * Open Mat Academy flyer programs (+ seminar for one-off events).
+ */
 export type ClassLevel =
-  | 'kids'
-  | 'fundamentals'
-  | 'advanced'
-  | 'competition'
+  | 'adult_bjj'
+  | 'youth_bjj'
+  | 'pee_wee_bjj'
+  | 'womens_bjj'
+  | 'boxing'
+  | 'muay_thai'
+  | 'wrestling'
+  | 'peak_performance'
+  | 'taekwondo'
   | 'open_mat'
   | 'seminar';
 
@@ -69,4 +77,33 @@ export interface CreateClassInput {
 
 export type UpdateClassInput = Partial<CreateClassInput> & {
   status?: ClassStatus;
+};
+
+export const CLASS_LEVEL_LABELS: Record<ClassLevel, string> = {
+  adult_bjj: 'Adult BJJ',
+  youth_bjj: 'Youth BJJ',
+  pee_wee_bjj: 'Pee Wee BJJ',
+  womens_bjj: "Women's BJJ",
+  boxing: 'Boxing',
+  muay_thai: 'Muay Thai',
+  wrestling: 'Wrestling',
+  peak_performance: 'Peak Performance',
+  taekwondo: 'Tae Kwon Do',
+  open_mat: 'Open Mat / Gym',
+  seminar: 'Seminar',
+};
+
+/** Flyer legend colors. */
+export const CLASS_LEVEL_COLORS: Record<ClassLevel, string> = {
+  adult_bjj: '#1E3A8A',
+  youth_bjj: '#14B8A6',
+  pee_wee_bjj: '#86EFAC',
+  womens_bjj: '#EC4899',
+  boxing: '#EF4444',
+  muay_thai: '#FB923C',
+  wrestling: '#8B5CF6',
+  peak_performance: '#166534',
+  taekwondo: '#FDE047',
+  open_mat: '#FEF3C7',
+  seminar: '#94A3B8',
 };

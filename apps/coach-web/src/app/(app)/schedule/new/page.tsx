@@ -42,20 +42,27 @@ export default async function NewClassPage() {
           >
             <option value="gi">Gi</option>
             <option value="no_gi">No-Gi</option>
+            <option value="gi_no_gi">Gi / No-Gi</option>
+            <option value="none">Open format</option>
           </select>
         </label>
         <label className="block text-sm">
-          <span className="text-mute">Level</span>
+          <span className="text-mute">Program</span>
           <select
             name="level"
             className="mt-1 w-full rounded-xl border border-line bg-elevated px-3 py-2 text-white"
-            defaultValue="fundamentals"
+            defaultValue="adult_bjj"
           >
-            <option value="fundamentals">Fundamentals</option>
-            <option value="advanced">Advanced</option>
-            <option value="competition">Competition</option>
-            <option value="kids">Kids</option>
-            <option value="open_mat">Open Mat</option>
+            <option value="adult_bjj">Adult BJJ</option>
+            <option value="youth_bjj">Youth BJJ</option>
+            <option value="pee_wee_bjj">Pee Wee BJJ</option>
+            <option value="womens_bjj">Women&apos;s BJJ</option>
+            <option value="boxing">Boxing</option>
+            <option value="muay_thai">Muay Thai</option>
+            <option value="wrestling">Wrestling</option>
+            <option value="peak_performance">Peak Performance</option>
+            <option value="taekwondo">Tae Kwon Do</option>
+            <option value="open_mat">Open Mat / Gym</option>
             <option value="seminar">Seminar</option>
           </select>
         </label>

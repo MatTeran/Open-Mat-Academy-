@@ -92,9 +92,21 @@ create table if not exists public.coach_classes (
   end_time text not null,
   instructor_id uuid not null references auth.users (id) on delete restrict,
   instructor_name text not null,
-  gi_type text not null check (gi_type in ('gi', 'no_gi')),
+  gi_type text not null check (gi_type in ('gi', 'no_gi', 'gi_no_gi', 'none')),
   level text not null check (
-    level in ('kids', 'fundamentals', 'advanced', 'competition', 'open_mat', 'seminar')
+    level in (
+      'adult_bjj',
+      'youth_bjj',
+      'pee_wee_bjj',
+      'womens_bjj',
+      'boxing',
+      'muay_thai',
+      'wrestling',
+      'peak_performance',
+      'taekwondo',
+      'open_mat',
+      'seminar'
+    )
   ),
   audience text not null check (audience in ('kids', 'adults', 'all')),
   capacity integer not null check (capacity > 0),

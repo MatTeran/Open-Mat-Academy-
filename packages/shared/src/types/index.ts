@@ -31,6 +31,7 @@ export type {
   UpdateClassInput,
   Weekday,
 } from './classes';
+export { CLASS_LEVEL_COLORS, CLASS_LEVEL_LABELS } from './classes';
 export type {
   AcademyActivityItem,
   CoachQuickAction,

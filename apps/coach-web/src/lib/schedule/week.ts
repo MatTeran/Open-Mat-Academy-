@@ -1,3 +1,9 @@
+import {
+  CLASS_LEVEL_COLORS,
+  type ClassLevel,
+  type GiType,
+} from '@openmat/shared';
+
 /** Week-calendar helpers for Coach Web schedule. */
 
 export function toISODate(date: Date): string {
@@ -38,7 +44,10 @@ export function formatWeekRange(weekStartISO: string): string {
   return `${start.toLocaleDateString(undefined, opts)} – ${end.toLocaleDateString(undefined, opts)}`;
 }
 
-export function formatDayHeader(isoDate: string): { weekday: string; day: string } {
+export function formatDayHeader(isoDate: string): {
+  weekday: string;
+  day: string;
+} {
   const date = parseISODate(isoDate);
   return {
     weekday: date.toLocaleDateString(undefined, { weekday: 'short' }),
@@ -65,8 +74,7 @@ export const HOUR_HEIGHT_PX = 64;
 export function eventGeometry(startTime: string, endTime: string) {
   const startMin = timeToMinutes(startTime);
   const endMin = Math.max(startMin + 30, timeToMinutes(endTime));
-  const top =
-    ((startMin - DAY_START_HOUR * 60) / 60) * HOUR_HEIGHT_PX;
+  const top = ((startMin - DAY_START_HOUR * 60) / 60) * HOUR_HEIGHT_PX;
   const height = ((endMin - startMin) / 60) * HOUR_HEIGHT_PX;
   return {
     top: Math.max(0, top),
@@ -77,26 +85,54 @@ export function eventGeometry(startTime: string, endTime: string) {
 export type ScheduleFilterKey =
   | 'gi'
   | 'no_gi'
-  | 'kids'
-  | 'fundamentals'
-  | 'advanced'
+  | 'adult_bjj'
+  | 'youth_bjj'
+  | 'pee_wee_bjj'
+  | 'womens_bjj'
+  | 'boxing'
+  | 'muay_thai'
+  | 'wrestling'
+  | 'peak_performance'
+  | 'taekwondo'
   | 'open_mat'
-  | 'competition'
-  | 'seminar';
+  | 'seminar'
+  | 'kids';
 
 export const SCHEDULE_FILTERS: Array<{
   key: ScheduleFilterKey;
   label: string;
   color: string;
 }> = [
-  { key: 'fundamentals', label: 'Fundamentals', color: '#38BDF8' },
-  { key: 'advanced', label: 'Advanced', color: '#F59E0B' },
+  { key: 'adult_bjj', label: 'Adult BJJ', color: CLASS_LEVEL_COLORS.adult_bjj },
+  { key: 'youth_bjj', label: 'Youth BJJ', color: CLASS_LEVEL_COLORS.youth_bjj },
+  {
+    key: 'pee_wee_bjj',
+    label: 'Pee Wee',
+    color: CLASS_LEVEL_COLORS.pee_wee_bjj,
+  },
+  {
+    key: 'womens_bjj',
+    label: "Women's BJJ",
+    color: CLASS_LEVEL_COLORS.womens_bjj,
+  },
+  { key: 'boxing', label: 'Boxing', color: CLASS_LEVEL_COLORS.boxing },
+  { key: 'muay_thai', label: 'Muay Thai', color: CLASS_LEVEL_COLORS.muay_thai },
+  { key: 'wrestling', label: 'Wrestling', color: CLASS_LEVEL_COLORS.wrestling },
+  {
+    key: 'peak_performance',
+    label: 'Peak Perf.',
+    color: CLASS_LEVEL_COLORS.peak_performance,
+  },
+  {
+    key: 'taekwondo',
+    label: 'Tae Kwon Do',
+    color: CLASS_LEVEL_COLORS.taekwondo,
+  },
+  { key: 'open_mat', label: 'Open Mat', color: '#EAB308' },
   { key: 'gi', label: 'Gi', color: '#FFFFFF' },
   { key: 'no_gi', label: 'No-Gi', color: '#A78BFA' },
   { key: 'kids', label: 'Kids', color: '#FB7185' },
-  { key: 'open_mat', label: 'Open Mat', color: '#22C55E' },
-  { key: 'competition', label: 'Competition', color: '#EF4444' },
-  { key: 'seminar', label: 'Seminar', color: '#94A3B8' },
+  { key: 'seminar', label: 'Seminar', color: CLASS_LEVEL_COLORS.seminar },
 ];
 
 export function classAccent(input: {
@@ -105,13 +141,16 @@ export function classAccent(input: {
   isOpenMat?: boolean;
   isSeminar?: boolean;
 }): string {
-  if (input.isSeminar || input.level === 'seminar') return '#94A3B8';
-  if (input.isOpenMat || input.level === 'open_mat') return '#22C55E';
-  if (input.level === 'kids') return '#FB7185';
-  if (input.level === 'competition') return '#EF4444';
-  if (input.level === 'advanced') return '#F59E0B';
+  if (input.isSeminar || input.level === 'seminar') {
+    return CLASS_LEVEL_COLORS.seminar;
+  }
+  if (input.isOpenMat || input.level === 'open_mat') {
+    return '#EAB308';
+  }
+  if (input.level in CLASS_LEVEL_COLORS) {
+    return CLASS_LEVEL_COLORS[input.level as ClassLevel];
+  }
   if (input.giType === 'no_gi') return '#A78BFA';
-  if (input.level === 'fundamentals') return '#38BDF8';
   return '#FFFFFF';
 }
 
@@ -119,6 +158,7 @@ export function classMatchesFilters(
   item: {
     level: string;
     giType: string;
+    audience?: string;
     isOpenMat?: boolean;
     isSeminar?: boolean;
   },
@@ -126,13 +166,47 @@ export function classMatchesFilters(
 ): boolean {
   if (active.size === 0) return true;
   const tags: ScheduleFilterKey[] = [];
-  if (item.giType === 'gi') tags.push('gi');
-  if (item.giType === 'no_gi') tags.push('no_gi');
-  if (item.level === 'kids') tags.push('kids');
-  if (item.level === 'fundamentals') tags.push('fundamentals');
-  if (item.level === 'advanced') tags.push('advanced');
-  if (item.level === 'competition') tags.push('competition');
+  if (item.giType === 'gi' || item.giType === 'gi_no_gi') tags.push('gi');
+  if (item.giType === 'no_gi' || item.giType === 'gi_no_gi') tags.push('no_gi');
+  if (
+    item.audience === 'kids' ||
+    item.level === 'youth_bjj' ||
+    item.level === 'pee_wee_bjj'
+  ) {
+    tags.push('kids');
+  }
+  const levels: ClassLevel[] = [
+    'adult_bjj',
+    'youth_bjj',
+    'pee_wee_bjj',
+    'womens_bjj',
+    'boxing',
+    'muay_thai',
+    'wrestling',
+    'peak_performance',
+    'taekwondo',
+    'open_mat',
+    'seminar',
+  ];
+  if (levels.includes(item.level as ClassLevel)) {
+    tags.push(item.level as ScheduleFilterKey);
+  }
   if (item.isOpenMat || item.level === 'open_mat') tags.push('open_mat');
   if (item.isSeminar || item.level === 'seminar') tags.push('seminar');
   return tags.some((tag) => active.has(tag));
+}
+
+export function formatGiType(giType: GiType | string): string {
+  switch (giType) {
+    case 'gi':
+      return 'Gi';
+    case 'no_gi':
+      return 'No-Gi';
+    case 'gi_no_gi':
+      return 'Gi / No-Gi';
+    case 'none':
+      return 'Open format';
+    default:
+      return String(giType);
+  }
 }
