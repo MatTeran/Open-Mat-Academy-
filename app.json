@@ -19,7 +19,10 @@
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "Open Mat Academy uses your location to send reminders when you are near the gym for class.",
         "NSLocationAlwaysAndWhenInUseUsageDescription": "Open Mat Academy uses your location to send reminders when you are near the gym for class.",
-        "UIBackgroundModes": ["location", "remote-notification"]
+        "UIBackgroundModes": [
+          "location",
+          "remote-notification"
+        ]
       }
     },
     "android": {
@@ -36,7 +39,12 @@
         "ACCESS_BACKGROUND_LOCATION",
         "RECEIVE_BOOT_COMPLETED",
         "VIBRATE",
-        "SCHEDULE_EXACT_ALARM"
+        "SCHEDULE_EXACT_ALARM",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.ACCESS_BACKGROUND_LOCATION",
+        "android.permission.FOREGROUND_SERVICE",
+        "android.permission.FOREGROUND_SERVICE_LOCATION"
       ]
     },
     "web": {
@@ -62,15 +70,15 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "REPLACE_AFTER_EAS_INIT"
+        "projectId": "6a8ec44f-0200-4f82-b872-9b6c890942dd"
       }
     },
-    "owner": "REPLACE_WITH_EXPO_ACCOUNT",
+    "owner": "matblack",
     "runtimeVersion": {
       "policy": "appVersion"
     },
     "updates": {
-      "url": "https://u.expo.dev/REPLACE_AFTER_EAS_INIT"
+      "url": "https://u.expo.dev/6a8ec44f-0200-4f82-b872-9b6c890942dd"
     }
   }
 }

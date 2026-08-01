@@ -17,7 +17,9 @@
       "bundleIdentifier": "com.openmat.coach",
       "buildNumber": "1",
       "infoPlist": {
-        "UIBackgroundModes": ["remote-notification"]
+        "UIBackgroundModes": [
+          "remote-notification"
+        ]
       }
     },
     "android": {
@@ -47,15 +49,15 @@
     },
     "extra": {
       "eas": {
-        "projectId": "REPLACE_AFTER_EAS_INIT"
+        "projectId": "065f8d54-0897-4956-be31-e9b5bfcec83f"
       }
     },
-    "owner": "REPLACE_WITH_EXPO_ACCOUNT",
+    "owner": "matblack",
     "runtimeVersion": {
       "policy": "appVersion"
     },
     "updates": {
-      "url": "https://u.expo.dev/REPLACE_AFTER_EAS_INIT"
+      "url": "https://u.expo.dev/065f8d54-0897-4956-be31-e9b5bfcec83f"
     }
   }
 }
