@@ -17,6 +17,7 @@
       "bundleIdentifier": "com.openmat.academy",
       "buildNumber": "1",
       "infoPlist": {
+        "CFBundleDisplayName": "Open Mat",
         "NSLocationWhenInUseUsageDescription": "Open Mat Academy uses your location to send reminders when you are near the gym for class.",
         "NSLocationAlwaysAndWhenInUseUsageDescription": "Open Mat Academy uses your location to send reminders when you are near the gym for class.",
         "UIBackgroundModes": [

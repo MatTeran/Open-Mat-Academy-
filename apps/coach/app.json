@@ -17,6 +17,7 @@
       "bundleIdentifier": "OpenMatCoach",
       "buildNumber": "1",
       "infoPlist": {
+        "CFBundleDisplayName": "OM Coach",
         "UIBackgroundModes": [
           "remote-notification"
         ],
