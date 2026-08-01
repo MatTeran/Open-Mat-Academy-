@@ -151,7 +151,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
 
       if (!isConfigured) {
         throw new Error(
-          'Use a demo account (alex@openmat.demo / demo1234) or Continue as Guest.',
+          'Supabase is not connected in this build. Use the prefilled login, alex@openmat.demo / demo1234, or Continue as Guest.',
         );
       }
 

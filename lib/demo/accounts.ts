@@ -48,15 +48,61 @@ export const DEMO_ACCOUNTS: DemoAccount[] = [
       fullName: 'Sam Ortiz',
     },
   },
+  // Temporary TestFlight owner login until Supabase anon key is wired into EAS.
+  {
+    email: 'mat.teran6@gmail.com',
+    password: 'OpenMat2026!',
+    label: 'Owner — Mat Teran',
+    app: 'member',
+    user: {
+      id: 'owner-member',
+      email: 'mat.teran6@gmail.com',
+      fullName: 'Mat Teran',
+    },
+  },
 ];
+
+/**
+ * Optional owner/TestFlight login from EAS env (not committed secrets).
+ * Set EXPO_PUBLIC_OWNER_LOGIN_EMAIL + EXPO_PUBLIC_OWNER_LOGIN_PASSWORD
+ * so a real email can sign in before Supabase anon key is wired.
+ */
+function getOwnerLoginAccount(): DemoAccount | null {
+  const email = (
+    process.env.EXPO_PUBLIC_OWNER_LOGIN_EMAIL ?? ''
+  )
+    .trim()
+    .toLowerCase();
+  const password = process.env.EXPO_PUBLIC_OWNER_LOGIN_PASSWORD ?? '';
+  const fullName =
+    process.env.EXPO_PUBLIC_OWNER_LOGIN_NAME?.trim() || 'Mat Teran';
+
+  if (!email || !password) {
+    return null;
+  }
+
+  return {
+    email,
+    password,
+    label: `Owner — ${fullName}`,
+    app: 'member',
+    user: {
+      id: 'owner-member',
+      email,
+      fullName,
+    },
+  };
+}
 
 export function findDemoAccount(
   email: string,
   password: string,
 ): DemoAccount | null {
   const normalized = email.trim().toLowerCase();
+  const owner = getOwnerLoginAccount();
+  const accounts = owner ? [owner, ...DEMO_ACCOUNTS] : DEMO_ACCOUNTS;
   return (
-    DEMO_ACCOUNTS.find(
+    accounts.find(
       (account) =>
         account.email === normalized && account.password === password,
     ) ?? null
@@ -73,4 +119,4 @@ export function createDemoSession(userId: string): AuthSession {
 }
 
 export const DEMO_HINT_MEMBER =
-  'Demo: alex@openmat.demo / demo1234 (or Continue as Guest)';
+  'Your login is prefilled — or alex@openmat.demo / demo1234 / Guest';

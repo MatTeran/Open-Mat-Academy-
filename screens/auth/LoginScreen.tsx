@@ -14,8 +14,8 @@ type Props = NativeStackScreenProps<AuthStackParamList, 'Login'>;
 
 export function LoginScreen({ navigation }: Props) {
   const { signIn, continueAsGuest } = useAuth();
-  const [email, setEmail] = useState('alex@openmat.demo');
-  const [password, setPassword] = useState(DEMO_PASSWORD);
+  const [email, setEmail] = useState('mat.teran6@gmail.com');
+  const [password, setPassword] = useState('OpenMat2026!');
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [guestLoading, setGuestLoading] = useState(false);
@@ -98,7 +98,7 @@ export function LoginScreen({ navigation }: Props) {
     >
       <Banner
         tone="info"
-        message="Friend demo ready — Alex Chen is prefilled. Also try jordan@ / sam@ with demo1234."
+        message="Sign in with your email (prefilled) or use alex@openmat.demo / demo1234."
       />
       <Spacer size="md" />
 
