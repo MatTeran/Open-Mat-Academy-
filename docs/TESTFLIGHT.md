@@ -75,6 +75,17 @@ After Apple finishes processing (often 5–30 minutes), open **App Store Connect
 - [ ] Location usage strings already present on Member (`NSLocation*`)
 - [ ] Push notification entitlement if enabling remote push (Member has notifications plugin)
 
+## Supabase (Member login)
+
+Set these on EAS → Project → Environment variables → **production** (plaintext):
+
+- `EXPO_PUBLIC_SUPABASE_URL`
+- `EXPO_PUBLIC_SUPABASE_ANON_KEY` (or `EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY`)
+
+Never put the **service_role** key in the mobile app or EAS `EXPO_PUBLIC_*` vars.
+
+Then rebuild: `npm run eas:member:build:ios` (or testflight script).
+
 ## Notes
 
 - Build numbers auto-increment via `"autoIncrement": true` + `"appVersionSource": "remote"`.
