@@ -25,7 +25,8 @@ We cannot finish the upload from this cloud agent without these:
    - Copy each numeric **Apple ID / ascAppId** from App Information
 4. **Preferred for CI / non-interactive submit:** App Store Connect API key
    - Keys → App Store Connect API → Generate
-   - Provide: `ASC_API_KEY_PATH` (`.p8`), `ASC_API_KEY_ID`, `ASC_API_ISSUER_ID`
+   - Provide locally (do not commit): `EXPO_ASC_API_KEY_PATH` (`.p8`), `EXPO_ASC_KEY_ID`, `EXPO_ASC_ISSUER_ID`
+   - Or set `ascApiKeyPath` / `ascApiKeyId` / `ascApiKeyIssuerId` under `submit.production.ios` in a local-only `eas.json` override
 
 ## One-time project init (after Expo login)
 
