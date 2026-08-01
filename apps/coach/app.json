@@ -19,7 +19,8 @@
       "infoPlist": {
         "UIBackgroundModes": [
           "remote-notification"
-        ]
+        ],
+        "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
@@ -52,12 +53,6 @@
         "projectId": "065f8d54-0897-4956-be31-e9b5bfcec83f"
       }
     },
-    "owner": "matblack",
-    "runtimeVersion": {
-      "policy": "appVersion"
-    },
-    "updates": {
-      "url": "https://u.expo.dev/065f8d54-0897-4956-be31-e9b5bfcec83f"
-    }
+    "owner": "matblack"
   }
 }
