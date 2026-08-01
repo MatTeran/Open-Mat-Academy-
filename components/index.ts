@@ -39,6 +39,7 @@ export { FamilyMemberCard } from './profile/FamilyMemberCard';
 export { ProfileActionButton } from './profile/ProfileActionButton';
 export { ProfileAttendanceSnapshot } from './profile/ProfileAttendanceSnapshot';
 export { ProfileAvatar } from './profile/ProfileAvatar';
+export { ProfileBeltBar } from './profile/ProfileBeltBar';
 export { ProfileHighlightTile } from './profile/ProfileHighlightTile';
 export { ProfileMenuGroup } from './profile/ProfileMenuGroup';
 export { ProfileMenuRow } from './profile/ProfileMenuRow';

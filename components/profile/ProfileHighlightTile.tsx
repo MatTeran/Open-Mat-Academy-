@@ -32,7 +32,7 @@ export function ProfileHighlightTile({
       accessibilityRole="button"
       accessibilityLabel={`${label}: ${title}`}
       onPress={onPress}
-      style={({ pressed }) => [{ flex: 1 }, pressed && styles.pressed]}
+      style={({ pressed }) => [styles.pressable, pressed && styles.pressed]}
     >
       <View
         style={[
@@ -74,11 +74,15 @@ export function ProfileHighlightTile({
 }
 
 const styles = StyleSheet.create({
+  pressable: {
+    width: '100%',
+  },
   pressed: {
     opacity: 0.92,
   },
   tile: {
-    minHeight: 132,
+    width: '100%',
+    minHeight: 96,
     borderRadius: radii.xl,
     borderWidth: 1,
     padding: spacing.md,

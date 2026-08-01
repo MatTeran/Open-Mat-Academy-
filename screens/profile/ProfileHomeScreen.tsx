@@ -14,10 +14,10 @@ import {
   ProfileActionButton,
   ProfileAttendanceSnapshot,
   ProfileAvatar,
+  ProfileBeltBar,
   ProfileHighlightTile,
   ProfileMenuGroup,
   ProfileMenuRow,
-  ProfileMiniBelt,
   ProfileSectionHeader,
   ProfileStatsRow,
   Screen,
@@ -246,20 +246,15 @@ export function ProfileHomeScreen({ navigation }: Props) {
       <Spacer size="xl" />
 
       <FadeIn delay={100}>
-        <View style={styles.tiles}>
-          <ProfileHighlightTile
-            label="Belt"
-            title={beltLabel}
-            subtitle={stripesLabel}
-            icon="ribbon-outline"
-            onPress={() => navigation.navigate('BeltRank')}
-            media={
-              <ProfileMiniBelt
-                belt={hub.beltProgress.belt}
-                stripes={hub.beltProgress.stripes}
-              />
-            }
-          />
+        <ProfileBeltBar
+          belt={hub.beltProgress.belt}
+          stripes={hub.beltProgress.stripes}
+          beltLabel={beltLabel}
+          stripesLabel={stripesLabel}
+          onPress={() => navigation.navigate('BeltRank')}
+        />
+        <Spacer size="md" />
+        <View style={styles.membershipTile}>
           <ProfileHighlightTile
             label="Membership"
             title={formatMembershipPlan(hub.membership.plan)}
@@ -403,9 +398,8 @@ const styles = StyleSheet.create({
     alignItems: 'stretch',
     gap: spacing.sm,
   },
-  tiles: {
-    flexDirection: 'row',
-    gap: spacing.md,
+  membershipTile: {
+    width: '100%',
   },
   bottomSpace: {
     height: spacing.xxl,
