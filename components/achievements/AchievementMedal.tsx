@@ -13,14 +13,16 @@ import Svg, {
 } from 'react-native-svg';
 
 import {
+  categoryEdgeEngraving,
   categoryShape,
-  motifForBadge,
-  type MedalMotif,
   type MedalShape,
 } from '../../lib/achievements/meta';
-import { materialForRarity, materialPalette } from '../../lib/achievements/materials';
+import { materialForRarity } from '../../lib/achievements/materials';
 import type { AchievementBadge } from '../../types/journey';
 import { getMedalArtwork } from './artworks';
+import { InterimSealArt } from './artworks/InterimSealArt';
+import { MedalEdgeEngraving } from './medal/MedalEdgeEngraving';
+import { MedalSerialMark } from './medal/MedalSerialMark';
 
 export type AchievementMedalProps = {
   badge: Pick<
@@ -73,128 +75,18 @@ function shapePath(shape: MedalShape, center: number, radius: number): string {
         Q ${c + r * 0.35} ${top + r * 0.15} ${c} ${top}
         Z`;
     }
-    case 'medal': {
-      // Octagonal championship medallion
+    case 'coin': {
+      // Special — octagonal commemorative coin
       const pts = Array.from({ length: 8 }).map((_, i) => {
         const a = (Math.PI / 180) * (45 * i - 22.5);
         return `${c + r * Math.cos(a)},${c + r * Math.sin(a)}`;
       });
       return pts.join(' ');
     }
-    case 'coin':
+    case 'medal': // Competition — round championship medallion (+ ribbon)
     case 'circle':
     default:
       return '';
-  }
-}
-
-function FallbackMotif({
-  motif,
-  cx,
-  cy,
-  scale,
-  unlocked,
-  accent,
-}: {
-  motif: MedalMotif;
-  cx: number;
-  cy: number;
-  scale: number;
-  unlocked: boolean;
-  accent: string;
-}) {
-  const stroke = unlocked ? accent : materialPalette.gunmetalLight;
-  const fill = unlocked ? `${accent}2E` : 'rgba(138,138,138,0.14)';
-  const s = scale;
-  const opacity = unlocked ? 1 : 0.72;
-
-  switch (motif) {
-    case 'sunrise':
-      return (
-        <G opacity={opacity}>
-          <Circle cx={cx} cy={cy + 2 * s} r={10 * s} fill={fill} stroke={stroke} strokeWidth={1.6} />
-          {[-2, -1, 0, 1, 2].map((i) => (
-            <Path
-              key={i}
-              d={`M ${cx + i * 5 * s} ${cy - 14 * s} L ${cx + i * 6.5 * s} ${cy - 20 * s}`}
-              stroke={stroke}
-              strokeWidth={1.4}
-              strokeLinecap="round"
-            />
-          ))}
-        </G>
-      );
-    case 'flame':
-      return (
-        <Path
-          opacity={opacity}
-          d={`M ${cx} ${cy + 14 * s}
-            C ${cx - 14 * s} ${cy + 2 * s}, ${cx - 10 * s} ${cy - 10 * s}, ${cx} ${cy - 16 * s}
-            C ${cx + 4 * s} ${cy - 6 * s}, ${cx + 12 * s} ${cy - 2 * s}, ${cx + 10 * s} ${cy + 8 * s}
-            C ${cx + 8 * s} ${cy + 14 * s}, ${cx + 4 * s} ${cy + 16 * s}, ${cx} ${cy + 14 * s}
-            Z`}
-          fill={fill}
-          stroke={stroke}
-          strokeWidth={1.6}
-        />
-      );
-    case 'moon':
-      return (
-        <Path
-          opacity={opacity}
-          d={`M ${cx + 6 * s} ${cy - 12 * s}
-            A ${14 * s} ${14 * s} 0 1 0 ${cx + 6 * s} ${cy + 12 * s}
-            A ${10 * s} ${10 * s} 0 1 1 ${cx + 6 * s} ${cy - 12 * s}
-            Z`}
-          fill={fill}
-          stroke={stroke}
-          strokeWidth={1.5}
-        />
-      );
-    case 'laurel':
-      return (
-        <G opacity={opacity}>
-          <Path
-            d={`M ${cx - 4 * s} ${cy + 12 * s}
-              Q ${cx - 18 * s} ${cy + 4 * s} ${cx - 14 * s} ${cy - 12 * s}`}
-            fill="none"
-            stroke={stroke}
-            strokeWidth={1.6}
-          />
-          <Path
-            d={`M ${cx + 4 * s} ${cy + 12 * s}
-              Q ${cx + 18 * s} ${cy + 4 * s} ${cx + 14 * s} ${cy - 12 * s}`}
-            fill="none"
-            stroke={stroke}
-            strokeWidth={1.6}
-          />
-          <Circle cx={cx} cy={cy - 2 * s} r={5 * s} fill={fill} stroke={stroke} strokeWidth={1.3} />
-        </G>
-      );
-    case 'mat':
-    default:
-      return (
-        <G opacity={opacity}>
-          <Path
-            d={`M ${cx - 14 * s} ${cy - 8 * s}
-              H ${cx + 14 * s}
-              V ${cy + 10 * s}
-              H ${cx - 14 * s}
-              Z`}
-            fill={fill}
-            stroke={stroke}
-            strokeWidth={1.5}
-          />
-          <Path
-            d={`M ${cx - 8 * s} ${cy - 8 * s} V ${cy + 10 * s}
-              M ${cx} ${cy - 8 * s} V ${cy + 10 * s}
-              M ${cx + 8 * s} ${cy - 8 * s} V ${cy + 10 * s}`}
-            stroke={stroke}
-            strokeWidth={1.2}
-            opacity={0.7}
-          />
-        </G>
-      );
   }
 }
 
@@ -205,14 +97,15 @@ function AchievementMedalInner({
   progress,
 }: AchievementMedalProps) {
   const shape = categoryShape(badge.category);
-  const motif = motifForBadge(badge.icon, badge.category);
+  const edgeType = categoryEdgeEngraving(badge.category);
   const unlocked = badge.isUnlocked;
   const material = useMemo(
     () => materialForRarity(badge.rarity, unlocked),
     [badge.rarity, unlocked],
   );
-  const Artwork = getMedalArtwork(badge.id);
+  const Artwork = getMedalArtwork(badge.id) ?? InterimSealArt;
   const legendary = badge.rarity === 'legendary' && unlocked;
+  const showDetailMarks = size >= 152;
 
   const bloom = useRef(new Animated.Value(celebrate && unlocked ? 0 : 1)).current;
   const scaleAnim = useRef(new Animated.Value(celebrate && unlocked ? 0.88 : 1)).current;
@@ -276,9 +169,11 @@ function AchievementMedalInner({
   const rimPoly = shapePath(shape, c, outerR);
   const midPoly = shapePath(shape, c, midR);
   const enamelPoly = shapePath(shape, c, enamelR);
-  const isPoly = shape === 'hexagon' || shape === 'medal';
+  const isPoly = shape === 'hexagon' || shape === 'coin';
   const isPath = shape === 'shield' || shape === 'crest';
-  const isCircle = !isPoly && !isPath;
+  const showRibbon = shape === 'medal';
+  const isCircle = shape === 'circle' || shape === 'medal';
+  const edgeOnCircle = isCircle;
 
   const progressRatio =
     typeof progress === 'number'
@@ -358,6 +253,26 @@ function AchievementMedalInner({
           opacity={0.38}
         />
 
+        {/* Championship ribbon (competition) */}
+        {showRibbon ? (
+          <G opacity={unlocked ? 0.95 : 0.45}>
+            <Path
+              d={`M ${c - size * 0.15} ${c - outerR + 2}
+                L ${c - size * 0.04} ${c - outerR * 0.52}
+                L ${c - size * 0.2} ${c - outerR * 0.32}
+                Z`}
+              fill={material.rimMid}
+            />
+            <Path
+              d={`M ${c + size * 0.15} ${c - outerR + 2}
+                L ${c + size * 0.04} ${c - outerR * 0.52}
+                L ${c + size * 0.2} ${c - outerR * 0.32}
+                Z`}
+              fill={material.rimInner}
+            />
+          </G>
+        ) : null}
+
         {/* Outer metallic silhouette */}
         {isPoly ? (
           <Polygon points={rimPoly} fill={`url(#${gid}-rim)`} />
@@ -366,6 +281,17 @@ function AchievementMedalInner({
         ) : (
           <Circle cx={c} cy={c} r={outerR} fill={`url(#${gid}-rim)`} />
         )}
+
+        {/* Category edge machining */}
+        <MedalEdgeEngraving
+          cx={c}
+          cy={c}
+          radius={outerR - 1.2}
+          type={edgeType}
+          color={material.rimHighlight}
+          unlocked={unlocked}
+          enabled={edgeOnCircle}
+        />
 
         {/* Inner bevel */}
         {isPoly ? (
@@ -385,52 +311,37 @@ function AchievementMedalInner({
           <Circle cx={c} cy={c} r={enamelR} fill={`url(#${gid}-enamel)`} />
         )}
 
-        {/* Coin / legendary engraved rings */}
-        {(shape === 'coin' || legendary) && (
+        {/* Legendary double ring */}
+        {legendary ? (
           <Circle
             cx={c}
             cy={c}
-            r={enamelR * 0.88}
+            r={enamelR * 0.9}
             fill="none"
             stroke={material.rimOuter}
-            strokeOpacity={unlocked ? 0.4 : 0.22}
+            strokeOpacity={unlocked ? 0.45 : 0.22}
             strokeWidth={1}
           />
-        )}
+        ) : null}
 
-        {/* Raised artwork */}
-        {Artwork ? (
-          <Artwork
-            cx={c}
-            cy={c}
-            s={motifScale}
-            material={material}
-            unlocked={unlocked}
-          />
-        ) : (
-          <FallbackMotif
-            motif={motif}
-            cx={c}
-            cy={c}
-            scale={motifScale}
-            unlocked={unlocked}
-            accent={material.accent}
-          />
-        )}
+        {/* Raised artwork (prototype or interim seal) */}
+        <Artwork
+          cx={c}
+          cy={c + (showRibbon ? size * 0.02 : 0)}
+          s={motifScale}
+          material={material}
+          unlocked={unlocked}
+        />
 
-        {/* Tiny OM engraving */}
-        <Path
-          d={`M ${c - 5} ${c + enamelR * 0.72}
-              L ${c - 2} ${c + enamelR * 0.58}
-              L ${c} ${c + enamelR * 0.7}
-              L ${c + 2} ${c + enamelR * 0.58}
-              L ${c + 5} ${c + enamelR * 0.72}`}
-          fill="none"
-          stroke={material.rimHighlight}
-          strokeOpacity={unlocked ? 0.28 : 0.16}
-          strokeWidth={0.9}
-          strokeLinecap="round"
-          strokeLinejoin="round"
+        <MedalSerialMark
+          cx={c}
+          cy={c}
+          s={motifScale}
+          color={material.rimHighlight}
+          unlocked={unlocked}
+          showDetail={showDetailMarks}
+          serial="OM-2026"
+          edition="#0001"
         />
 
         {/* Directional highlight */}
@@ -440,7 +351,7 @@ function AchievementMedalInner({
           rx={size * 0.18}
           ry={size * 0.09}
           fill="#FFFFFF"
-          opacity={unlocked ? 0.2 : 0.1}
+          opacity={unlocked ? 0.22 : 0.1}
         />
 
         {/* Glass sheen */}

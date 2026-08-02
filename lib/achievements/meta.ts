@@ -39,19 +39,47 @@ export function categoryLabel(category: BadgeCategory): string {
 export function categoryShape(category: BadgeCategory): MedalShape {
   switch (category) {
     case 'attendance':
-      return 'circle';
+      return 'circle'; // challenge coin
     case 'streak':
       return 'hexagon';
     case 'challenge':
       return 'shield';
     case 'competition':
-      return 'medal';
+      return 'medal'; // championship medallion
     case 'community':
       return 'crest';
     case 'special':
-      return 'coin';
+      return 'coin'; // octagonal commemorative coin
     default:
       return 'circle';
+  }
+}
+
+/** Category-specific edge machining pattern. */
+export type EdgeEngraving =
+  | 'ridges' // Attendance — fine ridges
+  | 'diagonal' // Streaks — diagonal machining
+  | 'angular' // Challenges — angular cuts
+  | 'diamond' // Competition — diamond cuts
+  | 'dots' // Community — dotted milled edge
+  | 'facets'; // Special — octagonal facet ticks
+
+export function categoryEdgeEngraving(category: BadgeCategory): EdgeEngraving {
+  switch (category) {
+    case 'attendance':
+      return 'ridges';
+    case 'streak':
+      return 'diagonal';
+    case 'challenge':
+      return 'angular';
+    case 'competition':
+      return 'diamond';
+    case 'community':
+      return 'dots';
+    case 'special':
+      return 'facets';
+    default:
+      return 'ridges';
   }
 }
 
