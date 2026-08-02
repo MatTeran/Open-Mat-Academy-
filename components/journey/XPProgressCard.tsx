@@ -1,6 +1,6 @@
 import { StyleSheet, View } from 'react-native';
 
-import { colors, spacing } from '../../lib/theme';
+import { spacing } from '../../lib/theme';
 import type { UserGamificationProfile } from '../../types/journey';
 import {
   formatXp,
@@ -47,10 +47,10 @@ export function XPProgressCard({ profile }: XPProgressCardProps) {
       />
       <Spacer size="sm" />
       <View style={styles.footer}>
-        <Text variant="caption">
+        <Text variant="caption" muted>
           {formatXp(remaining)} XP until Level {profile.level + 1}
         </Text>
-        <Text variant="caption" style={styles.total}>
+        <Text variant="caption" muted>
           {formatXp(profile.totalXP)} total
         </Text>
       </View>
@@ -64,8 +64,5 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     gap: spacing.md,
-  },
-  total: {
-    color: colors.secondaryText,
   },
 });

@@ -1,6 +1,7 @@
 import { StyleSheet, View } from 'react-native';
 
-import { colors, radii, spacing } from '../../lib/theme';
+import { useAppTheme } from '../../lib/providers/ThemeProvider';
+import { radii, spacing } from '../../lib/theme';
 import type { Challenge } from '../../types/journey';
 import {
   formatDaysRemaining,
@@ -32,6 +33,7 @@ export function MonthlyChallengeCard({
   challenge,
   badgeName,
 }: MonthlyChallengeCardProps) {
+  const { colors } = useAppTheme();
   const progress = getChallengeProgress(challenge);
   const locked = challenge.status === 'locked';
 
@@ -41,24 +43,32 @@ export function MonthlyChallengeCard({
         <View style={styles.copy}>
           <Text variant="subtitle">{challenge.title}</Text>
           <Spacer size="xs" />
-          <Text variant="caption">{challenge.description}</Text>
+          <Text variant="caption" muted>
+            {challenge.description}
+          </Text>
         </View>
         <View
           style={[
             styles.statusPill,
-            challenge.status === 'completed' && styles.statusComplete,
-            locked && styles.statusLocked,
+            {
+              backgroundColor: locked
+                ? colors.border
+                : challenge.status === 'completed'
+                  ? 'rgba(34, 197, 94, 0.16)'
+                  : colors.goldMuted,
+            },
           ]}
         >
           <Text
             variant="caption"
-            style={
-              challenge.status === 'completed'
-                ? styles.statusCompleteText
-                : locked
-                  ? styles.statusLockedText
-                  : styles.statusActiveText
-            }
+            style={{
+              color:
+                challenge.status === 'completed'
+                  ? colors.success
+                  : locked
+                    ? colors.secondaryText
+                    : colors.goldAccent,
+            }}
           >
             {statusLabel(challenge.status)}
           </Text>
@@ -78,10 +88,7 @@ export function MonthlyChallengeCard({
       <Spacer size="md" />
       <View style={styles.metaGrid}>
         <Meta label="XP Reward" value={`+${formatXp(challenge.xpReward)}`} />
-        <Meta
-          label="Badge"
-          value={badgeName || '—'}
-        />
+        <Meta label="Badge" value={badgeName || '—'} />
         <Meta
           label="Time"
           value={
@@ -98,7 +105,9 @@ export function MonthlyChallengeCard({
 function Meta({ label, value }: { label: string; value: string }) {
   return (
     <View style={styles.metaItem}>
-      <Text variant="caption">{label}</Text>
+      <Text variant="caption" muted>
+        {label}
+      </Text>
       <Text variant="caption" gold numberOfLines={1}>
         {value}
       </Text>
@@ -120,25 +129,9 @@ const styles = StyleSheet.create({
   },
   statusPill: {
     borderRadius: radii.pill,
-    backgroundColor: colors.goldMuted,
     paddingHorizontal: spacing.sm,
     paddingVertical: 4,
     alignSelf: 'flex-start',
-  },
-  statusComplete: {
-    backgroundColor: 'rgba(34, 197, 94, 0.16)',
-  },
-  statusLocked: {
-    backgroundColor: colors.border,
-  },
-  statusActiveText: {
-    color: colors.goldAccent,
-  },
-  statusCompleteText: {
-    color: colors.success,
-  },
-  statusLockedText: {
-    color: colors.secondaryText,
   },
   metaGrid: {
     flexDirection: 'row',

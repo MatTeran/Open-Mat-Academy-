@@ -2,7 +2,8 @@ import { Ionicons } from '@expo/vector-icons';
 import type { ComponentProps } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
-import { colors, radii, spacing } from '../../lib/theme';
+import { useAppTheme } from '../../lib/providers/ThemeProvider';
+import { radii, spacing } from '../../lib/theme';
 import type { AchievementBadge } from '../../types/journey';
 import {
   formatRarity,
@@ -23,6 +24,7 @@ export function AchievementBadgeCard({
   badge,
   onPress,
 }: AchievementBadgeCardProps) {
+  const { colors } = useAppTheme();
   const progress = getBadgeProgress(badge);
 
   return (
@@ -30,12 +32,27 @@ export function AchievementBadgeCard({
       accessibilityRole="button"
       accessibilityLabel={`${badge.name}. ${badge.isUnlocked ? 'Unlocked' : 'Locked'}. ${badge.rarity} rarity.`}
       onPress={onPress}
-      style={({ pressed }) => [styles.card, pressed && styles.pressed]}
+      style={({ pressed }) => [
+        styles.card,
+        {
+          backgroundColor: colors.secondaryBackground,
+          borderColor: colors.border,
+        },
+        pressed && styles.pressed,
+      ]}
     >
       <View
         style={[
           styles.iconWrap,
-          badge.isUnlocked ? styles.iconUnlocked : styles.iconLocked,
+          badge.isUnlocked
+            ? {
+                backgroundColor: colors.goldMuted,
+                borderColor: colors.goldAccent,
+              }
+            : {
+                backgroundColor: colors.primaryBackground,
+                borderColor: colors.border,
+              },
         ]}
       >
         <Ionicons
@@ -44,14 +61,16 @@ export function AchievementBadgeCard({
           color={badge.isUnlocked ? colors.goldAccent : colors.secondaryText}
         />
       </View>
-      <Text variant="body" numberOfLines={1} style={styles.name}>
+      <Text variant="body" numberOfLines={1}>
         {badge.name}
       </Text>
-      <Text variant="caption" numberOfLines={2} style={styles.description}>
+      <Text variant="caption" muted numberOfLines={2} style={styles.description}>
         {badge.description}
       </Text>
-      <View style={styles.rarityPill}>
-        <Text variant="caption" style={styles.rarityText}>
+      <View
+        style={[styles.rarityPill, { backgroundColor: colors.goldMuted }]}
+      >
+        <Text variant="caption" style={{ color: colors.goldAccent }}>
           {formatRarity(badge.rarity)}
         </Text>
       </View>
@@ -62,7 +81,7 @@ export function AchievementBadgeCard({
       ) : (
         <>
           <ProgressBar progress={progress.percent} height={6} />
-          <Text variant="caption">
+          <Text variant="caption" muted>
             {progress.current} / {progress.target}
           </Text>
         </>
@@ -75,10 +94,8 @@ const styles = StyleSheet.create({
   card: {
     width: '47.5%',
     minHeight: 196,
-    backgroundColor: colors.secondaryBackground,
     borderRadius: radii.lg,
     borderWidth: 1,
-    borderColor: colors.border,
     padding: spacing.md,
     gap: spacing.xs,
   },
@@ -95,29 +112,14 @@ const styles = StyleSheet.create({
     marginBottom: spacing.xs,
     borderWidth: 1,
   },
-  iconUnlocked: {
-    backgroundColor: colors.goldMuted,
-    borderColor: colors.goldAccent,
-  },
-  iconLocked: {
-    backgroundColor: colors.primaryBackground,
-    borderColor: colors.border,
-  },
-  name: {
-    color: colors.text,
-  },
   description: {
     minHeight: 34,
   },
   rarityPill: {
     alignSelf: 'flex-start',
     borderRadius: radii.pill,
-    backgroundColor: colors.goldMuted,
     paddingHorizontal: spacing.sm,
     paddingVertical: 2,
     marginVertical: 2,
-  },
-  rarityText: {
-    color: colors.goldAccent,
   },
 });

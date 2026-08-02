@@ -1,7 +1,8 @@
 import { useEffect, useRef } from 'react';
 import { Animated, Easing, StyleSheet, View } from 'react-native';
 
-import { colors, radii, spacing } from '../../lib/theme';
+import { useAppTheme } from '../../lib/providers/ThemeProvider';
+import { radii, spacing } from '../../lib/theme';
 import type { Challenge } from '../../types/journey';
 import {
   formatDaysRemaining,
@@ -22,6 +23,7 @@ export function ChallengeCard({
   challenge,
   celebrate = false,
 }: ChallengeCardProps) {
+  const { colors } = useAppTheme();
   const progress = getChallengeProgress(challenge);
   const pulse = useRef(new Animated.Value(0)).current;
 
@@ -57,24 +59,36 @@ export function ChallengeCard({
   return (
     <View style={styles.wrap}>
       {(celebrate || progress.isComplete) && (
-        <Animated.View style={[styles.glow, { opacity: glowOpacity }]} />
+        <Animated.View
+          style={[
+            styles.glow,
+            { opacity: glowOpacity, backgroundColor: colors.goldAccent },
+          ]}
+        />
       )}
-      <Card style={styles.card}>
+      <Card>
         <View style={styles.topRow}>
           <View style={styles.copy}>
             <Text variant="subtitle">{challenge.title}</Text>
             <Spacer size="xs" />
-            <Text variant="caption">{challenge.description}</Text>
+            <Text variant="caption" muted>
+              {challenge.description}
+            </Text>
           </View>
           <View
             style={[
               styles.xpPill,
-              progress.isComplete ? styles.xpComplete : undefined,
+              { backgroundColor: colors.goldMuted },
+              progress.isComplete
+                ? { backgroundColor: 'rgba(34, 197, 94, 0.16)' }
+                : undefined,
             ]}
           >
             <Text
               variant="caption"
-              style={progress.isComplete ? styles.xpCompleteText : styles.xpText}
+              style={{
+                color: progress.isComplete ? colors.success : colors.goldAccent,
+              }}
             >
               +{formatXp(challenge.xpReward)} XP
             </Text>
@@ -99,7 +113,7 @@ export function ChallengeCard({
                   ? ' Training Sessions'
                   : ' Classes'}
           </Text>
-          <Text variant="caption">
+          <Text variant="caption" muted>
             {progress.isComplete
               ? 'Completed'
               : formatDaysRemaining(challenge.endDate)}
@@ -117,10 +131,6 @@ const styles = StyleSheet.create({
   glow: {
     ...StyleSheet.absoluteFillObject,
     borderRadius: radii.lg,
-    backgroundColor: colors.goldAccent,
-  },
-  card: {
-    backgroundColor: colors.secondaryBackground,
   },
   topRow: {
     flexDirection: 'row',
@@ -133,18 +143,8 @@ const styles = StyleSheet.create({
   },
   xpPill: {
     borderRadius: radii.pill,
-    backgroundColor: colors.goldMuted,
     paddingHorizontal: spacing.sm,
     paddingVertical: 4,
-  },
-  xpComplete: {
-    backgroundColor: 'rgba(34, 197, 94, 0.16)',
-  },
-  xpText: {
-    color: colors.goldAccent,
-  },
-  xpCompleteText: {
-    color: colors.success,
   },
   metaRow: {
     flexDirection: 'row',

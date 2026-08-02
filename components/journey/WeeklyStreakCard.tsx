@@ -1,7 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
 import { StyleSheet, View } from 'react-native';
 
-import { colors, radii, spacing } from '../../lib/theme';
+import { useAppTheme } from '../../lib/providers/ThemeProvider';
+import { radii, spacing } from '../../lib/theme';
 import type { TrainingStreak } from '../../types/journey';
 import { getStreakStatus } from '../../utils/journey';
 import { Card } from '../ui/Card';
@@ -13,6 +14,7 @@ interface WeeklyStreakCardProps {
 }
 
 export function WeeklyStreakCard({ streak }: WeeklyStreakCardProps) {
+  const { colors } = useAppTheme();
   const status = getStreakStatus(streak);
 
   return (
@@ -25,7 +27,9 @@ export function WeeklyStreakCard({ streak }: WeeklyStreakCardProps) {
           <Spacer size="xs" />
           <Text variant="subtitle">Weekly Streak</Text>
         </View>
-        <View style={styles.flameWrap}>
+        <View
+          style={[styles.flameWrap, { backgroundColor: colors.goldMuted }]}
+        >
           <Ionicons name="flame" size={18} color={colors.goldAccent} />
         </View>
       </View>
@@ -41,21 +45,34 @@ export function WeeklyStreakCard({ streak }: WeeklyStreakCardProps) {
           <View key={day.key} style={styles.dayCol}>
             <Text
               variant="caption"
-              style={day.isToday ? styles.todayLabel : undefined}
+              muted={!day.isToday}
+              style={day.isToday ? { color: colors.goldAccent } : undefined}
             >
               {day.label}
             </Text>
             <View
               style={[
                 styles.dayDot,
-                day.completed ? styles.dayComplete : styles.dayMissed,
-                day.isToday && styles.dayToday,
+                {
+                  backgroundColor: day.completed
+                    ? colors.goldMuted
+                    : colors.primaryBackground,
+                  borderColor: day.isToday
+                    ? colors.goldAccent
+                    : day.completed
+                      ? colors.goldAccent
+                      : colors.border,
+                },
               ]}
               accessibilityLabel={`${day.label} ${day.completed ? 'completed' : 'missed'}`}
             >
               <Text
                 variant="caption"
-                style={day.completed ? styles.check : styles.open}
+                style={{
+                  color: day.completed
+                    ? colors.goldAccent
+                    : colors.secondaryText,
+                }}
               >
                 {day.completed ? '✓' : '○'}
               </Text>
@@ -72,12 +89,18 @@ export function WeeklyStreakCard({ streak }: WeeklyStreakCardProps) {
       <Spacer size="lg" />
       <View style={styles.statsRow}>
         <View style={styles.stat}>
-          <Text variant="caption">Current Streak</Text>
+          <Text variant="caption" muted>
+            Current Streak
+          </Text>
           <Text variant="title">{status.currentStreak} Days</Text>
         </View>
-        <View style={styles.divider} />
+        <View
+          style={[styles.divider, { backgroundColor: colors.border }]}
+        />
         <View style={styles.stat}>
-          <Text variant="caption">Best Streak</Text>
+          <Text variant="caption" muted>
+            Best Streak
+          </Text>
           <Text variant="title">{status.bestStreak} Days</Text>
         </View>
       </View>
@@ -95,7 +118,6 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: radii.md,
-    backgroundColor: colors.goldMuted,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -109,9 +131,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: spacing.xs,
   },
-  todayLabel: {
-    color: colors.goldAccent,
-  },
   dayDot: {
     width: 36,
     height: 36,
@@ -119,23 +138,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
-  },
-  dayComplete: {
-    backgroundColor: colors.goldMuted,
-    borderColor: colors.goldAccent,
-  },
-  dayMissed: {
-    backgroundColor: colors.primaryBackground,
-    borderColor: colors.border,
-  },
-  dayToday: {
-    borderColor: colors.goldAccent,
-  },
-  check: {
-    color: colors.goldAccent,
-  },
-  open: {
-    color: colors.secondaryText,
   },
   statsRow: {
     flexDirection: 'row',
@@ -148,7 +150,6 @@ const styles = StyleSheet.create({
   divider: {
     width: 1,
     height: 40,
-    backgroundColor: colors.border,
     marginHorizontal: spacing.md,
   },
 });
