@@ -20,10 +20,7 @@ import {
 } from '../../lib/achievements/meta';
 import { materialForRarity, materialPalette } from '../../lib/achievements/materials';
 import type { AchievementBadge } from '../../types/journey';
-import { CenturyClubArt } from './artworks/CenturyClubArt';
-import { EarlyBirdArt } from './artworks/EarlyBirdArt';
-import { FirstClassArt } from './artworks/FirstClassArt';
-import { Streak30Art } from './artworks/Streak30Art';
+import { getMedalArtwork } from './artworks';
 
 export type AchievementMedalProps = {
   badge: Pick<
@@ -36,14 +33,6 @@ export type AchievementMedalProps = {
   /** 0–1 locked perimeter progress (circular shapes only). */
   progress?: number;
 };
-
-/** Unique collectible art — prototypes only until approved. */
-const PROTOTYPE_IDS = new Set([
-  'badge-first-class',
-  'badge-early-bird',
-  'badge-100-classes',
-  'badge-30-day-streak',
-]);
 
 function shapePath(shape: MedalShape, center: number, radius: number): string {
   const c = center;
@@ -209,36 +198,6 @@ function FallbackMotif({
   }
 }
 
-function PrototypeArtwork({
-  badgeId,
-  cx,
-  cy,
-  scale,
-  material,
-  unlocked,
-}: {
-  badgeId: string;
-  cx: number;
-  cy: number;
-  scale: number;
-  material: ReturnType<typeof materialForRarity>;
-  unlocked: boolean;
-}) {
-  const props = { cx, cy, s: scale, material, unlocked };
-  switch (badgeId) {
-    case 'badge-first-class':
-      return <FirstClassArt {...props} />;
-    case 'badge-early-bird':
-      return <EarlyBirdArt {...props} />;
-    case 'badge-100-classes':
-      return <CenturyClubArt {...props} />;
-    case 'badge-30-day-streak':
-      return <Streak30Art {...props} />;
-    default:
-      return null;
-  }
-}
-
 function AchievementMedalInner({
   badge,
   size = 136,
@@ -252,7 +211,7 @@ function AchievementMedalInner({
     () => materialForRarity(badge.rarity, unlocked),
     [badge.rarity, unlocked],
   );
-  const isPrototype = PROTOTYPE_IDS.has(badge.id);
+  const Artwork = getMedalArtwork(badge.id);
   const legendary = badge.rarity === 'legendary' && unlocked;
 
   const bloom = useRef(new Animated.Value(celebrate && unlocked ? 0 : 1)).current;
@@ -440,12 +399,11 @@ function AchievementMedalInner({
         )}
 
         {/* Raised artwork */}
-        {isPrototype ? (
-          <PrototypeArtwork
-            badgeId={badge.id}
+        {Artwork ? (
+          <Artwork
             cx={c}
             cy={c}
-            scale={motifScale}
+            s={motifScale}
             material={material}
             unlocked={unlocked}
           />

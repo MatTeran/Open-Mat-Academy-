@@ -22,6 +22,8 @@ export { CenterLogTabIcon } from './layout/CenterLogTabIcon';
 export { TabBarIcon } from './layout/TabBarIcon';
 export { AchievementDetailModal } from './achievements/AchievementDetailModal';
 export { AchievementMedalCard } from './achievements/AchievementMedalCard';
+export { AchievementMedal } from './achievements/AchievementMedal';
+export { AchievementUnlockOverlay } from './achievements/AchievementUnlockOverlay';
 export { EnamelMedal } from './achievements/EnamelMedal';
 export { AchievementBadgeCard } from './journey/AchievementBadgeCard';
 export { BadgeDetailModal } from './journey/BadgeDetailModal';
