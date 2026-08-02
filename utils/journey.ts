@@ -186,8 +186,10 @@ export function formatRarity(rarity: AchievementBadge['rarity']): string {
       return 'Common';
     case 'rare':
       return 'Rare';
-    case 'elite':
-      return 'Elite';
+    case 'epic':
+      return 'Epic';
+    case 'legendary':
+      return 'Legendary';
     default:
       return rarity;
   }

@@ -3,9 +3,9 @@ import * as Haptics from 'expo-haptics';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { RefreshControl, StyleSheet, View } from 'react-native';
 
+import { AchievementDetailModal } from '../../components/achievements/AchievementDetailModal';
+import { AchievementMedalCard } from '../../components/achievements/AchievementMedalCard';
 import {
-  AchievementBadgeCard,
-  BadgeDetailModal,
   Button,
   ChallengeCard,
   EmptyState,
@@ -186,16 +186,31 @@ export function JourneyScreen({ navigation }: Props) {
           <Spacer size="xl" />
 
           <FadeIn delay={200}>
-            <SectionHeader title="Achievement Badges" />
+            <SectionHeader
+              title="Achievement Gallery"
+              actionLabel="View all"
+              onAction={() => navigation.navigate('AchievementGallery')}
+            />
+            <Text variant="caption" muted>
+              Collectible enamel medals across attendance, streaks, and more.
+            </Text>
+            <Spacer size="md" />
             <View style={styles.badgeGrid}>
-              {badges.map((badge) => (
-                <AchievementBadgeCard
+              {badges.slice(0, 4).map((badge) => (
+                <AchievementMedalCard
                   key={badge.id}
                   badge={badge}
+                  celebrate={badge.isUnlocked}
                   onPress={() => openBadge(badge.id)}
                 />
               ))}
             </View>
+            <Spacer size="md" />
+            <Button
+              label="Open Achievement Gallery"
+              variant="secondary"
+              onPress={() => navigation.navigate('AchievementGallery')}
+            />
           </FadeIn>
 
           <Spacer size="xl" />
@@ -212,7 +227,7 @@ export function JourneyScreen({ navigation }: Props) {
 
       <View style={styles.bottomSpace} />
 
-      <BadgeDetailModal
+      <AchievementDetailModal
         badge={selectedBadge}
         visible={Boolean(selectedBadge)}
         onClose={() => setSelectedBadge(null)}

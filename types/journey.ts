@@ -1,12 +1,13 @@
-export type BadgeRarity = 'common' | 'rare' | 'elite';
+export type BadgeRarity = 'common' | 'rare' | 'epic' | 'legendary';
 
+/** Gallery categories map 1:1 to medal silhouettes. */
 export type BadgeCategory =
-  | 'milestone'
-  | 'streak'
-  | 'competition'
-  | 'attendance'
-  | 'technique'
-  | 'challenge';
+  | 'attendance' // circle
+  | 'streak' // hexagon
+  | 'challenge' // shield
+  | 'competition' // medal
+  | 'community' // crest
+  | 'special'; // coin
 
 export type BadgeRequirementType =
   | 'classes'

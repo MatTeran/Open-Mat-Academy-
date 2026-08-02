@@ -6,6 +6,7 @@ export { AnnouncementDetailScreen } from './community/AnnouncementDetailScreen';
 export { CommunityHomeScreen } from './community/CommunityHomeScreen';
 export { TeamChatScreen } from './community/TeamChatScreen';
 export { LocalEventsScreen } from './events/LocalEventsScreen';
+export { AchievementGalleryScreen } from './achievements/AchievementGalleryScreen';
 export { JourneyScreen } from './journey/JourneyScreen';
 export { HomeScreen } from './main/HomeScreen';
 export { ScheduleScreen } from './main/ScheduleScreen';
