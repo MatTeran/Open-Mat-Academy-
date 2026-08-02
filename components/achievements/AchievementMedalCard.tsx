@@ -1,11 +1,18 @@
-import { Pressable, StyleSheet, View } from 'react-native';
+import * as Haptics from 'expo-haptics';
+import { useMemo } from 'react';
+import {
+  Pressable,
+  StyleSheet,
+  useWindowDimensions,
+  View,
+} from 'react-native';
 
-import { categoryLabel, rarityLabel } from '../../lib/achievements/meta';
+import { rarityLabel } from '../../lib/achievements/meta';
 import { achievementTokens } from '../../lib/achievements/tokens';
 import type { AchievementBadge } from '../../types/journey';
 import { getBadgeProgress } from '../../utils/journey';
 import { Text } from '../ui/Text';
-import { EnamelMedal } from './EnamelMedal';
+import { AchievementMedal } from './AchievementMedal';
 
 interface AchievementMedalCardProps {
   badge: AchievementBadge;
@@ -13,29 +20,84 @@ interface AchievementMedalCardProps {
   celebrate?: boolean;
 }
 
+/** Short gallery status — rarity · earned, or progress only. */
+export function galleryStatusLine(badge: AchievementBadge): string {
+  if (badge.isUnlocked) {
+    return `${rarityLabel(badge.rarity)} · Earned`;
+  }
+  const progress = getBadgeProgress(badge);
+  const unit = shortRequirementUnit(badge.requirementLabel, badge.requirementType);
+  return `${progress.current} of ${progress.target} ${unit}`;
+}
+
+function shortRequirementUnit(label: string, type: string): string {
+  const lower = label.toLowerCase();
+  if (type.includes('streak') || lower.includes('streak') || lower.includes('day')) {
+    return 'days';
+  }
+  if (lower.includes('evening') || lower.includes('night')) {
+    return 'evening classes';
+  }
+  if (lower.includes('early')) {
+    return 'early classes';
+  }
+  if (lower.includes('open mat')) {
+    return 'open mats';
+  }
+  if (lower.includes('class')) {
+    return 'classes';
+  }
+  if (lower.includes('challenge')) {
+    return 'challenges';
+  }
+  // Fall back to a trimmed lowercase label
+  return lower.replace(/completed|earned/g, '').trim() || 'complete';
+}
+
+export function achievementA11yLabel(badge: AchievementBadge): string {
+  const rarity = rarityLabel(badge.rarity);
+  if (badge.isUnlocked) {
+    return `${badge.name}, ${rarity} achievement, earned.`;
+  }
+  const progress = getBadgeProgress(badge);
+  const unit = shortRequirementUnit(badge.requirementLabel, badge.requirementType);
+  return `${badge.name}, ${rarity} achievement, ${progress.current} of ${progress.target} ${unit} completed.`;
+}
+
 export function AchievementMedalCard({
   badge,
   onPress,
   celebrate = false,
 }: AchievementMedalCardProps) {
-  const progress = getBadgeProgress(badge);
-  const rarityColor = achievementTokens.rarity[badge.rarity];
+  const { width, fontScale } = useWindowDimensions();
+  const singleColumn = fontScale >= 1.35 || width < 340;
+  const medalSize = useMemo(() => {
+    if (singleColumn) {
+      return Math.min(150, Math.max(120, width * 0.42));
+    }
+    // Two-column: ~120–150pt medals with generous gutters
+    const col = (width - 48 - 20) / 2;
+    return Math.min(148, Math.max(118, col * 0.78));
+  }, [singleColumn, width]);
+
+  const status = galleryStatusLine(badge);
 
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityLabel={`${badge.name}. ${rarityLabel(badge.rarity)}. ${
-        badge.isUnlocked ? 'Unlocked' : 'Locked'
-      }`}
-      onPress={onPress}
+      accessibilityLabel={achievementA11yLabel(badge)}
+      onPress={() => {
+        void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+        onPress();
+      }}
       style={({ pressed }) => [
-        styles.card,
+        styles.item,
+        singleColumn ? styles.itemFull : styles.itemHalf,
         pressed && styles.pressed,
-        badge.rarity === 'legendary' && badge.isUnlocked && styles.legendaryCard,
       ]}
     >
       <View style={styles.medalWrap}>
-        <EnamelMedal badge={badge} size={88} celebrate={celebrate} />
+        <AchievementMedal badge={badge} size={medalSize} celebrate={celebrate} />
       </View>
 
       <Text
@@ -46,95 +108,51 @@ export function AchievementMedalCard({
         {badge.name}
       </Text>
 
-      <View style={[styles.rarityPill, { borderColor: rarityColor }]}>
-        <Text variant="caption" style={{ color: rarityColor }}>
-          {rarityLabel(badge.rarity)}
-        </Text>
-      </View>
-
-      <Text variant="caption" style={styles.meta} numberOfLines={1}>
-        {categoryLabel(badge.category)}
+      <Text variant="caption" style={styles.status} numberOfLines={1}>
+        {status}
       </Text>
-
-      {!badge.isUnlocked ? (
-        <View style={styles.progressTrack}>
-          <View
-            style={[
-              styles.progressFill,
-              { width: `${Math.max(4, progress.percent)}%` },
-            ]}
-          />
-        </View>
-      ) : (
-        <Text variant="caption" style={styles.earned}>
-          Earned
-        </Text>
-      )}
     </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
-  card: {
-    width: '47.5%',
-    minHeight: 214,
-    backgroundColor: achievementTokens.card,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: achievementTokens.border,
-    paddingHorizontal: 12,
-    paddingTop: 16,
-    paddingBottom: 14,
+  item: {
     alignItems: 'center',
-    gap: 6,
+    paddingVertical: 10,
+    paddingHorizontal: 6,
+    gap: 8,
+    minHeight: 196,
   },
-  legendaryCard: {
-    borderColor: 'rgba(212,175,55,0.45)',
+  itemHalf: {
+    width: '47%',
+  },
+  itemFull: {
+    width: '100%',
   },
   pressed: {
-    opacity: 0.92,
-    transform: [{ scale: 0.98 }],
+    opacity: 0.94,
+    transform: [{ scale: 0.975 }],
   },
   medalWrap: {
-    marginBottom: 4,
-    minHeight: 92,
+    marginBottom: 2,
     alignItems: 'center',
     justifyContent: 'center',
+    minHeight: 128,
   },
   name: {
     color: achievementTokens.text,
     textAlign: 'center',
-    fontSize: 14,
-    lineHeight: 18,
-    minHeight: 36,
+    fontSize: 15,
+    lineHeight: 19,
+    fontWeight: '600',
+    minHeight: 38,
   },
   lockedText: {
+    color: achievementTokens.textSecondary,
+  },
+  status: {
     color: achievementTokens.textMuted,
-  },
-  rarityPill: {
-    borderRadius: 999,
-    borderWidth: 1,
-    paddingHorizontal: 8,
-    paddingVertical: 2,
-  },
-  meta: {
-    color: achievementTokens.textMuted,
-  },
-  progressTrack: {
-    marginTop: 4,
-    width: '100%',
-    height: 4,
-    borderRadius: 999,
-    backgroundColor: '#222222',
-    overflow: 'hidden',
-  },
-  progressFill: {
-    height: '100%',
-    borderRadius: 999,
-    backgroundColor: achievementTokens.gold,
-  },
-  earned: {
-    marginTop: 4,
-    color: achievementTokens.gold,
+    textAlign: 'center',
+    fontSize: 12,
   },
 });

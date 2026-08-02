@@ -200,7 +200,7 @@ export function JourneyScreen({ navigation }: Props) {
                 <AchievementMedalCard
                   key={badge.id}
                   badge={badge}
-                  celebrate={badge.isUnlocked}
+                  celebrate={false}
                   onPress={() => openBadge(badge.id)}
                 />
               ))}

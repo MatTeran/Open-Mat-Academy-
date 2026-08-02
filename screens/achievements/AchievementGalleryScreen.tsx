@@ -25,6 +25,7 @@ export function AchievementGalleryScreen({ navigation }: Props) {
   const [selected, setSelected] = useState<AchievementBadge | null>(null);
 
   const unlockedCount = badges.filter((b) => b.isUnlocked).length;
+  const inProgressCount = badges.length - unlockedCount;
 
   const sections = useMemo(() => {
     return BADGE_CATEGORY_ORDER.map((category) => {
@@ -68,40 +69,19 @@ export function AchievementGalleryScreen({ navigation }: Props) {
         </Text>
         <Spacer size="xs" />
         <Text variant="bodyMuted" style={styles.subtitle}>
-          Collectible academy medals. {unlockedCount} of {badges.length} earned.
+          {unlockedCount} of {badges.length} earned
         </Text>
       </FadeIn>
 
-      <Spacer size="lg" />
+      <Spacer size="md" />
 
       <FadeIn delay={40}>
-        <View style={styles.summaryCard}>
-          <View style={styles.summaryStat}>
-            <Text variant="title" style={styles.summaryValue}>
-              {unlockedCount}
-            </Text>
-            <Text variant="caption" style={styles.summaryLabel}>
-              Unlocked
-            </Text>
-          </View>
+        <View style={styles.summaryRow}>
+          <SummaryCell value={unlockedCount} label="Earned" />
           <View style={styles.summaryDivider} />
-          <View style={styles.summaryStat}>
-            <Text variant="title" style={styles.summaryValue}>
-              {badges.length - unlockedCount}
-            </Text>
-            <Text variant="caption" style={styles.summaryLabel}>
-              In progress
-            </Text>
-          </View>
+          <SummaryCell value={inProgressCount} label="In Progress" />
           <View style={styles.summaryDivider} />
-          <View style={styles.summaryStat}>
-            <Text variant="title" style={styles.summaryValue}>
-              {sections.length}
-            </Text>
-            <Text variant="caption" style={styles.summaryLabel}>
-              Categories
-            </Text>
-          </View>
+          <SummaryCell value={sections.length} label="Collections" />
         </View>
       </FadeIn>
 
@@ -131,6 +111,19 @@ export function AchievementGalleryScreen({ navigation }: Props) {
   );
 }
 
+function SummaryCell({ value, label }: { value: number; label: string }) {
+  return (
+    <View style={styles.summaryStat}>
+      <Text variant="subtitle" style={styles.summaryValue}>
+        {value}
+      </Text>
+      <Text variant="caption" style={styles.summaryLabel}>
+        {label}
+      </Text>
+    </View>
+  );
+}
+
 function CategorySection({
   category,
   earned,
@@ -152,7 +145,7 @@ function CategorySection({
             {categoryLabel(category)}
           </Text>
           <Text variant="caption" style={styles.sectionMeta}>
-            {earned} / {total} collected
+            {earned} of {total} earned
           </Text>
         </View>
         <View style={styles.sectionTrack}>
@@ -170,7 +163,7 @@ function CategorySection({
           <AchievementMedalCard
             key={badge.id}
             badge={badge}
-            celebrate={badge.isUnlocked}
+            celebrate={false}
             onPress={() => onPressBadge(badge.id)}
           />
         ))}
@@ -188,36 +181,38 @@ const styles = StyleSheet.create({
     color: achievementTokens.text,
   },
   subtitle: {
-    color: achievementTokens.textMuted,
+    color: achievementTokens.textSecondary,
   },
-  summaryCard: {
+  summaryRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: achievementTokens.card,
-    borderRadius: 22,
+    backgroundColor: achievementTokens.surface,
+    borderRadius: 14,
     borderWidth: 1,
     borderColor: achievementTokens.border,
-    paddingVertical: 18,
-    paddingHorizontal: 10,
+    paddingVertical: 12,
+    paddingHorizontal: 8,
   },
   summaryStat: {
     flex: 1,
     alignItems: 'center',
-    gap: 4,
+    gap: 2,
   },
   summaryValue: {
     color: achievementTokens.goldHighlight,
+    fontSize: 18,
   },
   summaryLabel: {
     color: achievementTokens.textMuted,
+    fontSize: 11,
   },
   summaryDivider: {
     width: 1,
-    height: 36,
+    height: 28,
     backgroundColor: achievementTokens.border,
   },
   sectionHeader: {
-    gap: 10,
+    gap: 8,
   },
   sectionTitle: {
     color: achievementTokens.text,
@@ -227,7 +222,7 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   sectionTrack: {
-    height: 3,
+    height: 2,
     borderRadius: 999,
     backgroundColor: '#1F1F1F',
     overflow: 'hidden',
@@ -240,6 +235,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
-    gap: spacing.md,
+    rowGap: spacing.lg,
   },
 });

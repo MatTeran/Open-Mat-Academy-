@@ -20,7 +20,7 @@ import {
 import { Button } from '../ui/Button';
 import { Spacer } from '../ui/Spacer';
 import { Text } from '../ui/Text';
-import { EnamelMedal } from './EnamelMedal';
+import { AchievementMedal } from './AchievementMedal';
 
 interface AchievementDetailModalProps {
   badge: AchievementBadge | null;
@@ -34,19 +34,38 @@ export function AchievementDetailModal({
   onClose,
 }: AchievementDetailModalProps) {
   const rise = useRef(new Animated.Value(0)).current;
+  const tilt = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     if (!visible) {
       rise.setValue(0);
+      tilt.setValue(0);
       return;
     }
-    Animated.timing(rise, {
-      toValue: 1,
-      duration: 280,
-      easing: Easing.out(Easing.cubic),
-      useNativeDriver: true,
-    }).start();
-  }, [rise, visible]);
+    // One-shot entrance — no continuous idle loop (battery / reduced motion).
+    Animated.parallel([
+      Animated.timing(rise, {
+        toValue: 1,
+        duration: 280,
+        easing: Easing.out(Easing.cubic),
+        useNativeDriver: true,
+      }),
+      Animated.sequence([
+        Animated.timing(tilt, {
+          toValue: 1,
+          duration: 420,
+          easing: Easing.out(Easing.cubic),
+          useNativeDriver: true,
+        }),
+        Animated.timing(tilt, {
+          toValue: 0.5,
+          duration: 380,
+          easing: Easing.inOut(Easing.quad),
+          useNativeDriver: true,
+        }),
+      ]),
+    ]).start();
+  }, [rise, tilt, visible]);
 
   if (!badge) {
     return null;
@@ -58,7 +77,7 @@ export function AchievementDetailModal({
   const handleShare = async () => {
     const message = badge.isUnlocked
       ? `I earned the ${badge.name} ${rarityLabel(badge.rarity)} medal on Open Mat Academy — ${badge.description}`
-      : `Working toward ${badge.name} on Open Mat Academy — ${progress.current}/${progress.target} ${badge.requirementLabel}.`;
+      : `Working toward ${badge.name} on Open Mat Academy — ${progress.current} of ${progress.target} ${badge.requirementLabel}.`;
     try {
       await Share.share({ message, title: badge.name });
     } catch {
@@ -95,31 +114,46 @@ export function AchievementDetailModal({
           ]}
         >
           <Pressable onPress={(event) => event.stopPropagation()}>
-            <View style={styles.medalStage}>
-              <EnamelMedal
+            <Animated.View
+              style={[
+                styles.medalStage,
+                {
+                  transform: [
+                    {
+                      rotateZ: tilt.interpolate({
+                        inputRange: [0, 0.5, 1],
+                        outputRange: ['-3deg', '2deg', '0deg'],
+                      }),
+                    },
+                    {
+                      scale: tilt.interpolate({
+                        inputRange: [0, 0.5, 1],
+                        outputRange: [0.94, 1.03, 1],
+                      }),
+                    },
+                  ],
+                },
+              ]}
+            >
+              <AchievementMedal
                 badge={badge}
-                size={132}
+                size={168}
                 celebrate={badge.isUnlocked}
               />
-            </View>
+            </Animated.View>
 
             <Spacer size="md" />
             <Text variant="title" style={styles.center}>
               {badge.name}
             </Text>
             <Spacer size="xs" />
-            <View style={styles.metaRow}>
-              <View style={[styles.chip, { borderColor: rarityColor }]}>
-                <Text variant="caption" style={{ color: rarityColor }}>
-                  {rarityLabel(badge.rarity)}
-                </Text>
-              </View>
-              <View style={styles.chip}>
-                <Text variant="caption" style={styles.chipText}>
-                  {categoryLabel(badge.category)}
-                </Text>
-              </View>
-            </View>
+            <Text variant="caption" style={[styles.center, { color: rarityColor }]}>
+              {rarityLabel(badge.rarity)} Achievement
+            </Text>
+            <Spacer size="xs" />
+            <Text variant="caption" style={styles.category}>
+              {categoryLabel(badge.category)}
+            </Text>
 
             <Spacer size="sm" />
             <Text variant="bodyMuted" style={styles.center}>
@@ -128,35 +162,35 @@ export function AchievementDetailModal({
 
             <Spacer size="lg" />
             <View style={styles.statBlock}>
-              <Text variant="caption" style={styles.label}>
-                Progress
-              </Text>
-              <Spacer size="xs" />
-              <View style={styles.track}>
-                <View
-                  style={[
-                    styles.fill,
-                    {
-                      width: `${badge.isUnlocked ? 100 : Math.max(4, progress.percent)}%`,
-                      backgroundColor: badge.isUnlocked
-                        ? achievementTokens.goldHighlight
-                        : achievementTokens.gold,
-                    },
-                  ]}
-                />
-              </View>
-              <Spacer size="xs" />
-              <Text variant="body" style={styles.statText}>
-                {progress.current} / {progress.target} {badge.requirementLabel}
-              </Text>
               {badge.isUnlocked ? (
-                <Text variant="caption" style={styles.earned}>
-                  Earned {formatUnlockedDate(badge.unlockedAt)}
-                </Text>
+                <>
+                  <Text variant="caption" style={styles.label}>
+                    Earned
+                  </Text>
+                  <Text variant="body" style={styles.statText}>
+                    {formatUnlockedDate(badge.unlockedAt)}
+                  </Text>
+                  <Spacer size="sm" />
+                  <Text variant="caption" style={styles.label}>
+                    Requirement
+                  </Text>
+                  <Text variant="body" style={styles.statText}>
+                    {badge.requirementLabel}: {progress.target}
+                  </Text>
+                </>
               ) : (
-                <Text variant="caption" style={styles.remaining}>
-                  {progress.remaining} remaining
-                </Text>
+                <>
+                  <Text variant="caption" style={styles.label}>
+                    Progress
+                  </Text>
+                  <Text variant="body" style={styles.statText}>
+                    {progress.current} of {progress.target}{' '}
+                    {badge.requirementLabel.toLowerCase()} completed
+                  </Text>
+                  <Text variant="caption" style={styles.remaining}>
+                    {progress.remaining} remaining
+                  </Text>
+                </>
               )}
             </View>
 
@@ -171,7 +205,7 @@ export function AchievementDetailModal({
             <Spacer size="xl" />
             <Button label="Share Achievement" onPress={() => void handleShare()} />
             <Spacer size="sm" />
-            <Button label="Close" variant="ghost" onPress={onClose} />
+            <Button label="Done" variant="ghost" onPress={onClose} />
           </Pressable>
         </Animated.View>
       </Pressable>
@@ -196,25 +230,14 @@ const styles = StyleSheet.create({
   medalStage: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 8,
+    paddingVertical: 10,
   },
   center: {
     textAlign: 'center',
     color: achievementTokens.text,
   },
-  metaRow: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    gap: 8,
-  },
-  chip: {
-    borderRadius: 999,
-    borderWidth: 1,
-    borderColor: achievementTokens.border,
-    paddingHorizontal: 10,
-    paddingVertical: 3,
-  },
-  chipText: {
+  category: {
+    textAlign: 'center',
     color: achievementTokens.textMuted,
   },
   statBlock: {
@@ -229,25 +252,12 @@ const styles = StyleSheet.create({
     letterSpacing: 0.6,
     textTransform: 'uppercase',
   },
-  track: {
-    height: 6,
-    borderRadius: 999,
-    backgroundColor: '#222',
-    overflow: 'hidden',
-  },
-  fill: {
-    height: '100%',
-    borderRadius: 999,
-  },
   statText: {
     color: achievementTokens.text,
-  },
-  earned: {
     marginTop: 4,
-    color: achievementTokens.gold,
   },
   remaining: {
-    marginTop: 4,
+    marginTop: 6,
     color: achievementTokens.textMuted,
   },
   xp: {
