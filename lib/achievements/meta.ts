@@ -92,7 +92,8 @@ export function motifForBadge(icon: string, category: BadgeCategory): MedalMotif
   if (icon.includes('moon')) return 'moon';
   if (icon.includes('people') || icon.includes('community')) return 'people';
   if (icon.includes('shield')) return 'shield';
-  if (icon.includes('star') || icon.includes('ribbon')) return 'star';
+  if (icon.includes('star') || icon.includes('ribbon') || icon.includes('diamond'))
+    return 'star';
   if (icon.includes('fitness') || icon.includes('calendar')) return 'calendar';
   if (icon.includes('bulb') || icon.includes('flash')) return 'bolt';
   if (icon.includes('crown')) return 'crown';

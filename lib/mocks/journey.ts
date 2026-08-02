@@ -282,7 +282,7 @@ export const ACHIEVEMENT_BADGES: AchievementBadge[] = [
     currentProgress: 7,
     isUnlocked: true,
     unlockedAt: '2026-07-20T20:00:00.000Z',
-  }, // unlocked — matches JOURNEY_PROFILE.unlockedBadgeIds
+  },
   {
     id: 'badge-30-day-streak',
     name: '30-Day Streak',
@@ -445,7 +445,7 @@ export const ACHIEVEMENT_BADGES: AchievementBadge[] = [
     id: 'badge-founders-crest',
     name: 'Founders Crest',
     description: 'A rare honor for athletes who define the Open Mat standard.',
-    icon: 'crown-outline',
+    icon: 'diamond-outline',
     category: 'special',
     rarity: 'legendary',
     xpReward: 1500,
