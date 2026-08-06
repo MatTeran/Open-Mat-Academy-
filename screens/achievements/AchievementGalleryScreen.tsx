@@ -7,7 +7,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { AchievementDetailModal } from '../../components/achievements/AchievementDetailModal';
 import { AchievementMedalCard } from '../../components/achievements/AchievementMedalCard';
 import { Button, FadeIn, Screen, Spacer, Text } from '../../components';
-import { PRODUCTION_PROTOTYPE_IDS } from '../../components/achievements/artworks';
 import {
   BADGE_CATEGORY_ORDER,
   categoryLabel,
@@ -35,14 +34,6 @@ export function AchievementGalleryScreen({ navigation }: Props) {
       return { category, items, earned };
     }).filter((section) => section.items.length > 0);
   }, [badges]);
-
-  const prototypes = useMemo(
-    () =>
-      PRODUCTION_PROTOTYPE_IDS.map((id) => badges.find((b) => b.id === id)).filter(
-        (b): b is AchievementBadge => Boolean(b),
-      ),
-    [badges],
-  );
 
   const openBadge = useCallback(
     (badgeId: string) => {
@@ -95,29 +86,6 @@ export function AchievementGalleryScreen({ navigation }: Props) {
       </FadeIn>
 
       <Spacer size="xl" />
-
-      {prototypes.length > 0 ? (
-        <FadeIn delay={60}>
-          <Text variant="subtitle" style={styles.sectionTitle}>
-            Prototype Medals
-          </Text>
-          <Text variant="caption" style={styles.sectionMeta}>
-            Production-quality set for approval
-          </Text>
-          <Spacer size="md" />
-          <View style={styles.grid}>
-            {prototypes.map((badge) => (
-              <AchievementMedalCard
-                key={`proto-${badge.id}`}
-                badge={badge}
-                celebrate={false}
-                onPress={() => openBadge(badge.id)}
-              />
-            ))}
-          </View>
-          <Spacer size="xl" />
-        </FadeIn>
-      ) : null}
 
       {sections.map((section, index) => (
         <FadeIn key={section.category} delay={80 + index * 40}>

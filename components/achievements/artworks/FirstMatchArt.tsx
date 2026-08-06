@@ -3,7 +3,7 @@ import { Circle, G, Path } from 'react-native-svg';
 import { materialPalette } from '../../../lib/achievements/materials';
 import type { MedalArtProps } from './types';
 
-/** First competition match — raised mat circle + starting whistle geometry. */
+/** First Match — raised mat circle + starting mark. */
 export function FirstMatchArt({ cx, cy, s, material, unlocked }: MedalArtProps) {
   const metal = unlocked ? materialPalette.brushedSilver : material.accent;
   const gold = unlocked ? materialPalette.primaryGold : material.rimMid;
@@ -16,8 +16,8 @@ export function FirstMatchArt({ cx, cy, s, material, unlocked }: MedalArtProps) 
         r={16 * s}
         fill="none"
         stroke={metal}
-        strokeWidth={2}
-        opacity={unlocked ? 0.85 : 0.45}
+        strokeWidth={2.1}
+        opacity={unlocked ? 0.9 : 0.45}
       />
       <Circle
         cx={cx}
@@ -25,10 +25,9 @@ export function FirstMatchArt({ cx, cy, s, material, unlocked }: MedalArtProps) 
         r={10 * s}
         fill="none"
         stroke={gold}
-        strokeWidth={1.2}
-        opacity={unlocked ? 0.7 : 0.35}
+        strokeWidth={1.3}
+        opacity={unlocked ? 0.75 : 0.35}
       />
-      {/* Abstract starting mark */}
       <Path
         d={`M ${cx - 3 * s} ${cy - 6 * s}
           L ${cx + 7 * s} ${cy}
@@ -40,7 +39,7 @@ export function FirstMatchArt({ cx, cy, s, material, unlocked }: MedalArtProps) 
       <Path
         d={`M ${cx - 12 * s} ${cy + 14 * s} H ${cx + 12 * s}`}
         stroke={metal}
-        strokeOpacity={unlocked ? 0.4 : 0.2}
+        strokeOpacity={unlocked ? 0.45 : 0.2}
         strokeWidth={1}
       />
     </G>

@@ -3,7 +3,7 @@ import { G, Path } from 'react-native-svg';
 import { materialPalette } from '../../../lib/achievements/materials';
 import type { MedalArtProps } from './types';
 
-/** Two interlocking grips / chain links for training partnership. */
+/** Training Partner — interlocking grip / chain links. */
 export function TrainingPartnerArt({
   cx,
   cy,
@@ -22,7 +22,7 @@ export function TrainingPartnerArt({
           A ${7 * s} ${7 * s} 0 1 1 ${cx - 12 * s} ${cy - 4 * s}`}
         fill="none"
         stroke={a}
-        strokeWidth={2.2}
+        strokeWidth={2.3}
         opacity={unlocked ? 0.95 : 0.48}
       />
       <Path
@@ -31,7 +31,7 @@ export function TrainingPartnerArt({
           A ${7 * s} ${7 * s} 0 1 1 ${cx + 12 * s} ${cy - 8 * s}`}
         fill="none"
         stroke={b}
-        strokeWidth={2.2}
+        strokeWidth={2.3}
         opacity={unlocked ? 0.95 : 0.48}
       />
       <Path

@@ -3,7 +3,7 @@ import { Circle, G, Path } from 'react-native-svg';
 import { materialPalette } from '../../../lib/achievements/materials';
 import type { MedalArtProps } from './types';
 
-/** Community crest — interlocking rings, not generic people icons. */
+/** Mat Family — interlocking rings crest (not generic people icons). */
 export function MatFamilyArt({ cx, cy, s, material, unlocked }: MedalArtProps) {
   const ring = unlocked ? materialPalette.brushedSilver : material.accent;
   const gold = unlocked ? materialPalette.paleGold : material.rimMid;
@@ -16,8 +16,8 @@ export function MatFamilyArt({ cx, cy, s, material, unlocked }: MedalArtProps) {
         r={9 * s}
         fill="none"
         stroke={ring}
-        strokeWidth={1.8}
-        opacity={unlocked ? 0.9 : 0.45}
+        strokeWidth={1.9}
+        opacity={unlocked ? 0.92 : 0.45}
       />
       <Circle
         cx={cx + 7 * s}
@@ -25,8 +25,8 @@ export function MatFamilyArt({ cx, cy, s, material, unlocked }: MedalArtProps) {
         r={9 * s}
         fill="none"
         stroke={gold}
-        strokeWidth={1.8}
-        opacity={unlocked ? 0.9 : 0.45}
+        strokeWidth={1.9}
+        opacity={unlocked ? 0.92 : 0.45}
       />
       <Circle
         cx={cx}

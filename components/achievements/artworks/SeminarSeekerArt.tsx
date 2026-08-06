@@ -3,7 +3,7 @@ import { Circle, G, Path, Polygon } from 'react-native-svg';
 import { materialPalette } from '../../../lib/achievements/materials';
 import type { MedalArtProps } from './types';
 
-/** Commemorative coin star for guest seminars. */
+/** Seminar Seeker — commemorative coin star for guest seminars. */
 export function SeminarSeekerArt({
   cx,
   cy,
@@ -29,7 +29,7 @@ export function SeminarSeekerArt({
       <Polygon
         points={`${cx},${cy - 14 * s} ${cx + 4 * s},${cy - 4 * s} ${cx + 14 * s},${cy - 4 * s} ${cx + 6 * s},${cy + 3 * s} ${cx + 9 * s},${cy + 14 * s} ${cx},${cy + 7 * s} ${cx - 9 * s},${cy + 14 * s} ${cx - 6 * s},${cy + 3 * s} ${cx - 14 * s},${cy - 4 * s} ${cx - 4 * s},${cy - 4 * s}`}
         fill={gold}
-        opacity={unlocked ? 0.9 : 0.42}
+        opacity={unlocked ? 0.92 : 0.42}
         stroke={silver}
         strokeWidth={1}
       />

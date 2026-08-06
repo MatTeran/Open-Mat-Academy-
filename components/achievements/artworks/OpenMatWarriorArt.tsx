@@ -1,9 +1,9 @@
-import { Circle, G, Path } from 'react-native-svg';
+import { Circle, Defs, G, LinearGradient, Path, Stop } from 'react-native-svg';
 
 import { materialPalette } from '../../../lib/achievements/materials';
 import type { MedalArtProps } from './types';
 
-/** Crossed mat lines + interlocking grappling arcs — gunmetal & gold. */
+/** Open Mat Warrior — crossed belts, tatami, gold rim language, academy seal. */
 export function OpenMatWarriorArt({
   cx,
   cy,
@@ -11,71 +11,85 @@ export function OpenMatWarriorArt({
   material,
   unlocked,
 }: MedalArtProps) {
-  const metal = unlocked ? materialPalette.primaryGold : material.accent;
+  const gold = unlocked ? materialPalette.primaryGold : material.accent;
+  const beltA = unlocked ? '#F2F0EA' : '#7A8088';
+  const beltB = unlocked ? materialPalette.deepGold : material.rimMid;
   const gun = unlocked ? materialPalette.gunmetalLight : material.rimMid;
-  const deep = unlocked ? materialPalette.deepGold : material.rimInner;
+  const uid = `omw-${Math.round(cx)}-${Math.round(s * 100)}`;
 
   return (
     <G>
-      {/* Mat grid base */}
-      {[-12, -4, 4, 12].map((x) => (
+      <Defs>
+        <LinearGradient id={`${uid}-gold`} x1="0%" y1="0%" x2="100%" y2="100%">
+          <Stop offset="0%" stopColor={unlocked ? materialPalette.goldHighlight : material.rimHighlight} />
+          <Stop offset="100%" stopColor={gold} />
+        </LinearGradient>
+      </Defs>
+
+      <Circle cx={cx} cy={cy} r={20.5 * s} fill={materialPalette.obsidian} opacity={unlocked ? 0.7 : 0.45} />
+
+      {/* Tatami weave */}
+      {Array.from({ length: 8 }).map((_, i) => (
         <Path
-          key={`v-${x}`}
-          d={`M ${cx + x * s} ${cy - 16 * s} V ${cy + 16 * s}`}
+          key={`v-${i}`}
+          d={`M ${cx - 16 * s + i * 4.5 * s} ${cy - 16 * s} V ${cy + 16 * s}`}
           stroke={gun}
-          strokeOpacity={unlocked ? 0.35 : 0.2}
-          strokeWidth={0.9}
+          strokeOpacity={unlocked ? 0.28 : 0.14}
+          strokeWidth={0.7}
         />
       ))}
-      {[-12, -4, 4, 12].map((y) => (
+      {Array.from({ length: 8 }).map((_, i) => (
         <Path
-          key={`h-${y}`}
-          d={`M ${cx - 16 * s} ${cy + y * s} H ${cx + 16 * s}`}
+          key={`h-${i}`}
+          d={`M ${cx - 16 * s} ${cy - 16 * s + i * 4.5 * s} H ${cx + 16 * s}`}
           stroke={gun}
-          strokeOpacity={unlocked ? 0.28 : 0.16}
-          strokeWidth={0.9}
+          strokeOpacity={unlocked ? 0.22 : 0.12}
+          strokeWidth={0.7}
         />
       ))}
 
-      {/* Interlocking grappling arcs (abstract, not people icons) */}
+      {/* Crossed belts */}
       <Path
-        d={`M ${cx - 14 * s} ${cy - 2 * s}
-          Q ${cx - 2 * s} ${cy - 16 * s} ${cx + 10 * s} ${cy - 4 * s}
-          Q ${cx + 2 * s} ${cy + 2 * s} ${cx - 8 * s} ${cy + 10 * s}
-          Q ${cx - 14 * s} ${cy + 6 * s} ${cx - 14 * s} ${cy - 2 * s}
+        d={`M ${cx - 15 * s} ${cy - 10 * s}
+          L ${cx + 15 * s} ${cy + 10 * s}
+          L ${cx + 12 * s} ${cy + 14 * s}
+          L ${cx - 18 * s} ${cy - 6 * s}
           Z`}
-        fill={deep}
-        opacity={unlocked ? 0.55 : 0.3}
-        stroke={metal}
-        strokeWidth={1.3}
-      />
-      <Path
-        d={`M ${cx + 14 * s} ${cy + 2 * s}
-          Q ${cx + 2 * s} ${cy + 16 * s} ${cx - 10 * s} ${cy + 4 * s}
-          Q ${cx - 2 * s} ${cy - 2 * s} ${cx + 8 * s} ${cy - 10 * s}
-          Q ${cx + 14 * s} ${cy - 6 * s} ${cx + 14 * s} ${cy + 2 * s}
-          Z`}
-        fill={gun}
-        opacity={unlocked ? 0.5 : 0.28}
-        stroke={metal}
-        strokeWidth={1.3}
-      />
-
-      <Circle
-        cx={cx}
-        cy={cy}
-        r={4.5 * s}
-        fill={metal}
+        fill={beltA}
         opacity={unlocked ? 0.95 : 0.5}
       />
+      <Path
+        d={`M ${cx + 15 * s} ${cy - 10 * s}
+          L ${cx - 15 * s} ${cy + 10 * s}
+          L ${cx - 12 * s} ${cy + 14 * s}
+          L ${cx + 18 * s} ${cy - 6 * s}
+          Z`}
+        fill={beltB}
+        opacity={unlocked ? 0.92 : 0.48}
+      />
+
+      {/* Academy seal */}
       <Circle
         cx={cx}
         cy={cy}
-        r={18 * s}
+        r={6.5 * s}
+        fill={materialPalette.obsidian}
+        stroke={`url(#${uid}-gold)`}
+        strokeWidth={1.5}
+        opacity={unlocked ? 0.98 : 0.55}
+      />
+      <Path
+        d={`M ${cx - 3 * s} ${cy + 1.5 * s}
+          L ${cx - 1.2 * s} ${cy - 2.5 * s}
+          L ${cx} ${cy} 
+          L ${cx + 1.2 * s} ${cy - 2.5 * s}
+          L ${cx + 3 * s} ${cy + 1.5 * s}`}
         fill="none"
-        stroke={metal}
-        strokeOpacity={unlocked ? 0.35 : 0.18}
-        strokeWidth={1}
+        stroke={gold}
+        strokeWidth={1.2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        opacity={unlocked ? 0.9 : 0.45}
       />
     </G>
   );
