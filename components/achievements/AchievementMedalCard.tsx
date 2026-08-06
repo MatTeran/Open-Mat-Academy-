@@ -18,6 +18,8 @@ interface AchievementMedalCardProps {
   badge: AchievementBadge;
   onPress: () => void;
   celebrate?: boolean;
+  /** Larger medal treatment for featured / prototype showcase. */
+  featured?: boolean;
 }
 
 /** Short gallery status — rarity · earned, or progress only. */
@@ -50,7 +52,6 @@ function shortRequirementUnit(label: string, type: string): string {
   if (lower.includes('challenge')) {
     return 'challenges';
   }
-  // Fall back to a trimmed lowercase label
   return lower.replace(/completed|earned/g, '').trim() || 'complete';
 }
 
@@ -68,17 +69,24 @@ export function AchievementMedalCard({
   badge,
   onPress,
   celebrate = false,
+  featured = false,
 }: AchievementMedalCardProps) {
   const { width, fontScale } = useWindowDimensions();
   const singleColumn = fontScale >= 1.35 || width < 340;
   const medalSize = useMemo(() => {
+    if (featured) {
+      if (singleColumn) {
+        return Math.min(168, Math.max(140, width * 0.5));
+      }
+      const col = (width - 48 - 20) / 2;
+      return Math.min(162, Math.max(138, col * 0.88));
+    }
     if (singleColumn) {
       return Math.min(150, Math.max(120, width * 0.42));
     }
-    // Two-column: ~120–150pt medals with generous gutters
     const col = (width - 48 - 20) / 2;
     return Math.min(148, Math.max(118, col * 0.78));
-  }, [singleColumn, width]);
+  }, [featured, singleColumn, width]);
 
   const status = galleryStatusLine(badge);
 
@@ -92,18 +100,23 @@ export function AchievementMedalCard({
       }}
       style={({ pressed }) => [
         styles.item,
+        featured && styles.itemFeatured,
         singleColumn ? styles.itemFull : styles.itemHalf,
         pressed && styles.pressed,
       ]}
     >
-      <View style={styles.medalWrap}>
+      <View style={[styles.medalWrap, featured && styles.medalWrapFeatured]}>
         <AchievementMedal badge={badge} size={medalSize} celebrate={celebrate} />
       </View>
 
       <Text
         variant="body"
         numberOfLines={2}
-        style={[styles.name, !badge.isUnlocked && styles.lockedText]}
+        style={[
+          styles.name,
+          featured && styles.nameFeatured,
+          !badge.isUnlocked && styles.lockedText,
+        ]}
       >
         {badge.name}
       </Text>
@@ -123,6 +136,10 @@ const styles = StyleSheet.create({
     gap: 8,
     minHeight: 196,
   },
+  itemFeatured: {
+    minHeight: 228,
+    paddingVertical: 14,
+  },
   itemHalf: {
     width: '47%',
   },
@@ -139,6 +156,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     minHeight: 128,
   },
+  medalWrapFeatured: {
+    minHeight: 150,
+  },
   name: {
     color: achievementTokens.text,
     textAlign: 'center',
@@ -146,6 +166,10 @@ const styles = StyleSheet.create({
     lineHeight: 19,
     fontWeight: '600',
     minHeight: 38,
+  },
+  nameFeatured: {
+    fontSize: 16,
+    lineHeight: 20,
   },
   lockedText: {
     color: achievementTokens.textSecondary,

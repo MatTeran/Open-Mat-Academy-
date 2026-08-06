@@ -5,6 +5,7 @@ import { RefreshControl, StyleSheet, View } from 'react-native';
 
 import { AchievementDetailModal } from '../../components/achievements/AchievementDetailModal';
 import { AchievementMedalCard } from '../../components/achievements/AchievementMedalCard';
+import { FEATURED_MEDAL_IDS } from '../../components/achievements/artworks';
 import {
   Button,
   ChallengeCard,
@@ -54,6 +55,14 @@ export function JourneyScreen({ navigation }: Props) {
     badges.forEach((badge) => map.set(badge.id, badge.name));
     return map;
   }, [badges]);
+
+  const featuredMedals = useMemo(
+    () =>
+      FEATURED_MEDAL_IDS.map((id) => badges.find((b) => b.id === id))
+        .filter((b): b is AchievementBadge => Boolean(b))
+        .slice(0, 8),
+    [badges],
+  );
 
   useEffect(() => {
     weeklyChallenges.forEach((challenge) => {
@@ -192,14 +201,15 @@ export function JourneyScreen({ navigation }: Props) {
               onAction={() => navigation.navigate('AchievementGallery')}
             />
             <Text variant="caption" muted>
-              Collectible enamel medals across attendance, streaks, and more.
+              Featured collectible medals — open the gallery for all {badges.length}.
             </Text>
             <Spacer size="md" />
             <View style={styles.badgeGrid}>
-              {badges.slice(0, 4).map((badge) => (
+              {featuredMedals.map((badge) => (
                 <AchievementMedalCard
                   key={badge.id}
                   badge={badge}
+                  featured
                   celebrate={false}
                   onPress={() => openBadge(badge.id)}
                 />

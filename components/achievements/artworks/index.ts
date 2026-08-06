@@ -21,12 +21,21 @@ import { WeekOnFireArt } from './WeekOnFireArt';
 
 export type { MedalArtProps } from './types';
 
-/** Approved hero set — used for featured gallery strip ordering. */
+/**
+ * Featured showcase medals — hero collectibles shown large at the top
+ * of the gallery and on the Journey preview.
+ */
 export const FEATURED_MEDAL_IDS = [
   'badge-first-class',
+  'badge-early-bird',
+  'badge-night-owl',
   'badge-100-classes',
+  'badge-open-mat-warrior',
   'badge-30-day-streak',
+  'badge-iron-will',
+  'badge-competition-ready',
   'badge-gold-medalist',
+  'badge-founders-crest',
 ] as const;
 
 /** Unique collectible artwork for every achievement badge. */

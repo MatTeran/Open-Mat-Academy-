@@ -6,6 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AchievementDetailModal } from '../../components/achievements/AchievementDetailModal';
 import { AchievementMedalCard } from '../../components/achievements/AchievementMedalCard';
+import { FEATURED_MEDAL_IDS } from '../../components/achievements/artworks';
 import { Button, FadeIn, Screen, Spacer, Text } from '../../components';
 import {
   BADGE_CATEGORY_ORDER,
@@ -26,6 +27,14 @@ export function AchievementGalleryScreen({ navigation }: Props) {
 
   const unlockedCount = badges.filter((b) => b.isUnlocked).length;
   const inProgressCount = badges.length - unlockedCount;
+
+  const featured = useMemo(
+    () =>
+      FEATURED_MEDAL_IDS.map((id) => badges.find((b) => b.id === id)).filter(
+        (b): b is AchievementBadge => Boolean(b),
+      ),
+    [badges],
+  );
 
   const sections = useMemo(() => {
     return BADGE_CATEGORY_ORDER.map((category) => {
@@ -81,11 +90,35 @@ export function AchievementGalleryScreen({ navigation }: Props) {
           <View style={styles.summaryDivider} />
           <SummaryCell value={inProgressCount} label="In Progress" />
           <View style={styles.summaryDivider} />
-          <SummaryCell value={sections.length} label="Collections" />
+          <SummaryCell value={badges.length} label="Medals" />
         </View>
       </FadeIn>
 
       <Spacer size="xl" />
+
+      {featured.length > 0 ? (
+        <FadeIn delay={60}>
+          <Text variant="subtitle" style={styles.sectionTitle}>
+            Featured Medals
+          </Text>
+          <Text variant="caption" style={styles.sectionMeta}>
+            Signature collectibles — {featured.length} showcased
+          </Text>
+          <Spacer size="md" />
+          <View style={styles.grid}>
+            {featured.map((badge) => (
+              <AchievementMedalCard
+                key={`featured-${badge.id}`}
+                badge={badge}
+                featured
+                celebrate={false}
+                onPress={() => openBadge(badge.id)}
+              />
+            ))}
+          </View>
+          <Spacer size="xl" />
+        </FadeIn>
+      ) : null}
 
       {sections.map((section, index) => (
         <FadeIn key={section.category} delay={80 + index * 40}>
