@@ -12,6 +12,11 @@ import { IronWillArt } from './IronWillArt';
 import { MatFamilyArt } from './MatFamilyArt';
 import { NightOwlArt } from './NightOwlArt';
 import { OpenMatWarriorArt } from './OpenMatWarriorArt';
+import {
+  getMedalReferenceFace,
+  MEDAL_REFERENCE_FACES,
+  REFERENCE_MEDAL_IDS,
+} from './referenceFaces';
 import { SeminarSeekerArt } from './SeminarSeekerArt';
 import { Streak30Art } from './Streak30Art';
 import { TechniqueScholarArt } from './TechniqueScholarArt';
@@ -20,6 +25,11 @@ import type { MedalArtProps } from './types';
 import { WeekOnFireArt } from './WeekOnFireArt';
 
 export type { MedalArtProps } from './types';
+export {
+  getMedalReferenceFace,
+  MEDAL_REFERENCE_FACES,
+  REFERENCE_MEDAL_IDS,
+};
 
 /**
  * Featured showcase medals — hero collectibles shown large at the top
