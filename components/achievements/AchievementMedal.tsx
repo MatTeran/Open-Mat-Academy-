@@ -228,7 +228,7 @@ function AchievementMedalInner({
       />
     ) : null;
 
-  // Approved art-direction renders — full photoreal face for hero prototypes.
+  // Approved metallic art-direction renders — full photoreal face for gallery medals.
   if (referenceFace) {
     return (
       <Animated.View style={[styles.wrap, shellStyle]}>
