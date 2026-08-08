@@ -44,11 +44,17 @@ Black & white athletic identity matching the official Gracie Fighter / Open Mat 
 
 ## Scripts
 
-- `npm start` / `npm run start:member` — Member Expo app
+- `npm run dev` / `npm start` / `npm run start:member` — Member Expo app (local Fast Refresh)
+- `npm run ios` / `npm run android` — open iOS Simulator / Android Emulator
 - `npm run start:coach` — Coach Expo app
 - `npm run start:coach-web` — Coach Web (Next.js)
 - `npm run typecheck:all` — Member + Coach + Coach Web TypeScript
 - `npm run test:coach-web` — Coach Web unit tests
+- `npm run eas:member:testflight` — Production iOS build + TestFlight submit
+
+## Local development (UI / Fast Refresh)
+
+See **[docs/LOCAL_DEVELOPMENT.md](./docs/LOCAL_DEVELOPMENT.md)** for the recommended Cursor → Expo Go → Simulator/device workflow. Use TestFlight only for milestones and external beta.
 
 ## Friend demo
 
@@ -59,7 +65,7 @@ See [DEMO.md](./DEMO.md) for sample users, walkthrough tips, and Expo Go QR code
 ```bash
 npm install
 cp .env.example .env
-npm start
+npm run dev
 ```
 
 ### Supabase auth setup
