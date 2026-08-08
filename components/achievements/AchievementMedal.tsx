@@ -251,25 +251,13 @@ function AchievementMedalInner({
           style={{
             width: size,
             height: size,
-            opacity: unlocked ? 1 : 0.62,
+            // Keep metallic faces fully readable when locked — status copy
+            // and the progress arc communicate lock state, not a grey wash.
+            opacity: unlocked ? 1 : 0.9,
           }}
           resizeMode="contain"
           accessibilityIgnoresInvertColors
         />
-
-        {!unlocked ? (
-          <View
-            pointerEvents="none"
-            style={[
-              styles.lockedWash,
-              {
-                width: size * 0.88,
-                height: size * 0.88,
-                borderRadius: size,
-              },
-            ]}
-          />
-        ) : null}
 
         {showArc || !unlocked ? (
           <Svg
@@ -289,12 +277,12 @@ function AchievementMedalInner({
                 strokeWidth={2.4}
                 strokeDasharray={`${arcDash} ${arcLen}`}
                 strokeLinecap="round"
-                opacity={0.8}
+                opacity={0.85}
                 transform={`rotate(-90 ${c} ${c})`}
               />
             ) : null}
             {!unlocked ? (
-              <G opacity={0.7}>
+              <G opacity={0.85}>
                 <Path
                   d={`M ${c - 3.5} ${c + outerR * 0.78}
                       V ${c + outerR * 0.7}
@@ -307,8 +295,8 @@ function AchievementMedalInner({
                       Z`}
                   fill="none"
                   stroke={material.rimHighlight}
-                  strokeWidth={1}
-                  opacity={0.55}
+                  strokeWidth={1.1}
+                  opacity={0.7}
                 />
               </G>
             ) : null}
@@ -546,9 +534,5 @@ const styles = StyleSheet.create({
     width: 28,
     height: '120%',
     backgroundColor: 'rgba(255,255,255,0.55)',
-  },
-  lockedWash: {
-    position: 'absolute',
-    backgroundColor: 'rgba(28,32,36,0.42)',
   },
 });
