@@ -78,6 +78,7 @@ export type { ScreenProps } from './ui/Screen';
 export { Spacer } from './ui/Spacer';
 export { Text } from './ui/Text';
 export type { AppTextProps } from './ui/Text';
+export { AchievementsBarCard } from './workout/AchievementsBarCard';
 export { ChipSelect } from './workout/ChipSelect';
 export { DropdownField } from './workout/DropdownField';
 export { FloatingActionButton } from './workout/FloatingActionButton';

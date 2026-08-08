@@ -5,6 +5,7 @@ import { useMemo, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import {
+  AchievementsBarCard,
   Button,
   FadeIn,
   FloatingActionButton,
@@ -18,6 +19,7 @@ import {
   WorkoutCard,
   WorkoutProgressCard,
 } from '../../components';
+import { useJourney } from '../../lib/providers/JourneyProvider';
 import { useWorkouts } from '../../lib/providers/WorkoutProvider';
 import { spacing } from '../../lib/theme';
 import type { MainTabParamList, WorkoutStackParamList } from '../../types';
@@ -36,6 +38,7 @@ type LogNavigation = CompositeNavigationProp<
 export function WorkoutLogListScreen({ navigation }: Props) {
   const tabNavigation = navigation as LogNavigation;
   const { workouts } = useWorkouts();
+  const { badges } = useJourney();
   const [segment, setSegment] = useState<LogTabSegment>('progress');
   const [filter, setFilter] = useState<WorkoutMetricFilter>('all');
 
@@ -46,6 +49,10 @@ export function WorkoutLogListScreen({ navigation }: Props) {
 
   const openJourney = () => {
     tabNavigation.navigate('Home', { screen: 'Journey' });
+  };
+
+  const openAchievements = () => {
+    tabNavigation.navigate('Home', { screen: 'AchievementGallery' });
   };
 
   const openSessions = () => {
@@ -89,6 +96,12 @@ export function WorkoutLogListScreen({ navigation }: Props) {
               filter={filter}
               onFilterChange={setFilter}
               onSeeMore={openJourney}
+            />
+
+            <Spacer size="md" />
+            <AchievementsBarCard
+              badges={badges}
+              onPress={openAchievements}
             />
 
             <Spacer size="md" />

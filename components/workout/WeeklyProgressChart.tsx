@@ -19,11 +19,12 @@ interface WeeklyProgressChartProps {
   points: WeeklyMetricPoint[];
 }
 
-const CHART_HEIGHT = 148;
+/** Compact chart so the Progress top tile can sit at roughly half height. */
+const CHART_HEIGHT = 72;
 const PAD_LEFT = 8;
-const PAD_RIGHT = 36;
-const PAD_TOP = 12;
-const PAD_BOTTOM = 28;
+const PAD_RIGHT = 32;
+const PAD_TOP = 6;
+const PAD_BOTTOM = 18;
 
 function buildLinePath(coords: Array<{ x: number; y: number }>): string {
   if (coords.length === 0) {
@@ -135,10 +136,10 @@ export function WeeklyProgressChart({ points }: WeeklyProgressChartProps) {
               key={`dot-${index}`}
               cx={point.x}
               cy={point.y}
-              r={3.5}
+              r={2.5}
               fill={colors.goldAccent}
               stroke={colors.secondaryBackground}
-              strokeWidth={1.5}
+              strokeWidth={1.2}
             />
           ))}
 
