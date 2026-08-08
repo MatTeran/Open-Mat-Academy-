@@ -45,8 +45,9 @@ function resolveScheme(
 
 export function ThemeProvider({ children }: PropsWithChildren) {
   const systemScheme = useColorScheme();
+  // Version W.1 defaults to the warm light palette; stored prefs still win.
   const [preference, setPreferenceState] =
-    useState<AppearancePreference>('system');
+    useState<AppearancePreference>('light');
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
@@ -61,7 +62,7 @@ export function ThemeProvider({ children }: PropsWithChildren) {
           setPreferenceState(stored);
         }
       } catch {
-        // Keep system default.
+        // Keep W.1 light default.
       } finally {
         if (mounted) {
           setHydrated(true);

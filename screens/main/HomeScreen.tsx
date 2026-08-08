@@ -9,35 +9,31 @@ import { useEffect, useMemo, useState } from 'react';
 import { AccessibilityInfo, StyleSheet, View } from 'react-native';
 
 import {
+  DashboardGrid,
   FadeIn,
-  HomeHeroBanner,
-  JourneySummaryCard,
-  LatestAnnouncementCard,
-  LocalEventsTile,
-  NextClassCard,
+  AcademyHero,
+  GreetingSection,
+  JourneyCard,
   NotificationPermissionCard,
-  QuickActions,
   Screen,
   Spacer,
-  Text,
-  UpcomingEvents,
+  TrainingStreakCard,
+  UpcomingEventCard,
+  W1NextClassCard,
 } from '../../components';
-import { useAuth, useNotifications } from '../../hooks';
+import { useAuth, useNotifications, useProfile } from '../../hooks';
 import {
   HOME_USER_SUMMARY,
   NEXT_CLASS_SUMMARY,
-  QUICK_ACTIONS,
-  UPCOMING_EVENTS,
 } from '../../lib/mocks/home';
 import { scheduleClassReminder } from '../../lib/notifications';
 import { useCommunity } from '../../lib/providers/CommunityProvider';
 import { useJourney } from '../../lib/providers/JourneyProvider';
-import { spacing } from '../../lib/theme';
+import { spacing, w1Spacing } from '../../lib/theme';
 import type { HomeStackParamList, MainTabParamList } from '../../types';
 import type {
   HomeUserSummary,
   NextClassReservationStatus,
-  QuickActionId,
 } from '../../types/home';
 import {
   getFirstName,
@@ -52,15 +48,29 @@ type HomeNavigation = CompositeNavigationProp<
 
 const CHECK_IN_XP = 100;
 
+function parseAcademy(membershipName?: string | null): {
+  academyName: string;
+  locationLabel: string;
+} {
+  const raw = membershipName?.trim() || 'Open Mat · Tracy';
+  const [namePart, locationPart] = raw.split('·').map((part) => part.trim());
+  return {
+    academyName: (namePart || 'Open Mat').toUpperCase(),
+    locationLabel: (locationPart || 'Tracy, California').toUpperCase(),
+  };
+}
+
 export function HomeScreen() {
   const { user } = useAuth();
-  const { announcements } = useCommunity();
+  const { hub } = useProfile();
+  const { seminars } = useCommunity();
   const { profile, streak, awardXp } = useJourney();
   const {
     permissionPromptStatus,
     enableNotifications,
     deferPermissionPrompt,
     openSettings,
+    unreadCount,
   } = useNotifications();
   const navigation = useNavigation<HomeNavigation>();
 
@@ -81,11 +91,10 @@ export function HomeScreen() {
   const showPermissionCard = permissionPromptStatus === 'unknown';
   const showBlockedCard = permissionPromptStatus === 'blocked';
 
-  const latestAnnouncement = useMemo(() => {
-    return [...announcements].sort(
-      (a, b) => +new Date(b.createdAt) - +new Date(a.createdAt),
-    )[0];
-  }, [announcements]);
+  const { academyName, locationLabel } = useMemo(
+    () => parseAcademy(hub.membership.academyName),
+    [hub.membership.academyName],
+  );
 
   const journeySummary: HomeUserSummary = useMemo(
     () => ({
@@ -117,7 +126,22 @@ export function HomeScreen() {
   const motivationalMessage = getMotivationalMessage({
     weeklyClassesCompleted,
     weeklyClassGoal: HOME_USER_SUMMARY.weeklyClassGoal,
+    currentStreak: journeySummary.currentStreak,
   });
+
+  const featuredEvent = useMemo(() => {
+    const seminar = seminars[0];
+    if (seminar) {
+      return {
+        title: seminar.title,
+        whenLabel: `${seminar.dateLabel} · ${seminar.timeLabel}`,
+      };
+    }
+    return {
+      title: 'Guard Retention Masterclass',
+      whenLabel: 'Sat, Aug 16 · 1:00 PM',
+    };
+  }, [seminars]);
 
   useEffect(() => {
     if (!xpEarnedLabel) {
@@ -149,7 +173,7 @@ export function HomeScreen() {
         await wait(500);
         setReservationStatus('reserved');
         AccessibilityInfo.announceForAccessibility?.(
-          `Reserved ${NEXT_CLASS_SUMMARY.title}. Mock reservation only.`,
+          `Reserved ${NEXT_CLASS_SUMMARY.title}.`,
         );
         await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
         void scheduleClassReminder({
@@ -157,7 +181,6 @@ export function HomeScreen() {
           classTitle: NEXT_CLASS_SUMMARY.title,
           startsAt: new Date(NEXT_CLASS_SUMMARY.startsAt),
         });
-        // Soon classes open check-in shortly after reserve in this mock flow.
         if (NEXT_CLASS_SUMMARY.status === 'soon') {
           await wait(900);
           setReservationStatus('check_in');
@@ -188,7 +211,7 @@ export function HomeScreen() {
       if (reservationStatus === 'class_full') {
         await wait(450);
         AccessibilityInfo.announceForAccessibility?.(
-          `Joined waitlist for ${NEXT_CLASS_SUMMARY.title}. Mock action only.`,
+          `Joined waitlist for ${NEXT_CLASS_SUMMARY.title}.`,
         );
         await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
       }
@@ -197,123 +220,107 @@ export function HomeScreen() {
     }
   };
 
-  const handleQuickAction = (id: QuickActionId) => {
-    switch (id) {
-      case 'reserveClass':
-      case 'viewSchedule':
-        navigation.navigate('Schedule');
-        break;
-      case 'logTraining':
-        navigation.navigate('WorkoutLog');
-        break;
-      case 'logTechnique':
-        navigation.navigate('WorkoutLog', {
-          screen: 'WorkoutDetails',
-        });
-        break;
-      default:
-        break;
-    }
-  };
-
   return (
     <Screen scroll padded={false} flushTop contentStyle={styles.content}>
-      <HomeHeroBanner
-        greeting={greeting}
-        firstName={firstName}
-        motivationalMessage={motivationalMessage}
+      <AcademyHero
+        academyName={academyName}
+        locationLabel={
+          locationLabel.includes(',')
+            ? locationLabel
+            : `${locationLabel}, CALIFORNIA`
+        }
+        unreadCount={unreadCount}
+        onPressNotifications={() =>
+          navigation.navigate('Profile', { screen: 'Notifications' })
+        }
       />
 
       <View style={styles.body}>
-        <FadeIn delay={60}>
-          <NextClassCard
-            nextClass={NEXT_CLASS_SUMMARY}
-            reservationStatus={reservationStatus}
-            actionLoading={actionLoading}
-            xpEarnedLabel={xpEarnedLabel}
-            onPrimaryAction={() => {
-              void handlePrimaryClassAction();
-            }}
-            onOpenDetails={() => navigation.navigate('Schedule')}
+        <FadeIn delay={40}>
+          <GreetingSection
+            greeting={greeting}
+            firstName={firstName}
+            message={motivationalMessage}
+          />
+        </FadeIn>
+
+        <Spacer size="md" />
+
+        <FadeIn delay={80}>
+          <DashboardGrid
+            left={
+              <W1NextClassCard
+                nextClass={NEXT_CLASS_SUMMARY}
+                reservationStatus={reservationStatus}
+                actionLoading={actionLoading}
+                xpEarnedLabel={xpEarnedLabel}
+                onPrimaryAction={() => {
+                  void handlePrimaryClassAction();
+                }}
+                onOpenDetails={() => navigation.navigate('Schedule')}
+              />
+            }
+            right={
+              <JourneyCard
+                summary={journeySummary}
+                onOpenJourney={() => navigation.navigate('Journey')}
+              />
+            }
           />
         </FadeIn>
 
         {showPermissionCard || showBlockedCard ? (
           <>
             <Spacer size="md" />
-            <FadeIn delay={80}>
-              <NotificationPermissionCard
-                loading={permissionLoading}
-                statusMessage={permissionMessage}
-                showOpenSettings={showBlockedCard}
-                onEnable={() => {
-                  setPermissionLoading(true);
-                  setPermissionMessage(null);
-                  void enableNotifications()
-                    .then((result) => {
-                      setPermissionMessage(result.message);
-                    })
-                    .finally(() => setPermissionLoading(false));
-                }}
-                onNotNow={() => {
-                  void deferPermissionPrompt();
-                }}
-                onOpenSettings={() => {
-                  void openSettings();
-                }}
-              />
-            </FadeIn>
+            <View style={styles.inset}>
+              <FadeIn delay={100}>
+                <NotificationPermissionCard
+                  loading={permissionLoading}
+                  statusMessage={permissionMessage}
+                  showOpenSettings={showBlockedCard}
+                  onEnable={() => {
+                    setPermissionLoading(true);
+                    setPermissionMessage(null);
+                    void enableNotifications()
+                      .then((result) => {
+                        setPermissionMessage(result.message);
+                      })
+                      .finally(() => setPermissionLoading(false));
+                  }}
+                  onNotNow={() => {
+                    void deferPermissionPrompt();
+                  }}
+                  onOpenSettings={() => {
+                    void openSettings();
+                  }}
+                />
+              </FadeIn>
+            </View>
           </>
         ) : null}
 
         <Spacer size="md" />
 
-        <FadeIn delay={100}>
-          <JourneySummaryCard
-            summary={journeySummary}
-            onOpenJourney={() => navigation.navigate('Journey')}
-          />
+        <FadeIn delay={140}>
+          <View style={styles.inset}>
+            <UpcomingEventCard
+              title={featuredEvent.title}
+              whenLabel={featuredEvent.whenLabel}
+              onPress={() => navigation.navigate('Community')}
+            />
+          </View>
         </FadeIn>
-
-        {latestAnnouncement ? (
-          <>
-            <Spacer size="md" />
-            <FadeIn delay={140}>
-              <Text variant="subtitle" style={styles.sectionTitle}>
-                Academy Announcement
-              </Text>
-              <Spacer size="sm" />
-              <LatestAnnouncementCard
-                announcement={latestAnnouncement}
-                onPress={() =>
-                  navigation.navigate('Community', {
-                    screen: 'AnnouncementDetail',
-                    params: { announcementId: latestAnnouncement.id },
-                  })
-                }
-              />
-            </FadeIn>
-          </>
-        ) : null}
 
         <Spacer size="md" />
-
-        <FadeIn delay={160}>
-          <LocalEventsTile
-            onPress={() => navigation.navigate('LocalEvents')}
-          />
-        </FadeIn>
-
-        <Spacer size="lg" />
 
         <FadeIn delay={180}>
-          <QuickActions actions={QUICK_ACTIONS} onAction={handleQuickAction} />
-        </FadeIn>
-
-        <Spacer size="lg" />
-
-        <FadeIn delay={220}>
-          <UpcomingEvents events={UPCOMING_EVENTS} />
+          <View style={styles.inset}>
+            <TrainingStreakCard
+              currentStreak={journeySummary.currentStreak}
+              weekDays={streak.weekDays}
+              onPress={() => navigation.navigate('Journey')}
+            />
+          </View>
         </FadeIn>
 
         <View style={styles.bottomSpace} />
@@ -328,13 +335,12 @@ const styles = StyleSheet.create({
   },
   body: {
     width: '100%',
-    paddingHorizontal: spacing.lg,
     paddingTop: spacing.lg,
   },
-  sectionTitle: {
-    fontSize: 17,
+  inset: {
+    paddingHorizontal: w1Spacing.screenX,
   },
   bottomSpace: {
-    height: spacing.xl,
+    height: 120,
   },
 });

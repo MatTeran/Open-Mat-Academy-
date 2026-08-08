@@ -18,6 +18,23 @@ export { NextClassCard } from './home/NextClassCard';
 export { QuickActions } from './home/QuickActions';
 export { RecentActivity } from './home/RecentActivity';
 export { UpcomingEvents } from './home/UpcomingEvents';
+export {
+  AcademyHero,
+  DashboardGrid,
+  DayIndicator,
+  GreetingSection,
+  JourneyCard,
+  JourneyProgressBar,
+  MetricItem,
+  QuickLogSheet,
+  SectionLabel,
+  StatusChip,
+  SurfaceCard,
+  TrainingStreakCard,
+  UpcomingEventCard,
+  W1NextClassCard,
+} from './home/w1';
+export type { QuickLogActionId } from './home/w1';
 export { CenterLogTabIcon } from './layout/CenterLogTabIcon';
 export { TabBarIcon } from './layout/TabBarIcon';
 export { AchievementDetailModal } from './achievements/AchievementDetailModal';

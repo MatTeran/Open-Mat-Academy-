@@ -13,6 +13,7 @@ export { radii, spacing } from './spacing';
 export type { RadiusToken, SpacingToken } from './spacing';
 export { fontFamilies, getTypography, typography } from './typography';
 export type { TypographyVariant } from './typography';
+export { w1Colors, w1Radii, w1Shadow, w1Spacing } from './w1';
 
 export const theme = {
   colors,

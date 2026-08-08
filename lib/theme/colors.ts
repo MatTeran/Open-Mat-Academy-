@@ -1,46 +1,47 @@
 /**
- * Open Mat brand color palettes.
- * Black & white athletic identity matching the official academy seal.
+ * Open Mat / My Gi brand color palettes.
+ * Light = Version W.1 warm ivory + bronze. Dark remains athletic charcoal.
  */
 
 export const darkColors = {
-  primaryBackground: '#000000',
-  secondaryBackground: '#111111',
-  cardBackground: '#141414',
-  elevatedSurface: '#1C1C1C',
-  goldAccent: '#FFFFFF',
-  highlightGold: '#F5F5F5',
-  goldPressed: '#D4D4D4',
-  text: '#FFFFFF',
-  secondaryText: '#B8B8B8',
+  primaryBackground: '#0C0B0A',
+  secondaryBackground: '#161412',
+  cardBackground: '#1A1816',
+  elevatedSurface: '#221F1C',
+  goldAccent: '#C4A06A',
+  highlightGold: '#E2C48A',
+  goldPressed: '#9A6735',
+  text: '#F5F3EE',
+  secondaryText: '#A39E96',
   error: '#FF4D4D',
   success: '#22C55E',
   warning: '#F59E0B',
   info: '#38BDF8',
-  border: '#2A2A2A',
+  border: 'rgba(245, 243, 238, 0.1)',
   overlay: 'rgba(0, 0, 0, 0.72)',
-  goldMuted: 'rgba(255, 255, 255, 0.14)',
-  goldTintSurface: '#1A1A1A',
+  goldMuted: 'rgba(196, 160, 106, 0.18)',
+  goldTintSurface: '#241E16',
 } as const;
 
+/** Version W.1 — warm refined neutrals */
 export const lightColors = {
-  primaryBackground: '#F5F5F3',
-  secondaryBackground: '#FFFFFF',
-  cardBackground: '#FFFFFF',
+  primaryBackground: '#F5F3EE',
+  secondaryBackground: '#FAF9F6',
+  cardBackground: '#FAF9F6',
   elevatedSurface: '#FFFFFF',
-  goldAccent: '#111111',
-  highlightGold: '#FFFFFF',
-  goldPressed: '#000000',
-  text: '#000000',
-  secondaryText: '#6B6B6B',
+  goldAccent: '#9A6735',
+  highlightGold: '#B8844A',
+  goldPressed: '#7D5329',
+  text: '#20201E',
+  secondaryText: '#6F6C66',
   error: '#DC2626',
   success: '#16A34A',
   warning: '#D97706',
   info: '#0284C7',
-  border: '#E4E4E0',
-  overlay: 'rgba(245, 245, 243, 0.82)',
-  goldMuted: 'rgba(0, 0, 0, 0.08)',
-  goldTintSurface: '#F0F0F0',
+  border: 'rgba(0, 0, 0, 0.06)',
+  overlay: 'rgba(20, 18, 14, 0.4)',
+  goldMuted: 'rgba(154, 103, 53, 0.12)',
+  goldTintSurface: '#F0E8DC',
 } as const;
 
 /** Default export remains the dark palette for static fallbacks. */

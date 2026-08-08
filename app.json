@@ -1,23 +1,23 @@
 {
   "expo": {
-    "name": "Open Mat Academy",
+    "name": "My Gi",
     "slug": "open-mat-academy",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "dark",
+    "userInterfaceStyle": "automatic",
     "scheme": "openmat",
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#000000"
+      "backgroundColor": "#F5F3EE"
     },
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.openmat.academy",
       "buildNumber": "1",
       "infoPlist": {
-        "CFBundleDisplayName": "Open Mat",
+        "CFBundleDisplayName": "My Gi",
         "NSLocationWhenInUseUsageDescription": "Open Mat Academy uses your location to send reminders when you are near the gym for class.",
         "NSLocationAlwaysAndWhenInUseUsageDescription": "Open Mat Academy uses your location to send reminders when you are near the gym for class.",
         "UIBackgroundModes": [
