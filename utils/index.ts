@@ -7,4 +7,5 @@ export * from './profilePhoto';
 export * from './schedule';
 export * from './scheduleLayout';
 export * from './validation';
+export * from './trainingInsights';
 export * from './workoutMetrics';
