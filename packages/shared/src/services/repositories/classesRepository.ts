@@ -6,11 +6,16 @@ import type {
 import { getSupabaseClient, isSupabaseConfigured } from '../supabase/client';
 
 export interface ClassesRepository {
-  list(params?: { date?: string; from?: string; to?: string }): Promise<CoachClass[]>;
+  list(params?: {
+    date?: string;
+    from?: string;
+    to?: string;
+    academyId?: string;
+  }): Promise<CoachClass[]>;
   getById(id: string): Promise<CoachClass | null>;
   create(
     input: CreateClassInput,
-    meta: { instructorId: string; academyId: string },
+    meta: { instructorId: string; academyId: string; locationId?: string | null },
   ): Promise<CoachClass>;
   update(id: string, input: UpdateClassInput): Promise<CoachClass | null>;
   cancel(id: string): Promise<CoachClass | null>;
@@ -25,6 +30,9 @@ export function createMemoryClassesRepository(
   return {
     async list(params) {
       let result = [...classes];
+      if (params?.academyId) {
+        result = result.filter((item) => item.academyId === params.academyId);
+      }
       if (params?.date) {
         result = result.filter((item) => item.date === params.date);
       }
@@ -65,6 +73,7 @@ export function createMemoryClassesRepository(
         isSeminar: Boolean(input.isSeminar) || input.level === 'seminar',
         recurrence: input.recurrence ?? 'none',
         academyId: meta.academyId,
+        locationId: meta.locationId ?? null,
         createdAt: now,
         updatedAt: now,
         cancelledAt: null,
@@ -174,6 +183,7 @@ function mapRow(row: Record<string, unknown>): CoachClass {
     isSeminar: Boolean(row.is_seminar),
     recurrence: (row.recurrence as CoachClass['recurrence']) ?? 'none',
     academyId: String(row.academy_id),
+    locationId: (row.location_id as string | null | undefined) ?? null,
     createdAt: String(row.created_at),
     updatedAt: String(row.updated_at),
     cancelledAt: (row.cancelled_at as string | null) ?? null,
@@ -188,6 +198,9 @@ export function createSupabaseClassesRepository(): ClassesRepository {
         return [];
       }
       let query = client.from('coach_classes').select('*').order('date');
+      if (params?.academyId) {
+        query = query.eq('academy_id', params.academyId);
+      }
       if (params?.date) {
         query = query.eq('date', params.date);
       }
@@ -241,6 +254,7 @@ export function createSupabaseClassesRepository(): ClassesRepository {
           is_seminar: Boolean(input.isSeminar) || input.level === 'seminar',
           recurrence: input.recurrence ?? 'none',
           academy_id: meta.academyId,
+          location_id: meta.locationId ?? null,
           status: 'scheduled',
         })
         .select('*')

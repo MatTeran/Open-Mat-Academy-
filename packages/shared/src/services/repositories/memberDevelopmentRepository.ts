@@ -127,12 +127,21 @@ export function createMemoryMemberDevelopmentRepository(
       return null;
     }
     const history = store.history
-      .filter((item) => item.memberId === memberId)
+      .filter(
+        (item) =>
+          item.memberId === memberId &&
+          item.academyId === development.academyId,
+      )
       .sort((a, b) => b.date.localeCompare(a.date) || b.createdAt.localeCompare(a.createdAt));
     const competition =
       store.competition.find((item) => item.memberId === memberId) ?? null;
-    const roles = store.roles.filter((item) => item.memberId === memberId);
-    const notes = notesRepo ? await notesRepo.listByMember(memberId) : [];
+    const roles = store.roles.filter(
+      (item) =>
+        item.memberId === memberId && item.academyId === development.academyId,
+    );
+    const notes = notesRepo
+      ? await notesRepo.listByMember(memberId, undefined, development.academyId)
+      : [];
     return {
       development,
       history,
@@ -224,6 +233,7 @@ export function createMemoryMemberDevelopmentRepository(
         coachId: author.id,
         coachName: author.name,
         notes: input.notes?.trim() || null,
+        academyId: author.academyId,
         createdAt: now,
       };
       store.history = [entry, ...store.history];
@@ -278,6 +288,7 @@ export function createMemoryMemberDevelopmentRepository(
         coachId: author.id,
         coachName: author.name,
         notes: input.notes?.trim() || null,
+        academyId: author.academyId,
         createdAt: now,
       };
       store.history = [entry, ...store.history];
@@ -325,12 +336,17 @@ export function createMemoryMemberDevelopmentRepository(
       const unique = Array.from(new Set(input.roles));
       const now = new Date().toISOString();
       store.roles = store.roles.filter(
-        (item) => item.memberId !== input.memberId,
+        (item) =>
+          !(
+            item.memberId === input.memberId &&
+            item.academyId === author.academyId
+          ),
       );
       const assigned: AcademyRoleAssignment[] = unique.map((role, index) => ({
         id: `role-${input.memberId}-${role}-${index}`,
         memberId: input.memberId,
         role,
+        academyId: author.academyId,
         assignedAt: now,
         assignedById: author.id,
         assignedByName: author.name,

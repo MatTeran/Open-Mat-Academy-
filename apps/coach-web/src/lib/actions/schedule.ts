@@ -128,7 +128,11 @@ export async function createClassAction(formData: FormData) {
         | 'biweekly',
       isOpenMat: formData.get('isOpenMat') === 'on',
     },
-    { instructorId: session.user.id, academyId: session.academyId },
+    {
+      instructorId: session.user.id,
+      academyId: session.academyId,
+      locationId: session.locationId,
+    },
   );
   redirect(`/schedule/${created.id}`);
 }

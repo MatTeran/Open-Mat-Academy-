@@ -16,6 +16,8 @@ export interface PromotionHistoryEntry {
   coachId: string;
   coachName: string;
   notes: string | null;
+  /** Academy that owns this official promotion record. */
+  academyId: string;
   createdAt: string;
 }
 
@@ -64,6 +66,7 @@ export interface AcademyRoleAssignment {
   id: string;
   memberId: string;
   role: AcademyRoleKey;
+  academyId: string;
   assignedAt: string;
   assignedById: string;
   assignedByName: string;

@@ -352,6 +352,7 @@ function defaultCapacity(level: ClassLevel): number {
 
 export interface BuildWeeklyCoachClassesOptions {
   academyId: string;
+  locationId?: string | null;
   todayISO?: string;
   /** Optional reserved/check-in overrides keyed by class id. */
   occupancy?: Partial<
@@ -412,6 +413,7 @@ export function buildWeeklyCoachClasses(
       isSeminar,
       recurrence: 'weekly',
       academyId: options.academyId,
+      locationId: options.locationId ?? null,
       createdAt,
       updatedAt: createdAt,
       cancelledAt: null,

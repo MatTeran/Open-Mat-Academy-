@@ -5,10 +5,14 @@ import type {
 import { getSupabaseClient, isSupabaseConfigured } from '../supabase/client';
 
 export interface CoachNotesRepository {
-  listByMember(memberId: string, query?: string): Promise<CoachNote[]>;
+  listByMember(
+    memberId: string,
+    query?: string,
+    academyId?: string,
+  ): Promise<CoachNote[]>;
   create(
     input: CreateCoachNoteInput,
-    author: { id: string; name: string },
+    author: { id: string; name: string; academyId: string },
   ): Promise<CoachNote>;
   update(id: string, body: string): Promise<CoachNote | null>;
   remove(id: string): Promise<boolean>;
@@ -20,11 +24,14 @@ export function createMemoryCoachNotesRepository(
   let notes = [...seed];
 
   return {
-    async listByMember(memberId, query) {
+    async listByMember(memberId, query, academyId) {
       const needle = query?.trim().toLowerCase() ?? '';
       return notes
         .filter((note) => {
           if (note.memberId !== memberId) {
+            return false;
+          }
+          if (academyId && note.academyId !== academyId) {
             return false;
           }
           if (!needle) {
@@ -46,6 +53,7 @@ export function createMemoryCoachNotesRepository(
         authorName: author.name,
         body: input.body.trim(),
         isPrivate: true,
+        academyId: input.academyId ?? author.academyId,
         createdAt: now,
         updatedAt: now,
       };
@@ -85,6 +93,7 @@ function mapRow(row: Record<string, unknown>): CoachNote {
     authorName: String(row.author_name),
     body: String(row.body),
     isPrivate: true,
+    academyId: String(row.academy_id),
     createdAt: String(row.created_at),
     updatedAt: String(row.updated_at),
   };
@@ -92,7 +101,7 @@ function mapRow(row: Record<string, unknown>): CoachNote {
 
 export function createSupabaseCoachNotesRepository(): CoachNotesRepository {
   return {
-    async listByMember(memberId, query) {
+    async listByMember(memberId, query, academyId) {
       const client = getSupabaseClient();
       if (!client) {
         return [];
@@ -102,6 +111,9 @@ export function createSupabaseCoachNotesRepository(): CoachNotesRepository {
         .select('*')
         .eq('member_id', memberId)
         .order('created_at', { ascending: false });
+      if (academyId) {
+        request = request.eq('academy_id', academyId);
+      }
       const needle = query?.trim();
       if (needle) {
         request = request.or(
@@ -127,6 +139,7 @@ export function createSupabaseCoachNotesRepository(): CoachNotesRepository {
           author_name: author.name,
           body: input.body.trim(),
           is_private: true,
+          academy_id: input.academyId ?? author.academyId,
         })
         .select('*')
         .single();

@@ -133,11 +133,12 @@ export function MemberDevelopmentProvider({ children }: PropsWithChildren) {
       const note = await notesRepo.create(input, {
         id: author.id,
         name: author.name,
+        academyId: author.academyId,
       });
       bump();
       return note;
     },
-    [author.id, author.name, bump, notesRepo],
+    [author.academyId, author.id, author.name, bump, notesRepo],
   );
 
   const updateNote = useCallback(

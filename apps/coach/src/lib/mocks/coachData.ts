@@ -24,10 +24,12 @@ function addDays(isoDate: string, days: number) {
 const TODAY = todayISO();
 
 export const COACH_ACADEMY_ID = 'academy-open-mat';
+export const COACH_LOCATION_ID = 'location-tracy-naglee';
 
 /** Full Open Mat Academy Tracy flyer board for the current week. */
 export const MOCK_CLASSES: CoachClass[] = buildWeeklyCoachClasses({
   academyId: COACH_ACADEMY_ID,
+  locationId: COACH_LOCATION_ID,
   todayISO: TODAY,
 });
 
@@ -264,6 +266,7 @@ export const MOCK_MEMBERS: CoachMemberProfile[] = [
         authorName: 'Coach Rivera',
         body: 'Strong pressure passer. Work left-side knee cut consistency under fatigue.',
         isPrivate: true,
+        academyId: 'academy-open-mat',
         createdAt: addDays(TODAY, -3) + 'T15:00:00.000Z',
         updatedAt: addDays(TODAY, -3) + 'T15:00:00.000Z',
       },
@@ -402,6 +405,7 @@ export const MOCK_MEMBERS: CoachMemberProfile[] = [
         authorName: 'Coach Rivera',
         body: 'Helping newer students during open mat. Consider assistant coaching path.',
         isPrivate: true,
+        academyId: 'academy-open-mat',
         createdAt: addDays(TODAY, -10) + 'T12:00:00.000Z',
         updatedAt: addDays(TODAY, -10) + 'T12:00:00.000Z',
       },

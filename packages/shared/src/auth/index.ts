@@ -19,3 +19,15 @@ export {
   hasManagerAccess,
   hasOwnerAccess,
 } from './roles';
+export {
+  canAccessAcademy,
+  canCoachAtAcademy,
+  canManageAcademy,
+  filterByAcademyId,
+  getAcademyMembership,
+  hasAcademyRole,
+  isAcademyMember,
+  isAcademyMembershipRole,
+  resolveAcademySessionContext,
+  sharesCoachableAcademyWith,
+} from './membership';

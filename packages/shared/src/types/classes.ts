@@ -54,6 +54,8 @@ export interface CoachClass {
   isSeminar: boolean;
   recurrence: RecurrenceRule;
   academyId: string;
+  /** Optional physical site under the academy. */
+  locationId?: string | null;
   createdAt: string;
   updatedAt: string;
   cancelledAt?: string | null;
