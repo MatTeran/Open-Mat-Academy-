@@ -4,36 +4,44 @@ import {
 } from '@react-navigation/native';
 import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useQuery } from '@tanstack/react-query';
 import * as Haptics from 'expo-haptics';
 import { useEffect, useMemo, useState } from 'react';
-import { AccessibilityInfo, StyleSheet, View } from 'react-native';
+import { AccessibilityInfo, Linking, StyleSheet, View } from 'react-native';
 
 import {
+  AcademyAnnouncementCard,
+  AcademyUpcomingEvents,
   DashboardGrid,
   FadeIn,
   AcademyHero,
   GreetingSection,
   JourneyCard,
+  LocalEventsHomeCard,
   NotificationPermissionCard,
+  QuickActionsRow,
   Screen,
   Spacer,
   TrainingStreakCard,
-  UpcomingEventCard,
   W1NextClassCard,
 } from '../../components';
 import { useAuth, useNotifications, useProfile } from '../../hooks';
 import {
   HOME_USER_SUMMARY,
   NEXT_CLASS_SUMMARY,
+  QUICK_ACTIONS,
+  UPCOMING_EVENTS,
 } from '../../lib/mocks/home';
 import { scheduleClassReminder } from '../../lib/notifications';
 import { useCommunity } from '../../lib/providers/CommunityProvider';
 import { useJourney } from '../../lib/providers/JourneyProvider';
 import { spacing, w1Spacing } from '../../lib/theme';
+import { searchLocalEvents } from '../../services/events/localEventsSearch';
 import type { HomeStackParamList, MainTabParamList } from '../../types';
 import type {
   HomeUserSummary,
   NextClassReservationStatus,
+  QuickActionId,
 } from '../../types/home';
 import {
   getFirstName,
@@ -63,7 +71,7 @@ function parseAcademy(membershipName?: string | null): {
 export function HomeScreen() {
   const { user } = useAuth();
   const { hub } = useProfile();
-  const { seminars } = useCommunity();
+  const { announcements } = useCommunity();
   const { profile, streak, awardXp } = useJourney();
   const {
     permissionPromptStatus,
@@ -90,6 +98,14 @@ export function HomeScreen() {
 
   const showPermissionCard = permissionPromptStatus === 'unknown';
   const showBlockedCard = permissionPromptStatus === 'blocked';
+
+  const localEventsQuery = useQuery({
+    queryKey: ['home-local-events'],
+    queryFn: () => searchLocalEvents({ radiusMiles: 250 }),
+    staleTime: 1000 * 60 * 30,
+  });
+
+  const nearestLocalEvent = localEventsQuery.data?.events?.[0] ?? null;
 
   const { academyName, locationLabel } = useMemo(
     () => parseAcademy(hub.membership.academyName),
@@ -129,19 +145,7 @@ export function HomeScreen() {
     currentStreak: journeySummary.currentStreak,
   });
 
-  const featuredEvent = useMemo(() => {
-    const seminar = seminars[0];
-    if (seminar) {
-      return {
-        title: seminar.title,
-        whenLabel: `${seminar.dateLabel} · ${seminar.timeLabel}`,
-      };
-    }
-    return {
-      title: 'Guard Retention Masterclass',
-      whenLabel: 'Sat, Aug 16 · 1:00 PM',
-    };
-  }, [seminars]);
+  const latestAnnouncement = announcements[0] ?? null;
 
   useEffect(() => {
     if (!xpEarnedLabel) {
@@ -218,6 +222,33 @@ export function HomeScreen() {
     } finally {
       setActionLoading(false);
     }
+  };
+
+  const handleQuickAction = (id: QuickActionId) => {
+    switch (id) {
+      case 'reserveClass':
+      case 'viewSchedule':
+        navigation.navigate('Schedule');
+        return;
+      case 'logTraining':
+      case 'logTechnique':
+        navigation.navigate('WorkoutLog', {
+          screen: 'WorkoutDetails',
+        });
+        return;
+      default:
+        return;
+    }
+  };
+
+  const openNearestEvent = () => {
+    if (nearestLocalEvent?.url) {
+      void Linking.openURL(nearestLocalEvent.url).catch(() => {
+        navigation.navigate('LocalEvents');
+      });
+      return;
+    }
+    navigation.navigate('LocalEvents');
   };
 
   return (
@@ -299,21 +330,59 @@ export function HomeScreen() {
           </>
         ) : null}
 
-        <Spacer size="md" />
+        {latestAnnouncement ? (
+          <>
+            <Spacer size="md" />
+            <FadeIn delay={120}>
+              <View style={styles.inset}>
+                <AcademyAnnouncementCard
+                  announcement={latestAnnouncement}
+                  onPress={() =>
+                    navigation.navigate('Community', {
+                      screen: 'AnnouncementDetail',
+                      params: { announcementId: latestAnnouncement.id },
+                    })
+                  }
+                />
+              </View>
+            </FadeIn>
+          </>
+        ) : null}
 
-        <FadeIn delay={140}>
+        <Spacer size="md" />
+        <FadeIn delay={150}>
           <View style={styles.inset}>
-            <UpcomingEventCard
-              title={featuredEvent.title}
-              whenLabel={featuredEvent.whenLabel}
-              onPress={() => navigation.navigate('Community')}
+            <LocalEventsHomeCard
+              event={nearestLocalEvent}
+              loading={localEventsQuery.isLoading}
+              onPressEvent={openNearestEvent}
+              onViewAll={() => navigation.navigate('LocalEvents')}
             />
           </View>
         </FadeIn>
 
         <Spacer size="md" />
-
         <FadeIn delay={180}>
+          <View style={styles.inset}>
+            <QuickActionsRow
+              actions={QUICK_ACTIONS}
+              onAction={handleQuickAction}
+            />
+          </View>
+        </FadeIn>
+
+        <Spacer size="md" />
+        <FadeIn delay={210}>
+          <View style={styles.inset}>
+            <AcademyUpcomingEvents
+              events={UPCOMING_EVENTS}
+              onPressEvent={() => navigation.navigate('Community')}
+            />
+          </View>
+        </FadeIn>
+
+        <Spacer size="md" />
+        <FadeIn delay={240}>
           <View style={styles.inset}>
             <TrainingStreakCard
               currentStreak={journeySummary.currentStreak}
