@@ -15,6 +15,7 @@ import {
   Spacer,
   StreaksMiniCard,
   Text,
+  TrainingInsightsSection,
   TrainingLogMiniCard,
   WorkoutCard,
   WorkoutProgressCard,
@@ -27,6 +28,7 @@ import type {
   LogTabSegment,
   WorkoutMetricFilter,
 } from '../../types/workoutMetrics';
+import { buildTrainingInsights } from '../../utils/trainingInsights';
 import { buildWorkoutProgressMetrics } from '../../utils/workoutMetrics';
 
 type Props = NativeStackScreenProps<WorkoutStackParamList, 'WorkoutList'>;
@@ -44,6 +46,11 @@ export function WorkoutLogListScreen({ navigation }: Props) {
 
   const metrics = useMemo(
     () => buildWorkoutProgressMetrics(workouts, filter),
+    [workouts, filter],
+  );
+
+  const insights = useMemo(
+    () => buildTrainingInsights(workouts, filter),
     [workouts, filter],
   );
 
@@ -96,6 +103,12 @@ export function WorkoutLogListScreen({ navigation }: Props) {
               filter={filter}
               onFilterChange={setFilter}
               onSeeMore={openJourney}
+            />
+
+            <Spacer size="lg" />
+            <TrainingInsightsSection
+              insights={insights}
+              onLogTraining={createNewLog}
             />
 
             <Spacer size="md" />
