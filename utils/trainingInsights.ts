@@ -15,9 +15,16 @@ import type {
   TechniquesInsight,
   TrainingInsights,
 } from '../types/trainingInsights';
-import type { TechniqueCategory, TechniqueId, Workout } from '../types/workout';
+import type { TechniqueId, TechniqueResolver } from '../types/technique';
+import type { TechniqueCategory, Workout } from '../types/workout';
 import type { WorkoutMetricFilter } from '../types/workoutMetrics';
 import { getWeekStart } from './workoutMetrics';
+
+const DEFAULT_RESOLVER: TechniqueResolver = {
+  getLabel: getTechniqueLabel,
+  getCategory: (id) => getTechniqueCategory(id) ?? 'other',
+  getTechnique: () => undefined,
+};
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
@@ -161,6 +168,7 @@ function buildPartnersInsight(
   workouts: Workout[],
   filter: WorkoutMetricFilter,
   now: Date,
+  resolver: TechniqueResolver,
 ): PartnersInsight {
   const end = startOfDay(now);
   end.setDate(end.getDate() + 1);
@@ -222,7 +230,7 @@ function buildPartnersInsight(
         averageIntensity: average(entry.intensityScores),
         mostLoggedTechniqueId: techniqueId,
         mostLoggedTechniqueLabel: techniqueId
-          ? getTechniqueLabel(techniqueId)
+          ? resolver.getLabel(techniqueId)
           : null,
       };
     })
@@ -257,6 +265,7 @@ function buildTechniquesInsight(
   workouts: Workout[],
   filter: WorkoutMetricFilter,
   now: Date,
+  resolver: TechniqueResolver,
 ): TechniquesInsight {
   const end = startOfDay(now);
   end.setDate(end.getDate() + 1);
@@ -273,8 +282,8 @@ function buildTechniquesInsight(
   const techniques: TechniqueInsight[] = Array.from(counts.entries())
     .map(([id, count]) => ({
       id,
-      label: getTechniqueLabel(id),
-      category: getTechniqueCategory(id) ?? 'other',
+      label: resolver.getLabel(id),
+      category: resolver.getCategory(id),
       count,
     }))
     .sort((a, b) => b.count - a.count || a.label.localeCompare(b.label));
@@ -309,11 +318,12 @@ export function buildTrainingInsights(
   workouts: Workout[],
   filter: WorkoutMetricFilter = 'all',
   now = new Date(),
+  resolver: TechniqueResolver = DEFAULT_RESOLVER,
 ): TrainingInsights {
   return {
     intensity: buildIntensityInsight(workouts, filter, now),
-    partners: buildPartnersInsight(workouts, filter, now),
-    techniques: buildTechniquesInsight(workouts, filter, now),
+    partners: buildPartnersInsight(workouts, filter, now, resolver),
+    techniques: buildTechniquesInsight(workouts, filter, now, resolver),
   };
 }
 

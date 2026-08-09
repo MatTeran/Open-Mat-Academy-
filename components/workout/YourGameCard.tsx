@@ -8,7 +8,6 @@ import {
   View,
 } from 'react-native';
 
-import { TECHNIQUE_FILTER_OPTIONS } from '../../lib/data/workoutOptions';
 import { useAppTheme } from '../../lib/providers/ThemeProvider';
 import { radii, spacing } from '../../lib/theme';
 import type {
@@ -22,17 +21,37 @@ import { Text } from '../ui/Text';
 import { InsightsEmptyState } from './InsightsEmptyState';
 import { RankedBarList } from './RankedBarList';
 
+const DASHBOARD_FILTERS: Array<{
+  value: TechniqueFilterId;
+  label: string;
+}> = [
+  { value: 'all', label: 'All' },
+  { value: 'submission', label: 'Submissions' },
+  { value: 'sweep', label: 'Sweeps' },
+  { value: 'takedown', label: 'Takedowns' },
+  { value: 'escape', label: 'Escapes' },
+  { value: 'position', label: 'Positions' },
+  { value: 'guard', label: 'Guards' },
+  { value: 'guard_pass', label: 'Passes' },
+];
+
 interface YourGameCardProps {
   insight: TechniquesInsight;
   onLogTraining?: () => void;
+  onViewAll?: () => void;
+  onTechniquePress?: (techniqueId: string) => void;
 }
 
 const INITIAL_LIMIT = 5;
 
-export function YourGameCard({ insight, onLogTraining }: YourGameCardProps) {
+export function YourGameCard({
+  insight,
+  onLogTraining,
+  onViewAll,
+  onTechniquePress,
+}: YourGameCardProps) {
   const { colors } = useAppTheme();
   const [filter, setFilter] = useState<TechniqueFilterId>('all');
-  const [showAll, setShowAll] = useState(false);
   const fade = useRef(new Animated.Value(1)).current;
 
   const filtered = useMemo(
@@ -41,11 +60,11 @@ export function YourGameCard({ insight, onLogTraining }: YourGameCardProps) {
   );
 
   const visible = useMemo(
-    () => (showAll ? filtered : filtered.slice(0, INITIAL_LIMIT)),
-    [filtered, showAll],
+    () => filtered.slice(0, INITIAL_LIMIT),
+    [filtered],
   );
 
-  const hasMore = filtered.length > INITIAL_LIMIT;
+  const showViewAll = Boolean(onViewAll) && insight.techniques.length > 0;
 
   useEffect(() => {
     let mounted = true;
@@ -87,7 +106,7 @@ export function YourGameCard({ insight, onLogTraining }: YourGameCardProps) {
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.chips}
       >
-        {TECHNIQUE_FILTER_OPTIONS.map((option) => {
+        {DASHBOARD_FILTERS.map((option) => {
           const active = filter === option.value;
           return (
             <Pressable
@@ -96,7 +115,6 @@ export function YourGameCard({ insight, onLogTraining }: YourGameCardProps) {
               accessibilityState={{ selected: active }}
               onPress={() => {
                 setFilter(option.value as TechniqueFilterId);
-                setShowAll(false);
               }}
               style={[
                 styles.chip,
@@ -149,24 +167,23 @@ export function YourGameCard({ insight, onLogTraining }: YourGameCardProps) {
                 value: technique.count,
                 valueLabel: `${technique.count}`,
               }))}
+              onItemPress={onTechniquePress}
             />
           </Animated.View>
 
-          {hasMore ? (
+          {showViewAll ? (
             <>
               <Spacer size="sm" />
               <Pressable
                 accessibilityRole="button"
-                accessibilityLabel={
-                  showAll ? 'Show fewer techniques' : 'View all techniques'
-                }
-                onPress={() => setShowAll((current) => !current)}
+                accessibilityLabel="View all techniques"
+                onPress={onViewAll}
               >
                 <Text
                   variant="caption"
                   style={{ color: colors.goldAccent }}
                 >
-                  {showAll ? 'Show Less' : 'View All Techniques →'}
+                  View All Techniques →
                 </Text>
               </Pressable>
             </>

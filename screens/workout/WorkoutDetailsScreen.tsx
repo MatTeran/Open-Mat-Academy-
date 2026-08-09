@@ -1,6 +1,6 @@
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useMemo, useState } from 'react';
-import { Pressable, ScrollView, TextInput, View } from 'react-native';
+import { TextInput, View } from 'react-native';
 
 import {
   Banner,
@@ -14,30 +14,27 @@ import {
   Screen,
   Spacer,
   StarRating,
+  TechniquesUsedField,
   Text,
 } from '../../components';
 import { useAppTheme } from '../../hooks';
 import {
   CLASS_TYPE_OPTIONS,
   getClassTypeLabel,
-  getTechniqueLabel,
   INSTRUCTOR_OPTIONS,
   intensityCategoryToScore,
-  TECHNIQUE_FILTER_OPTIONS,
-  TECHNIQUE_OPTIONS,
 } from '../../lib/data/workoutOptions';
 import {
   createEmptyWorkoutDraft,
   recentPartnersFromWorkouts,
-  recentTechniquesFromWorkouts,
 } from '../../lib/mocks/workouts';
+import { useTechniques } from '../../lib/providers/TechniqueProvider';
 import { useWorkouts } from '../../lib/providers/WorkoutProvider';
 import { fontFamilies, radii, spacing } from '../../lib/theme';
 import { useThemedStyles } from '../../lib/theme/useThemedStyles';
 import type { WorkoutStackParamList } from '../../types/navigation';
 import type {
   GiType,
-  TechniqueCategory,
   TechniqueId,
   TrainingIntensity,
   WorkoutClassType,
@@ -51,6 +48,7 @@ type Props = NativeStackScreenProps<WorkoutStackParamList, 'WorkoutDetails'>;
 export function WorkoutDetailsScreen({ navigation, route }: Props) {
   const { colors } = useAppTheme();
   const { workouts, getWorkout, saveWorkout } = useWorkouts();
+  const { getLabel } = useTechniques();
   const existing = route.params?.workoutId
     ? getWorkout(route.params.workoutId)
     : undefined;
@@ -71,32 +69,11 @@ export function WorkoutDetailsScreen({ navigation, route }: Props) {
   const [draft, setDraft] = useState<WorkoutDraft>(initial);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [techniqueFilter, setTechniqueFilter] = useState<
-    'all' | TechniqueCategory
-  >('all');
-  const [techniqueQuery, setTechniqueQuery] = useState('');
 
   const recentPartners = useMemo(
     () => recentPartnersFromWorkouts(workouts),
     [workouts],
   );
-  const recentTechniques = useMemo(
-    () => recentTechniquesFromWorkouts(workouts),
-    [workouts],
-  );
-
-  const techniqueOptions = useMemo(() => {
-    const query = techniqueQuery.trim().toLowerCase();
-    return TECHNIQUE_OPTIONS.filter((option) => {
-      if (techniqueFilter !== 'all' && option.category !== techniqueFilter) {
-        return false;
-      }
-      if (!query) {
-        return true;
-      }
-      return option.label.toLowerCase().includes(query);
-    });
-  }, [techniqueFilter, techniqueQuery]);
 
   const styles = useThemedStyles((themeColors) => ({
     content: {},
@@ -147,17 +124,6 @@ export function WorkoutDetailsScreen({ navigation, route }: Props) {
     },
     bottomSpace: {
       height: spacing.xl,
-    },
-    chipWrap: {
-      flexDirection: 'row' as const,
-      flexWrap: 'wrap' as const,
-      gap: spacing.xs,
-    },
-    quickChip: {
-      borderRadius: radii.pill,
-      borderWidth: 1,
-      paddingHorizontal: spacing.md,
-      paddingVertical: spacing.xs,
     },
   }));
 
@@ -320,128 +286,9 @@ export function WorkoutDetailsScreen({ navigation, route }: Props) {
       </FormSection>
 
       <FormSection title="Techniques">
-        <Text variant="label">Techniques Used</Text>
-        <Spacer size="xs" />
-        <Text variant="caption" muted>
-          Optional · Multi-select what you practiced
-        </Text>
-        {recentTechniques.length > 0 ? (
-          <>
-            <Spacer size="sm" />
-            <Text variant="caption" muted>
-              Recent
-            </Text>
-            <Spacer size="xs" />
-            <View style={styles.chipWrap}>
-              {recentTechniques.map((techniqueId) => {
-                const active = draft.techniques.includes(techniqueId);
-                return (
-                  <Pressable
-                    key={techniqueId}
-                    onPress={() => {
-                      if (active) {
-                        update(
-                          'techniques',
-                          draft.techniques.filter(
-                            (item) => item !== techniqueId,
-                          ),
-                        );
-                        return;
-                      }
-                      update('techniques', [
-                        ...draft.techniques,
-                        techniqueId,
-                      ]);
-                    }}
-                    style={[
-                      styles.quickChip,
-                      {
-                        backgroundColor: active
-                          ? colors.goldMuted
-                          : colors.elevatedSurface,
-                        borderColor: active
-                          ? colors.goldAccent
-                          : colors.border,
-                      },
-                    ]}
-                  >
-                    <Text
-                      variant="caption"
-                      style={{
-                        color: active
-                          ? colors.goldAccent
-                          : colors.secondaryText,
-                      }}
-                    >
-                      {getTechniqueLabel(techniqueId)}
-                    </Text>
-                  </Pressable>
-                );
-              })}
-            </View>
-          </>
-        ) : null}
-        <Spacer size="sm" />
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.chipWrap}
-        >
-          {TECHNIQUE_FILTER_OPTIONS.map((option) => {
-            const active = techniqueFilter === option.value;
-            return (
-              <Pressable
-                key={option.value}
-                onPress={() =>
-                  setTechniqueFilter(
-                    option.value as 'all' | TechniqueCategory,
-                  )
-                }
-                style={[
-                  styles.quickChip,
-                  {
-                    backgroundColor: active
-                      ? colors.goldAccent
-                      : colors.elevatedSurface,
-                    borderColor: active
-                      ? colors.goldAccent
-                      : colors.border,
-                  },
-                ]}
-              >
-                <Text
-                  variant="caption"
-                  style={{
-                    color: active
-                      ? colors.elevatedSurface
-                      : colors.secondaryText,
-                  }}
-                >
-                  {option.label}
-                </Text>
-              </Pressable>
-            );
-          })}
-        </ScrollView>
-        <Spacer size="sm" />
-        <TextInput
-          value={techniqueQuery}
-          onChangeText={setTechniqueQuery}
-          placeholder="Search techniques"
-          placeholderTextColor={colors.secondaryText}
-          style={styles.numberInput}
-        />
-        <Spacer size="sm" />
-        <ChipSelect
-          label="Select techniques"
-          options={techniqueOptions.map(({ value, label }) => ({
-            value,
-            label,
-          }))}
+        <TechniquesUsedField
           values={draft.techniques}
-          onChange={(techniques) =>
-            update('techniques', techniques as TechniqueId[])
-          }
+          onChange={(techniques) => update('techniques', techniques)}
         />
         {draft.techniques.length > 0 ? (
           <>
@@ -449,14 +296,18 @@ export function WorkoutDetailsScreen({ navigation, route }: Props) {
             <ChipSelect
               label="Favorite Technique"
               multi={false}
-              options={TECHNIQUE_OPTIONS.filter((item) =>
-                draft.techniques.includes(item.value),
-              ).map(({ value, label }) => ({ value, label }))}
+              options={draft.techniques.map((id) => ({
+                value: id,
+                label: getLabel(id),
+              }))}
               values={
                 draft.favoriteTechnique ? [draft.favoriteTechnique] : []
               }
               onChange={(values) =>
-                update('favoriteTechnique', values[0] ?? null)
+                update(
+                  'favoriteTechnique',
+                  (values[0] as TechniqueId | undefined) ?? null,
+                )
               }
             />
           </>

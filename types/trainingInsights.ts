@@ -1,12 +1,7 @@
-import type { IntensityBand, TechniqueCategory, TechniqueId } from './workout';
+import type { TechniqueCategory, TechniqueId } from './technique';
+import type { IntensityBand } from './workout';
 
-export type TechniqueFilterId =
-  | 'all'
-  | 'submission'
-  | 'sweep'
-  | 'takedown'
-  | 'escape'
-  | 'position';
+export type TechniqueFilterId = 'all' | TechniqueCategory;
 
 export interface IntensityWeekPoint {
   weekStartIso: string;

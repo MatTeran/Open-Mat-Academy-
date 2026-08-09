@@ -11,11 +11,15 @@ import { YourGameCard } from './YourGameCard';
 interface TrainingInsightsSectionProps {
   insights: TrainingInsights;
   onLogTraining?: () => void;
+  onViewAllTechniques?: () => void;
+  onTechniquePress?: (techniqueId: string) => void;
 }
 
 export function TrainingInsightsSection({
   insights,
   onLogTraining,
+  onViewAllTechniques,
+  onTechniquePress,
 }: TrainingInsightsSectionProps) {
   return (
     <View style={styles.section}>
@@ -36,6 +40,8 @@ export function TrainingInsightsSection({
       <YourGameCard
         insight={insights.techniques}
         onLogTraining={onLogTraining}
+        onViewAll={onViewAllTechniques}
+        onTechniquePress={onTechniquePress}
       />
     </View>
   );

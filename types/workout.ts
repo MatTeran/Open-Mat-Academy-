@@ -1,3 +1,7 @@
+import type { TechniqueCategory, TechniqueId } from './technique';
+
+export type { TechniqueCategory, TechniqueId } from './technique';
+
 export type WorkoutClassType =
   | 'fundamentals'
   | 'advanced'
@@ -14,35 +18,6 @@ export type TrainingIntensity =
   | 'competition_pace';
 
 export type WorkoutMood = 'great' | 'good' | 'average' | 'exhausted';
-
-export type TechniqueCategory =
-  | 'submission'
-  | 'sweep'
-  | 'takedown'
-  | 'escape'
-  | 'position'
-  | 'guard_pass'
-  | 'other';
-
-export type TechniqueId =
-  | 'armbar'
-  | 'triangle'
-  | 'kimura'
-  | 'rear_naked_choke'
-  | 'guillotine'
-  | 'ankle_lock'
-  | 'sweep'
-  | 'hip_bump_sweep'
-  | 'scissor_sweep'
-  | 'guard_pass'
-  | 'mount'
-  | 'back_control'
-  | 'closed_guard'
-  | 'side_control'
-  | 'side_control_escape'
-  | 'single_leg'
-  | 'double_leg'
-  | 'hip_escape';
 
 export type GiType = 'gi' | 'no_gi';
 
@@ -65,6 +40,7 @@ export interface Workout {
    */
   intensityScore?: number | null;
   partners: string[];
+  /** Technique IDs — system library slugs and/or custom technique IDs. */
   techniques: TechniqueId[];
   favoriteTechnique: TechniqueId | null;
   notes: string;
@@ -74,3 +50,6 @@ export interface Workout {
 }
 
 export type WorkoutDraft = Omit<Workout, 'id'>;
+
+/** @deprecated Prefer TechniqueCategory from types/technique */
+export type LegacyTechniqueCategory = TechniqueCategory;

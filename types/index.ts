@@ -79,14 +79,25 @@ export type { BeltRank, UserProfile } from './user';
 export type {
   GiType,
   IntensityBand,
-  TechniqueCategory,
-  TechniqueId,
   TrainingIntensity,
   Workout,
   WorkoutClassType,
   WorkoutDraft,
   WorkoutMood,
 } from './workout';
+export type {
+  CreateMemberTechniqueInput,
+  MemberTechnique,
+  TechniqueCategory,
+  TechniqueFormat,
+  TechniqueId,
+  TechniqueListSort,
+  TechniquePersonalStats,
+  TechniqueResolver,
+  TechniqueSourceType,
+  UpdateMemberTechniqueInput,
+  YourGameOverview,
+} from './technique';
 export type {
   IntensityInsight,
   IntensityWeekPoint,

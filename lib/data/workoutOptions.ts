@@ -1,11 +1,12 @@
 import type {
   IntensityBand,
-  TechniqueCategory,
-  TechniqueId,
   TrainingIntensity,
   WorkoutClassType,
   WorkoutMood,
 } from '../../types/workout';
+import type { TechniqueCategory, TechniqueId } from '../../types/technique';
+import { SYSTEM_TECHNIQUES } from './systemTechniques';
+import { getCategoryLabel } from './techniqueMeta';
 
 export const CLASS_TYPE_OPTIONS: { value: WorkoutClassType; label: string }[] = [
   { value: 'fundamentals', label: 'Fundamentals' },
@@ -24,38 +25,16 @@ export const INTENSITY_OPTIONS: { value: TrainingIntensity; label: string }[] = 
   { value: 'competition_pace', label: 'Competition Pace' },
 ];
 
+/** System library options for chips / fallbacks. */
 export const TECHNIQUE_OPTIONS: {
   value: TechniqueId;
   label: string;
   category: TechniqueCategory;
-}[] = [
-  { value: 'armbar', label: 'Armbar', category: 'submission' },
-  { value: 'triangle', label: 'Triangle', category: 'submission' },
-  { value: 'kimura', label: 'Kimura', category: 'submission' },
-  {
-    value: 'rear_naked_choke',
-    label: 'Rear Naked Choke',
-    category: 'submission',
-  },
-  { value: 'guillotine', label: 'Guillotine', category: 'submission' },
-  { value: 'ankle_lock', label: 'Ankle Lock', category: 'submission' },
-  { value: 'sweep', label: 'Sweep', category: 'sweep' },
-  { value: 'hip_bump_sweep', label: 'Hip Bump Sweep', category: 'sweep' },
-  { value: 'scissor_sweep', label: 'Scissor Sweep', category: 'sweep' },
-  { value: 'single_leg', label: 'Single Leg', category: 'takedown' },
-  { value: 'double_leg', label: 'Double Leg', category: 'takedown' },
-  {
-    value: 'side_control_escape',
-    label: 'Side Control Escape',
-    category: 'escape',
-  },
-  { value: 'hip_escape', label: 'Hip Escape', category: 'escape' },
-  { value: 'mount', label: 'Mount', category: 'position' },
-  { value: 'back_control', label: 'Back Control', category: 'position' },
-  { value: 'closed_guard', label: 'Closed Guard', category: 'position' },
-  { value: 'side_control', label: 'Side Control', category: 'position' },
-  { value: 'guard_pass', label: 'Guard Pass', category: 'guard_pass' },
-];
+}[] = SYSTEM_TECHNIQUES.map((technique) => ({
+  value: technique.id,
+  label: technique.name,
+  category: technique.category,
+}));
 
 export const TECHNIQUE_FILTER_OPTIONS: {
   value: 'all' | TechniqueCategory;
@@ -67,6 +46,10 @@ export const TECHNIQUE_FILTER_OPTIONS: {
   { value: 'takedown', label: 'Takedowns' },
   { value: 'escape', label: 'Escapes' },
   { value: 'position', label: 'Positions' },
+  { value: 'guard', label: 'Guards' },
+  { value: 'guard_pass', label: 'Passes' },
+  { value: 'transition', label: 'Transitions' },
+  { value: 'other', label: 'Other' },
 ];
 
 export const SUGGESTED_PARTNERS = [
@@ -103,8 +86,15 @@ export function getClassTypeLabel(value: WorkoutClassType): string {
   return CLASS_TYPE_OPTIONS.find((item) => item.value === value)?.label ?? value;
 }
 
+/** Fallback label lookup from the system library only. */
 export function getTechniqueLabel(value: TechniqueId): string {
-  return TECHNIQUE_OPTIONS.find((item) => item.value === value)?.label ?? value;
+  return (
+    TECHNIQUE_OPTIONS.find((item) => item.value === value)?.label ??
+    value
+      .replace(/^custom[-_]/, '')
+      .replace(/[-_]/g, ' ')
+      .replace(/\b\w/g, (char) => char.toUpperCase())
+  );
 }
 
 export function getTechniqueCategory(
@@ -117,7 +107,6 @@ export function getIntensityLabel(value: TrainingIntensity): string {
   return INTENSITY_OPTIONS.find((item) => item.value === value)?.label ?? value;
 }
 
-/** Map legacy categorical intensity to a 1–10 score midpoint. */
 export function intensityCategoryToScore(
   intensity: TrainingIntensity,
 ): number {
@@ -165,11 +154,6 @@ export function clampIntensityScore(score: number): number {
   return Math.min(10, Math.max(1, Math.round(score)));
 }
 
-/**
- * Resolve a workout's numeric intensity for analytics.
- * Explicit null intensityScore means "not rated" and is excluded.
- * Missing intensityScore falls back to categorical intensity (legacy logs).
- */
 export function resolveIntensityScore(workout: {
   intensity: TrainingIntensity;
   intensityScore?: number | null;
@@ -185,3 +169,5 @@ export function resolveIntensityScore(workout: {
   }
   return intensityCategoryToScore(workout.intensity);
 }
+
+export { getCategoryLabel };

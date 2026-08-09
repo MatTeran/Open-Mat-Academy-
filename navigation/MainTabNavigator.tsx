@@ -122,7 +122,10 @@ export function MainTabNavigator() {
           options={({ route }) => {
             const routeName =
               getFocusedRouteNameFromRoute(route) ?? 'WorkoutList';
-            const hideTabBar = routeName === 'WorkoutDetails';
+            const hideTabBar =
+              routeName === 'WorkoutDetails' ||
+              routeName === 'YourGame' ||
+              routeName === 'TechniqueDetail';
 
             return {
               title: 'Log',

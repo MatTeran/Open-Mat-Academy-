@@ -21,6 +21,7 @@ import {
   WorkoutProgressCard,
 } from '../../components';
 import { useJourney } from '../../lib/providers/JourneyProvider';
+import { useTechniques } from '../../lib/providers/TechniqueProvider';
 import { useWorkouts } from '../../lib/providers/WorkoutProvider';
 import { spacing } from '../../lib/theme';
 import type { MainTabParamList, WorkoutStackParamList } from '../../types';
@@ -40,6 +41,7 @@ type LogNavigation = CompositeNavigationProp<
 export function WorkoutLogListScreen({ navigation }: Props) {
   const tabNavigation = navigation as LogNavigation;
   const { workouts } = useWorkouts();
+  const { getLabel, getCategory, getTechnique } = useTechniques();
   const { badges } = useJourney();
   const [segment, setSegment] = useState<LogTabSegment>('progress');
   const [filter, setFilter] = useState<WorkoutMetricFilter>('all');
@@ -50,8 +52,13 @@ export function WorkoutLogListScreen({ navigation }: Props) {
   );
 
   const insights = useMemo(
-    () => buildTrainingInsights(workouts, filter),
-    [workouts, filter],
+    () =>
+      buildTrainingInsights(workouts, filter, new Date(), {
+        getLabel,
+        getCategory,
+        getTechnique,
+      }),
+    [filter, getCategory, getLabel, getTechnique, workouts],
   );
 
   const openJourney = () => {
@@ -109,6 +116,10 @@ export function WorkoutLogListScreen({ navigation }: Props) {
             <TrainingInsightsSection
               insights={insights}
               onLogTraining={createNewLog}
+              onViewAllTechniques={() => navigation.navigate('YourGame')}
+              onTechniquePress={(techniqueId) =>
+                navigation.navigate('TechniqueDetail', { techniqueId })
+              }
             />
 
             <Spacer size="md" />
