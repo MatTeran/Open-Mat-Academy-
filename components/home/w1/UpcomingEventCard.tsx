@@ -31,16 +31,26 @@ export function UpcomingEventCard({
     >
       <View style={styles.row}>
         <View style={styles.copy}>
-          <SectionLabel tone="accent">{eyebrow}</SectionLabel>
+          <SectionLabel>{eyebrow}</SectionLabel>
           <Text
             style={[styles.title, { color: colors.text }]}
             numberOfLines={2}
           >
-            {title}
+            {title.toUpperCase()}
           </Text>
-          <Text style={[styles.when, { color: colors.secondaryText }]}>
-            {whenLabel}
-          </Text>
+          <View style={styles.whenRow}>
+            <Ionicons
+              name="calendar-outline"
+              size={13}
+              color={colors.secondaryText}
+            />
+            <Text
+              style={[styles.when, { color: colors.secondaryText }]}
+              numberOfLines={1}
+            >
+              {whenLabel}
+            </Text>
+          </View>
         </View>
 
         <View style={styles.mediaWrap}>
@@ -49,7 +59,6 @@ export function UpcomingEventCard({
             name="chevron-forward"
             size={18}
             color={colors.secondaryText}
-            style={styles.chevron}
           />
         </View>
       </View>
@@ -62,6 +71,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     minHeight: 108,
+    paddingRight: spacing.sm,
   },
   copy: {
     flex: 1,
@@ -69,30 +79,33 @@ const styles = StyleSheet.create({
     paddingLeft: spacing.md,
     paddingRight: spacing.sm,
     gap: 6,
+    minWidth: 0,
   },
   title: {
     fontFamily: fontFamilies.bold,
-    fontSize: 17,
-    letterSpacing: 0.2,
-    lineHeight: 22,
+    fontSize: 16,
+    letterSpacing: 0.4,
+    lineHeight: 21,
+  },
+  whenRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
   },
   when: {
+    flex: 1,
     fontFamily: fontFamilies.medium,
     fontSize: 12,
-    letterSpacing: 0.4,
+    letterSpacing: 0.3,
   },
   mediaWrap: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
-    paddingRight: spacing.sm,
+    gap: 6,
   },
   media: {
-    width: 72,
-    height: 72,
-    borderRadius: 14,
-  },
-  chevron: {
-    marginLeft: 2,
+    width: 76,
+    height: 76,
+    borderRadius: 16,
   },
 });

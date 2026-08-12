@@ -8,30 +8,58 @@ interface MetricItemProps {
   label: string;
   value: string;
   icon?: keyof typeof Ionicons.glyphMap;
+  /** Mockup order: icon → label → value */
+  layout?: 'value-first' | 'label-first';
 }
 
-export function MetricItem({ label, value, icon }: MetricItemProps) {
+export function MetricItem({
+  label,
+  value,
+  icon,
+  layout = 'label-first',
+}: MetricItemProps) {
   const { colors } = useAppTheme();
 
   return (
     <View style={styles.wrap} accessibilityLabel={`${label}: ${value}`}>
       {icon ? (
-        <Ionicons name={icon} size={13} color={colors.goldAccent} />
+        <Ionicons name={icon} size={14} color={colors.goldAccent} />
       ) : null}
-      <Text
-        style={[styles.value, { color: colors.text }]}
-        numberOfLines={1}
-        adjustsFontSizeToFit
-        minimumFontScale={0.85}
-      >
-        {value}
-      </Text>
-      <Text
-        style={[styles.label, { color: colors.secondaryText }]}
-        numberOfLines={2}
-      >
-        {label}
-      </Text>
+      {layout === 'label-first' ? (
+        <>
+          <Text
+            style={[styles.label, { color: colors.secondaryText }]}
+            numberOfLines={2}
+          >
+            {label}
+          </Text>
+          <Text
+            style={[styles.value, { color: colors.text }]}
+            numberOfLines={1}
+            adjustsFontSizeToFit
+            minimumFontScale={0.8}
+          >
+            {value}
+          </Text>
+        </>
+      ) : (
+        <>
+          <Text
+            style={[styles.value, { color: colors.text }]}
+            numberOfLines={1}
+            adjustsFontSizeToFit
+            minimumFontScale={0.8}
+          >
+            {value}
+          </Text>
+          <Text
+            style={[styles.label, { color: colors.secondaryText }]}
+            numberOfLines={2}
+          >
+            {label}
+          </Text>
+        </>
+      )}
     </View>
   );
 }
@@ -41,7 +69,7 @@ const styles = StyleSheet.create({
     flex: 1,
     minWidth: 0,
     alignItems: 'center',
-    gap: 2,
+    gap: 3,
     paddingHorizontal: 2,
   },
   value: {
@@ -53,7 +81,7 @@ const styles = StyleSheet.create({
   label: {
     fontFamily: fontFamilies.medium,
     fontSize: 8,
-    letterSpacing: 0.4,
+    letterSpacing: 0.35,
     lineHeight: 10,
     textTransform: 'uppercase',
     textAlign: 'center',

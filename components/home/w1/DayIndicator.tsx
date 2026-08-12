@@ -36,8 +36,14 @@ export function DayIndicator({
     ]).start();
   }, [completed, delay, scale]);
 
-  const borderColor = completed || isToday ? colors.goldAccent : colors.border;
-  const backgroundColor = completed ? colors.goldMuted : 'transparent';
+  const borderColor = completed
+    ? 'transparent'
+    : isToday
+      ? colors.goldAccent
+      : colors.border;
+  const backgroundColor = completed
+    ? 'rgba(154, 103, 53, 0.14)'
+    : 'transparent';
 
   return (
     <View style={styles.wrap}>
@@ -47,7 +53,7 @@ export function DayIndicator({
           {
             borderColor,
             backgroundColor,
-            borderWidth: isToday ? 2.5 : 1.5,
+            borderWidth: isToday && !completed ? 2 : 1.5,
             transform: [{ scale }],
           },
         ]}

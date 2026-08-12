@@ -28,23 +28,25 @@ export function JourneyCard({ summary, onOpenJourney }: JourneyCardProps) {
       padded={false}
     >
       <View style={styles.inner}>
-        <SectionLabel>Your Journey</SectionLabel>
-
-        <View style={styles.levelRow}>
-          <Text
-            style={[styles.level, { color: colors.text }]}
-            numberOfLines={1}
-            adjustsFontSizeToFit
-            minimumFontScale={0.8}
-          >
-            {`LEVEL ${summary.level}`}
-          </Text>
+        <View style={styles.header}>
+          <SectionLabel style={styles.headerLabel}>Your Journey</SectionLabel>
           <Text style={[styles.percent, { color: colors.goldAccent }]}>
             {`${percent}%`}
           </Text>
         </View>
 
-        <JourneyProgressBar progress={progress} />
+        <Text
+          style={[styles.level, { color: colors.text }]}
+          numberOfLines={1}
+          adjustsFontSizeToFit
+          minimumFontScale={0.8}
+        >
+          {`LEVEL ${summary.level}`}
+        </Text>
+
+        <View style={styles.barWrap}>
+          <JourneyProgressBar progress={progress} height={5} />
+        </View>
 
         <View style={styles.xpBlock}>
           <Text
@@ -58,25 +60,28 @@ export function JourneyCard({ summary, onOpenJourney }: JourneyCardProps) {
             style={[styles.xpUntil, { color: colors.secondaryText }]}
             numberOfLines={2}
           >
-            {`${remaining.toLocaleString()} XP to Level ${summary.level + 1}`}
+            {`${remaining.toLocaleString()} XP UNTIL LEVEL ${summary.level + 1}`}
           </Text>
         </View>
 
-        <View style={[styles.metrics, { borderTopColor: colors.border }]}>
+        <View style={styles.metrics}>
           <MetricItem
             icon="calendar-outline"
-            label="Days"
+            label="Training Days"
             value={`${summary.weeklyTrainingDays}`}
+            layout="label-first"
           />
           <MetricItem
             icon="flag-outline"
-            label="Goal"
-            value={`${summary.weeklyClassesCompleted}/${summary.weeklyClassGoal}`}
+            label="Weekly Goal"
+            value={`${summary.weeklyClassesCompleted} / ${summary.weeklyClassGoal}`}
+            layout="label-first"
           />
           <MetricItem
             icon="flame-outline"
             label="Streak"
-            value={`${summary.currentStreak}`}
+            value={`${summary.currentStreak} Days`}
+            layout="label-first"
           />
         </View>
       </View>
@@ -87,35 +92,39 @@ export function JourneyCard({ summary, onOpenJourney }: JourneyCardProps) {
 const styles = StyleSheet.create({
   card: {
     flex: 1,
-    minHeight: 268,
+    minHeight: 260,
   },
   inner: {
     flex: 1,
     padding: 14,
   },
-  levelRow: {
+  header: {
     flexDirection: 'row',
-    alignItems: 'baseline',
+    alignItems: 'center',
     justifyContent: 'space-between',
     gap: 8,
-    marginTop: spacing.sm,
     marginBottom: spacing.sm,
   },
-  level: {
-    flex: 1,
-    minWidth: 0,
-    fontFamily: fontFamilies.bold,
-    fontSize: 18,
-    letterSpacing: 0.5,
+  headerLabel: {
+    flexShrink: 1,
   },
   percent: {
     fontFamily: fontFamilies.bold,
-    fontSize: 16,
+    fontSize: 13,
     letterSpacing: 0.2,
   },
+  level: {
+    fontFamily: fontFamilies.bold,
+    fontSize: 20,
+    letterSpacing: 0.6,
+    marginBottom: spacing.sm,
+  },
+  barWrap: {
+    marginBottom: spacing.sm,
+  },
   xpBlock: {
-    marginTop: spacing.sm,
     gap: 3,
+    marginBottom: spacing.md,
   },
   xpLine: {
     fontFamily: fontFamilies.medium,
@@ -125,15 +134,14 @@ const styles = StyleSheet.create({
   xpUntil: {
     fontFamily: fontFamilies.medium,
     fontSize: 10,
-    letterSpacing: 0.3,
+    letterSpacing: 0.5,
     lineHeight: 13,
+    textTransform: 'uppercase',
   },
   metrics: {
     flexDirection: 'row',
     alignItems: 'flex-start',
     gap: 4,
     marginTop: 'auto',
-    paddingTop: spacing.sm,
-    borderTopWidth: StyleSheet.hairlineWidth,
   },
 });

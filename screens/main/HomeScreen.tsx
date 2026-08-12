@@ -23,6 +23,7 @@ import {
   Screen,
   Spacer,
   TrainingStreakCard,
+  UpcomingEventCard,
   W1NextClassCard,
 } from '../../components';
 import { useAuth, useNotifications, useProfile } from '../../hooks';
@@ -71,7 +72,7 @@ function parseAcademy(membershipName?: string | null): {
 export function HomeScreen() {
   const { user } = useAuth();
   const { hub } = useProfile();
-  const { announcements } = useCommunity();
+  const { announcements, seminars } = useCommunity();
   const { profile, streak, awardXp } = useJourney();
   const {
     permissionPromptStatus,
@@ -146,6 +147,22 @@ export function HomeScreen() {
   });
 
   const latestAnnouncement = announcements[0] ?? null;
+
+  const featuredSeminar = useMemo(() => {
+    const seminar = seminars[0];
+    if (seminar) {
+      const datePart = seminar.dateLabel.replace(/\s*·\s*/g, ', ').toUpperCase();
+      const timePart = seminar.timeLabel.split(/[–-]/)[0]?.trim() ?? seminar.timeLabel;
+      return {
+        title: seminar.title,
+        whenLabel: `${datePart} • ${timePart}`,
+      };
+    }
+    return {
+      title: 'Guard Retention Masterclass',
+      whenLabel: 'SAT, AUG 10 • 1:00 PM',
+    };
+  }, [seminars]);
 
   useEffect(() => {
     if (!xpEarnedLabel) {
@@ -330,10 +347,32 @@ export function HomeScreen() {
           </>
         ) : null}
 
+        <Spacer size="md" />
+        <FadeIn delay={120}>
+          <View style={styles.inset}>
+            <UpcomingEventCard
+              title={featuredSeminar.title}
+              whenLabel={featuredSeminar.whenLabel}
+              onPress={() => navigation.navigate('Community')}
+            />
+          </View>
+        </FadeIn>
+
+        <Spacer size="md" />
+        <FadeIn delay={150}>
+          <View style={styles.inset}>
+            <TrainingStreakCard
+              currentStreak={journeySummary.currentStreak}
+              weekDays={streak.weekDays}
+              onPress={() => navigation.navigate('Journey')}
+            />
+          </View>
+        </FadeIn>
+
         {latestAnnouncement ? (
           <>
             <Spacer size="md" />
-            <FadeIn delay={120}>
+            <FadeIn delay={180}>
               <View style={styles.inset}>
                 <AcademyAnnouncementCard
                   announcement={latestAnnouncement}
@@ -350,7 +389,7 @@ export function HomeScreen() {
         ) : null}
 
         <Spacer size="md" />
-        <FadeIn delay={150}>
+        <FadeIn delay={210}>
           <View style={styles.inset}>
             <LocalEventsHomeCard
               event={nearestLocalEvent}
@@ -362,7 +401,7 @@ export function HomeScreen() {
         </FadeIn>
 
         <Spacer size="md" />
-        <FadeIn delay={180}>
+        <FadeIn delay={240}>
           <View style={styles.inset}>
             <QuickActionsRow
               actions={QUICK_ACTIONS}
@@ -372,22 +411,11 @@ export function HomeScreen() {
         </FadeIn>
 
         <Spacer size="md" />
-        <FadeIn delay={210}>
+        <FadeIn delay={270}>
           <View style={styles.inset}>
             <AcademyUpcomingEvents
               events={UPCOMING_EVENTS}
               onPressEvent={() => navigation.navigate('Community')}
-            />
-          </View>
-        </FadeIn>
-
-        <Spacer size="md" />
-        <FadeIn delay={240}>
-          <View style={styles.inset}>
-            <TrainingStreakCard
-              currentStreak={journeySummary.currentStreak}
-              weekDays={streak.weekDays}
-              onPress={() => navigation.navigate('Journey')}
             />
           </View>
         </FadeIn>

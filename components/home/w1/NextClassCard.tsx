@@ -22,25 +22,18 @@ interface NextClassCardProps {
 
 function formatClassWhen(iso: string): string {
   const date = new Date(iso);
-  return date.toLocaleString(undefined, {
-    weekday: 'short',
-    month: 'short',
-    day: 'numeric',
+  const day = date
+    .toLocaleDateString(undefined, { weekday: 'short' })
+    .toUpperCase();
+  const month = date
+    .toLocaleDateString(undefined, { month: 'short' })
+    .toUpperCase();
+  const dayNum = date.getDate();
+  const time = date.toLocaleTimeString(undefined, {
     hour: 'numeric',
     minute: '2-digit',
   });
-}
-
-function statusChipLabel(
-  status: NextClassSummary['status'],
-  reservation: NextClassReservationStatus,
-): string {
-  if (reservation === 'checked_in') return 'Checked In';
-  if (reservation === 'check_in') return 'Check In';
-  if (reservation === 'reserved') return 'Reserved';
-  if (status === 'live') return 'Live';
-  if (status === 'soon') return 'Soon';
-  return 'Upcoming';
+  return `${day}, ${month} ${dayNum} • ${time}`;
 }
 
 function primaryLabel(
@@ -79,6 +72,8 @@ export function NextClassCard({
     reservationStatus === 'reserved' ||
     reservationStatus === 'checked_in';
 
+  const formatChip = nextClass.format.replace(/\s*\/\s*/g, '/');
+
   return (
     <SurfaceCard
       accessibilityLabel={`Next class ${nextClass.title}`}
@@ -88,16 +83,14 @@ export function NextClassCard({
       <View style={styles.inner}>
         <View style={styles.header}>
           <SectionLabel style={styles.headerLabel}>Next Class</SectionLabel>
-          <StatusChip
-            label={statusChipLabel(nextClass.status, reservationStatus)}
-          />
+          <StatusChip label={formatChip} variant="filled" />
         </View>
 
         <Text
           style={[styles.title, { color: colors.text }]}
           numberOfLines={2}
           adjustsFontSizeToFit
-          minimumFontScale={0.8}
+          minimumFontScale={0.78}
         >
           {nextClass.title.toUpperCase()}
         </Text>
@@ -109,11 +102,7 @@ export function NextClassCard({
           />
           <MetaRow
             icon="people-outline"
-            text={`${nextClass.coach} · ${nextClass.format}`}
-          />
-          <MetaRow
-            icon="time-outline"
-            text={`${nextClass.durationMinutes} min · ${nextClass.location}`}
+            text={`${nextClass.coach} - ${nextClass.format} - ${nextClass.location} ${nextClass.durationMinutes} MIN`.toUpperCase()}
           />
         </View>
 
@@ -126,29 +115,25 @@ export function NextClassCard({
             styles.primaryBtn,
             {
               backgroundColor: checkedIn
-                ? colors.goldMuted
+                ? 'rgba(32, 32, 30, 0.05)'
                 : colors.goldTintSurface,
-              borderColor: colors.goldAccent,
+              borderColor: 'rgba(32, 32, 30, 0.06)',
               opacity: pressed || actionLoading ? 0.85 : 1,
             },
           ]}
         >
           {checkedIn ? (
-            <View
-              style={[
-                styles.checkIcon,
-                { backgroundColor: colors.goldAccent },
-              ]}
-            >
-              <Ionicons
-                name="checkmark"
-                size={12}
-                color={colors.cardBackground}
-              />
-            </View>
+            <Ionicons
+              name="checkmark"
+              size={16}
+              color={colors.goldAccent}
+            />
           ) : null}
           <Text
-            style={[styles.primaryLabel, { color: colors.goldAccent }]}
+            style={[
+              styles.primaryLabel,
+              { color: checkedIn ? colors.text : colors.goldAccent },
+            ]}
             numberOfLines={1}
             adjustsFontSizeToFit
           >
@@ -161,7 +146,7 @@ export function NextClassCard({
           ) : null}
         </Pressable>
 
-        <View style={styles.secondaryCol}>
+        <View style={styles.secondaryRow}>
           <SecondaryAction
             icon="calendar-outline"
             label="Add to Calendar"
@@ -229,6 +214,8 @@ function SecondaryAction({
       <Text
         style={[styles.secondaryLabel, { color: colors.secondaryText }]}
         numberOfLines={1}
+        adjustsFontSizeToFit
+        minimumFontScale={0.8}
       >
         {label}
       </Text>
@@ -239,7 +226,7 @@ function SecondaryAction({
 const styles = StyleSheet.create({
   card: {
     flex: 1,
-    minHeight: 268,
+    minHeight: 260,
   },
   inner: {
     flex: 1,
@@ -257,13 +244,13 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: fontFamilies.bold,
-    fontSize: 17,
-    letterSpacing: 0.4,
+    fontSize: 16,
+    letterSpacing: 0.5,
     lineHeight: 20,
     marginBottom: 10,
   },
   metaBlock: {
-    gap: 6,
+    gap: 7,
     marginBottom: 12,
   },
   metaRow: {
@@ -289,37 +276,35 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     marginBottom: 10,
   },
-  checkIcon: {
-    width: 18,
-    height: 18,
-    borderRadius: 9,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   primaryLabel: {
     fontFamily: fontFamilies.semibold,
     fontSize: 11,
-    letterSpacing: 0.8,
+    letterSpacing: 0.9,
     textTransform: 'uppercase',
   },
   xpLabel: {
     fontFamily: fontFamilies.medium,
     fontSize: 11,
   },
-  secondaryCol: {
-    gap: 4,
-  },
-  secondaryAction: {
+  secondaryRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 5,
-    minHeight: 26,
+    justifyContent: 'space-between',
+    gap: 8,
+  },
+  secondaryAction: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    minHeight: 28,
+    minWidth: 0,
   },
   secondaryLabel: {
     flexShrink: 1,
     fontFamily: fontFamilies.medium,
-    fontSize: 10,
-    letterSpacing: 0.4,
+    fontSize: 9,
+    letterSpacing: 0.35,
     textTransform: 'uppercase',
   },
 });
