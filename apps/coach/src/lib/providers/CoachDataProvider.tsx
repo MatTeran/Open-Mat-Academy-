@@ -3,6 +3,7 @@ import {
   PropsWithChildren,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
 } from 'react';
@@ -161,13 +162,20 @@ export function CoachDataProvider({ children }: PropsWithChildren) {
   );
 
   const refresh = useCallback(async () => {
-    const [nextClasses, nextAnnouncements] = await Promise.all([
+    const [nextClasses, nextAnnouncements, nextMembers] = await Promise.all([
       classesRepo.list(),
       announcementsRepo.list(COACH_ACADEMY_ID),
+      membersRepo.listProfiles(),
     ]);
     setClasses(nextClasses);
     setAnnouncements(nextAnnouncements);
-  }, [announcementsRepo, classesRepo]);
+    // Sample mocks stay; live Supabase signups are merged inside the repo.
+    setMemberProfiles(nextMembers);
+  }, [announcementsRepo, classesRepo, membersRepo]);
+
+  useEffect(() => {
+    void refresh();
+  }, [refresh]);
 
   const getClass = useCallback(
     (id: string) => classes.find((item) => item.id === id),
@@ -176,19 +184,30 @@ export function CoachDataProvider({ children }: PropsWithChildren) {
 
   const getMember = useCallback(
     async (id: string) => {
-      const profile = await membersRepo.getById(id);
+      const fromState = memberProfiles.find((profile) => profile.id === id);
+      const profile = fromState ?? (await membersRepo.getById(id));
       if (!profile) {
         return null;
       }
       const notes = await notesRepo.listByMember(id);
       return { ...profile, coachNotes: notes };
     },
-    [membersRepo, notesRepo],
+    [memberProfiles, membersRepo, notesRepo],
   );
 
   const searchMembers = useCallback(
-    async (query: string) => membersRepo.search(query),
-    [membersRepo],
+    async (query: string) => {
+      const needle = query.trim().toLowerCase();
+      if (!needle) {
+        return members;
+      }
+      return members.filter(
+        (item) =>
+          item.fullName.toLowerCase().includes(needle) ||
+          item.email.toLowerCase().includes(needle),
+      );
+    },
+    [members],
   );
 
   const getAttendanceForClass = useCallback(
