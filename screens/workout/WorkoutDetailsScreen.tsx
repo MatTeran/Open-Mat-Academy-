@@ -8,11 +8,13 @@ import {
   ChipSelect,
   DropdownField,
   FormSection,
+  IntensitySlider,
   MoodSelector,
   PartnerInput,
   Screen,
   Spacer,
   StarRating,
+  TechniquesUsedField,
   Text,
 } from '../../components';
 import { useAppTheme } from '../../hooks';
@@ -20,10 +22,13 @@ import {
   CLASS_TYPE_OPTIONS,
   getClassTypeLabel,
   INSTRUCTOR_OPTIONS,
-  INTENSITY_OPTIONS,
-  TECHNIQUE_OPTIONS,
+  intensityCategoryToScore,
 } from '../../lib/data/workoutOptions';
-import { createEmptyWorkoutDraft } from '../../lib/mocks/workouts';
+import {
+  createEmptyWorkoutDraft,
+  recentPartnersFromWorkouts,
+} from '../../lib/mocks/workouts';
+import { useTechniques } from '../../lib/providers/TechniqueProvider';
 import { useWorkouts } from '../../lib/providers/WorkoutProvider';
 import { fontFamilies, radii, spacing } from '../../lib/theme';
 import { useThemedStyles } from '../../lib/theme/useThemedStyles';
@@ -42,19 +47,33 @@ type Props = NativeStackScreenProps<WorkoutStackParamList, 'WorkoutDetails'>;
 
 export function WorkoutDetailsScreen({ navigation, route }: Props) {
   const { colors } = useAppTheme();
-  const { getWorkout, saveWorkout } = useWorkouts();
+  const { workouts, getWorkout, saveWorkout } = useWorkouts();
+  const { getLabel } = useTechniques();
   const existing = route.params?.workoutId
     ? getWorkout(route.params.workoutId)
     : undefined;
 
-  const initial = useMemo<WorkoutDraft>(
-    () => existing ?? createEmptyWorkoutDraft(),
-    [existing],
-  );
+  const initial = useMemo<WorkoutDraft>(() => {
+    if (!existing) {
+      return createEmptyWorkoutDraft();
+    }
+    return {
+      ...existing,
+      intensityScore:
+        existing.intensityScore === undefined
+          ? intensityCategoryToScore(existing.intensity)
+          : existing.intensityScore,
+    };
+  }, [existing]);
 
   const [draft, setDraft] = useState<WorkoutDraft>(initial);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const recentPartners = useMemo(
+    () => recentPartnersFromWorkouts(workouts),
+    [workouts],
+  );
 
   const styles = useThemedStyles((themeColors) => ({
     content: {},
@@ -236,32 +255,40 @@ export function WorkoutDetailsScreen({ navigation, route }: Props) {
           </View>
         </View>
         <Spacer size="lg" />
-        <ChipSelect
-          label="Training Intensity"
-          multi={false}
-          options={INTENSITY_OPTIONS}
-          values={[draft.intensity]}
-          onChange={(values) =>
-            update('intensity', (values[0] ?? 'moderate') as TrainingIntensity)
+        <IntensitySlider
+          value={
+            draft.intensityScore === undefined
+              ? null
+              : draft.intensityScore
           }
+          onChange={(score, intensity: TrainingIntensity) => {
+            setDraft((current) => ({
+              ...current,
+              intensityScore: score,
+              intensity,
+            }));
+          }}
+          onClear={() => {
+            setDraft((current) => ({
+              ...current,
+              intensityScore: null,
+            }));
+          }}
         />
       </FormSection>
 
       <FormSection title="Partners">
         <PartnerInput
           partners={draft.partners}
+          recentPartners={recentPartners}
           onChange={(partners) => update('partners', partners)}
         />
       </FormSection>
 
       <FormSection title="Techniques">
-        <ChipSelect
-          label="Techniques Practiced"
-          options={TECHNIQUE_OPTIONS}
+        <TechniquesUsedField
           values={draft.techniques}
-          onChange={(techniques) =>
-            update('techniques', techniques as TechniqueId[])
-          }
+          onChange={(techniques) => update('techniques', techniques)}
         />
         {draft.techniques.length > 0 ? (
           <>
@@ -269,14 +296,18 @@ export function WorkoutDetailsScreen({ navigation, route }: Props) {
             <ChipSelect
               label="Favorite Technique"
               multi={false}
-              options={TECHNIQUE_OPTIONS.filter((item) =>
-                draft.techniques.includes(item.value),
-              )}
+              options={draft.techniques.map((id) => ({
+                value: id,
+                label: getLabel(id),
+              }))}
               values={
                 draft.favoriteTechnique ? [draft.favoriteTechnique] : []
               }
               onChange={(values) =>
-                update('favoriteTechnique', values[0] ?? null)
+                update(
+                  'favoriteTechnique',
+                  (values[0] as TechniqueId | undefined) ?? null,
+                )
               }
             />
           </>

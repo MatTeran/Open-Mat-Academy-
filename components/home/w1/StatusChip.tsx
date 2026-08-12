@@ -5,21 +5,31 @@ import { fontFamilies, w1Radii } from '../../../lib/theme';
 
 interface StatusChipProps {
   label: string;
+  /** Filled bronze chip with light text — matches mockup Gi badge. */
+  variant?: 'soft' | 'filled';
 }
 
-export function StatusChip({ label }: StatusChipProps) {
+export function StatusChip({ label, variant = 'soft' }: StatusChipProps) {
   const { colors } = useAppTheme();
+  const filled = variant === 'filled';
 
   return (
     <View
       style={[
         styles.chip,
         {
-          backgroundColor: colors.goldMuted,
+          backgroundColor: filled ? colors.goldAccent : colors.goldMuted,
         },
       ]}
     >
-      <Text style={[styles.text, { color: colors.goldAccent }]}>{label}</Text>
+      <Text
+        style={[
+          styles.text,
+          { color: filled ? '#FFFFFF' : colors.goldAccent },
+        ]}
+      >
+        {label}
+      </Text>
     </View>
   );
 }
