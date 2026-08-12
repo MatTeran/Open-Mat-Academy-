@@ -23,24 +23,24 @@ export const darkColors = {
   goldTintSurface: '#241E16',
 } as const;
 
-/** Version W.1 — warm refined neutrals */
+/** Version W.1 — warm refined neutrals (Home mockup) */
 export const lightColors = {
-  primaryBackground: '#F5F3EE',
-  secondaryBackground: '#FAF9F6',
-  cardBackground: '#FAF9F6',
+  primaryBackground: '#F3F0EA',
+  secondaryBackground: '#FFFCF8',
+  cardBackground: '#FFFCF8',
   elevatedSurface: '#FFFFFF',
-  goldAccent: '#9A6735',
-  highlightGold: '#B8844A',
-  goldPressed: '#7D5329',
-  text: '#20201E',
-  secondaryText: '#6F6C66',
+  goldAccent: '#7C5D49',
+  highlightGold: '#9A7358',
+  goldPressed: '#5F4636',
+  text: '#1C1A17',
+  secondaryText: '#7A6554',
   error: '#DC2626',
   success: '#16A34A',
   warning: '#D97706',
   info: '#0284C7',
-  border: 'rgba(0, 0, 0, 0.06)',
+  border: 'rgba(28, 26, 23, 0.06)',
   overlay: 'rgba(20, 18, 14, 0.4)',
-  goldMuted: 'rgba(154, 103, 53, 0.12)',
+  goldMuted: 'rgba(124, 93, 73, 0.14)',
   goldTintSurface: '#F0E8DC',
 } as const;
 

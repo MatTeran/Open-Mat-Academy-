@@ -1,10 +1,8 @@
 import { StyleSheet, View } from 'react-native';
 
-import {
-  getClassTypeLabel,
-  getTechniqueLabel,
-} from '../../lib/data/workoutOptions';
+import { getClassTypeLabel } from '../../lib/data/workoutOptions';
 import { useAppTheme } from '../../lib/providers/ThemeProvider';
+import { useTechniques } from '../../lib/providers/TechniqueProvider';
 import { radii, spacing } from '../../lib/theme';
 import type { Workout } from '../../types/workout';
 import { formatShortDate } from '../../utils';
@@ -19,6 +17,7 @@ interface WorkoutCardProps {
 
 export function WorkoutCard({ workout, onPress }: WorkoutCardProps) {
   const { colors } = useAppTheme();
+  const { getLabel } = useTechniques();
 
   return (
     <Card onPress={onPress}>
@@ -66,7 +65,7 @@ export function WorkoutCard({ workout, onPress }: WorkoutCardProps) {
           label="Favorite"
           value={
             workout.favoriteTechnique
-              ? getTechniqueLabel(workout.favoriteTechnique)
+              ? getLabel(workout.favoriteTechnique)
               : '—'
           }
           backgroundColor={colors.primaryBackground}

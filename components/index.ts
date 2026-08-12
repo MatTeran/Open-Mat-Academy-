@@ -19,13 +19,17 @@ export { QuickActions } from './home/QuickActions';
 export { RecentActivity } from './home/RecentActivity';
 export { UpcomingEvents } from './home/UpcomingEvents';
 export {
+  AcademyAnnouncementCard,
   AcademyHero,
+  AcademyUpcomingEvents,
   DashboardGrid,
   DayIndicator,
   GreetingSection,
   JourneyCard,
   JourneyProgressBar,
+  LocalEventsHomeCard,
   MetricItem,
+  QuickActionsRow,
   QuickLogSheet,
   SectionLabel,
   StatusChip,
@@ -96,17 +100,28 @@ export { Spacer } from './ui/Spacer';
 export { Text } from './ui/Text';
 export type { AppTextProps } from './ui/Text';
 export { AchievementsBarCard } from './workout/AchievementsBarCard';
+export { AddTechniqueSheet } from './workout/AddTechniqueSheet';
 export { ChipSelect } from './workout/ChipSelect';
 export { DropdownField } from './workout/DropdownField';
 export { FloatingActionButton } from './workout/FloatingActionButton';
 export { FormSection } from './workout/FormSection';
+export { InsightsEmptyState } from './workout/InsightsEmptyState';
+export { IntensitySlider } from './workout/IntensitySlider';
+export { IntensityTrendChart } from './workout/IntensityTrendChart';
 export { LogSegmentControl } from './workout/LogSegmentControl';
 export { MoodSelector } from './workout/MoodSelector';
+export { PartnerDetailSheet } from './workout/PartnerDetailSheet';
 export { PartnerInput } from './workout/PartnerInput';
 export { ProgressInsightCard } from './workout/ProgressInsightCard';
+export { RankedBarList } from './workout/RankedBarList';
 export { StarRating } from './workout/StarRating';
 export { StreaksMiniCard } from './workout/StreaksMiniCard';
+export { TechniquesUsedField } from './workout/TechniquesUsedField';
+export { TrainingInsightsSection } from './workout/TrainingInsightsSection';
+export { TrainingIntensityCard } from './workout/TrainingIntensityCard';
 export { TrainingLogMiniCard } from './workout/TrainingLogMiniCard';
+export { TrainingPartnersCard } from './workout/TrainingPartnersCard';
 export { WeeklyProgressChart } from './workout/WeeklyProgressChart';
 export { WorkoutCard } from './workout/WorkoutCard';
 export { WorkoutProgressCard } from './workout/WorkoutProgressCard';
+export { YourGameCard } from './workout/YourGameCard';
