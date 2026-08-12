@@ -29,7 +29,7 @@ export function TrainingStreakCard({
 
       <View style={styles.body}>
         <View style={styles.days}>
-          {weekDays.map((day, index) => (
+          {(weekDays ?? []).map((day, index) => (
             <DayIndicator
               key={day.key}
               label={day.label}

@@ -142,6 +142,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
     gap: 4,
-    marginTop: 'auto',
+    marginTop: spacing.md,
   },
 });

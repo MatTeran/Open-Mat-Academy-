@@ -83,11 +83,6 @@
       "exclude": [
         "react-native-worklets"
       ]
-    },
-    "autolinking": {
-      "exclude": [
-        "@stripe/stripe-react-native"
-      ]
     }
   }
 }
