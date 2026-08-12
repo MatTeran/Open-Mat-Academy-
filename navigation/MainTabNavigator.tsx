@@ -23,12 +23,15 @@ export function MainTabNavigator() {
   const { colors, isDark } = useAppTheme();
 
   const tabBarStyle = {
-    backgroundColor: isDark ? colors.secondaryBackground : colors.cardBackground,
-    borderTopColor: colors.border,
-    height: 78,
-    paddingTop: 8,
-    paddingBottom: 12,
-    ...w1Shadow.soft,
+    backgroundColor: isDark ? colors.secondaryBackground : '#F7F3EC',
+    borderTopColor: 'transparent',
+    borderTopWidth: 0,
+    height: 82,
+    paddingTop: 10,
+    paddingBottom: 14,
+    borderTopLeftRadius: 22,
+    borderTopRightRadius: 22,
+    ...w1Shadow.card,
   };
 
   return (

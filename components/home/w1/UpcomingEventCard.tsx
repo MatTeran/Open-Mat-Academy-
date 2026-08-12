@@ -58,7 +58,7 @@ export function UpcomingEventCard({
           <Ionicons
             name="chevron-forward"
             size={18}
-            color={colors.secondaryText}
+            color={colors.goldAccent}
           />
         </View>
       </View>

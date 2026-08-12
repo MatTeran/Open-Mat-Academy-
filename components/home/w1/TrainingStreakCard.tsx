@@ -46,10 +46,10 @@ export function TrainingStreakCard({
           <Text style={[styles.strongValue, { color: colors.goldAccent }]}>
             {currentStreak}
           </Text>
-          <Text style={[styles.strongLabel, { color: colors.secondaryText }]}>
+          <Text style={[styles.strongLabel, { color: colors.goldAccent }]}>
             Days
           </Text>
-          <Text style={[styles.strongLabel, { color: colors.secondaryText }]}>
+          <Text style={[styles.strongLabel, { color: colors.goldAccent }]}>
             Strong
           </Text>
         </View>

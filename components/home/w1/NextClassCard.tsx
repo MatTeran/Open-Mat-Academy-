@@ -8,6 +8,7 @@ import type {
   NextClassSummary,
 } from '../../../types/home';
 import { SectionLabel } from './SectionLabel';
+import { SoftActionButton } from './SoftActionButton';
 import { StatusChip } from './StatusChip';
 import { SurfaceCard } from './SurfaceCard';
 
@@ -72,7 +73,10 @@ export function NextClassCard({
     reservationStatus === 'reserved' ||
     reservationStatus === 'checked_in';
 
-  const formatChip = nextClass.format.replace(/\s*\/\s*/g, '/');
+  const statusChipLabel =
+    nextClass.status === 'soon'
+      ? 'Soon'
+      : nextClass.format.replace(/\s*\/\s*/g, '/');
 
   return (
     <SurfaceCard
@@ -83,7 +87,7 @@ export function NextClassCard({
       <View style={styles.inner}>
         <View style={styles.header}>
           <SectionLabel style={styles.headerLabel}>Next Class</SectionLabel>
-          <StatusChip label={formatChip} variant="filled" />
+          <StatusChip label={statusChipLabel} variant="filled" />
         </View>
 
         <Text
@@ -101,50 +105,20 @@ export function NextClassCard({
             text={formatClassWhen(nextClass.startsAt)}
           />
           <MetaRow
-            icon="people-outline"
-            text={`${nextClass.coach} - ${nextClass.format} - ${nextClass.location} ${nextClass.durationMinutes} MIN`.toUpperCase()}
+            icon="location-outline"
+            text={`${nextClass.location} · ${nextClass.durationMinutes} min`.toUpperCase()}
           />
         </View>
 
-        <Pressable
-          accessibilityRole="button"
-          accessibilityState={{ disabled }}
-          disabled={disabled}
+        <SoftActionButton
+          label={primaryLabel(reservationStatus, actionLoading)}
           onPress={onPrimaryAction}
-          style={({ pressed }) => [
-            styles.primaryBtn,
-            {
-              backgroundColor: checkedIn
-                ? 'rgba(32, 32, 30, 0.05)'
-                : colors.goldTintSurface,
-              borderColor: 'rgba(32, 32, 30, 0.06)',
-              opacity: pressed || actionLoading ? 0.85 : 1,
-            },
-          ]}
-        >
-          {checkedIn ? (
-            <Ionicons
-              name="checkmark"
-              size={16}
-              color={colors.goldAccent}
-            />
-          ) : null}
-          <Text
-            style={[
-              styles.primaryLabel,
-              { color: checkedIn ? colors.text : colors.goldAccent },
-            ]}
-            numberOfLines={1}
-            adjustsFontSizeToFit
-          >
-            {primaryLabel(reservationStatus, actionLoading)}
-          </Text>
-          {xpEarnedLabel ? (
-            <Text style={[styles.xpLabel, { color: colors.goldAccent }]}>
-              {xpEarnedLabel}
-            </Text>
-          ) : null}
-        </Pressable>
+          disabled={disabled}
+          loading={actionLoading}
+          icon={checkedIn ? 'checkmark' : undefined}
+          trailing={xpEarnedLabel}
+          style={styles.primaryBtn}
+        />
 
         <View style={styles.secondaryRow}>
           <SecondaryAction
@@ -155,6 +129,9 @@ export function NextClassCard({
                 `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(nextClass.title)}`,
               ).catch(() => onOpenDetails?.());
             }}
+          />
+          <View
+            style={[styles.secondaryDivider, { backgroundColor: colors.border }]}
           />
           <SecondaryAction
             icon="navigate-outline"
@@ -181,7 +158,7 @@ function MetaRow({
   const { colors } = useAppTheme();
   return (
     <View style={styles.metaRow}>
-      <Ionicons name={icon} size={12} color={colors.secondaryText} />
+      <Ionicons name={icon} size={12} color={colors.goldAccent} />
       <Text
         style={[styles.metaText, { color: colors.secondaryText }]}
         numberOfLines={2}
@@ -210,7 +187,7 @@ function SecondaryAction({
       hitSlop={6}
       style={styles.secondaryAction}
     >
-      <Ionicons name={icon} size={12} color={colors.secondaryText} />
+      <Ionicons name={icon} size={12} color={colors.goldAccent} />
       <Text
         style={[styles.secondaryLabel, { color: colors.secondaryText }]}
         numberOfLines={1}
@@ -266,25 +243,7 @@ const styles = StyleSheet.create({
     lineHeight: 15,
   },
   primaryBtn: {
-    minHeight: 40,
-    borderRadius: 12,
-    borderWidth: StyleSheet.hairlineWidth,
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'row',
-    gap: 6,
-    paddingHorizontal: 8,
-    marginBottom: 10,
-  },
-  primaryLabel: {
-    fontFamily: fontFamilies.semibold,
-    fontSize: 11,
-    letterSpacing: 0.9,
-    textTransform: 'uppercase',
-  },
-  xpLabel: {
-    fontFamily: fontFamilies.medium,
-    fontSize: 11,
+    marginBottom: 12,
   },
   secondaryRow: {
     flexDirection: 'row',
@@ -292,10 +251,16 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     gap: 8,
   },
+  secondaryDivider: {
+    width: StyleSheet.hairlineWidth,
+    alignSelf: 'stretch',
+    marginVertical: 4,
+  },
   secondaryAction: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     gap: 4,
     minHeight: 28,
     minWidth: 0,

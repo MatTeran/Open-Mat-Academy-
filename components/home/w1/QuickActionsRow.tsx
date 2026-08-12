@@ -31,10 +31,10 @@ export function QuickActionsRow({ actions, onAction }: QuickActionsRowProps) {
             }}
             style={({ pressed }) => [
               styles.tile,
-              w1Shadow.soft,
+              w1Shadow.card,
               {
                 backgroundColor: colors.cardBackground,
-                borderColor: colors.border,
+                borderColor: 'rgba(28, 26, 23, 0.05)',
                 opacity: pressed ? 0.92 : 1,
               },
             ]}

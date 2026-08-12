@@ -36,7 +36,7 @@ export function JourneyCard({ summary, onOpenJourney }: JourneyCardProps) {
         </View>
 
         <Text
-          style={[styles.level, { color: colors.text }]}
+          style={[styles.level, { color: colors.goldAccent }]}
           numberOfLines={1}
           adjustsFontSizeToFit
           minimumFontScale={0.8}

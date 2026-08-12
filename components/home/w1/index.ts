@@ -13,6 +13,7 @@ export { QuickActionsRow } from './QuickActionsRow';
 export { QuickLogSheet } from './QuickLogSheet';
 export type { QuickLogActionId } from './QuickLogSheet';
 export { SectionLabel } from './SectionLabel';
+export { SoftActionButton } from './SoftActionButton';
 export { StatusChip } from './StatusChip';
 export { SurfaceCard } from './SurfaceCard';
 export { TrainingStreakCard } from './TrainingStreakCard';
