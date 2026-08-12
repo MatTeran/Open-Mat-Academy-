@@ -23,7 +23,6 @@ function addDays(isoDate: string, days: number) {
 
 const TODAY = todayISO();
 
-/** @deprecated Prefer OPEN_MAT_ACADEMY_ID from @openmat/shared — kept for local imports. */
 export const COACH_ACADEMY_ID = 'academy-open-mat';
 
 /** Full Open Mat Academy Tracy flyer board for the current week. */
