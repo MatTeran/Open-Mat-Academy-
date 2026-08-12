@@ -22,25 +22,18 @@ interface NextClassCardProps {
 
 function formatClassWhen(iso: string): string {
   const date = new Date(iso);
-  return date.toLocaleString(undefined, {
-    weekday: 'long',
-    month: 'short',
-    day: 'numeric',
+  const day = date
+    .toLocaleDateString(undefined, { weekday: 'short' })
+    .toUpperCase();
+  const month = date
+    .toLocaleDateString(undefined, { month: 'short' })
+    .toUpperCase();
+  const dayNum = date.getDate();
+  const time = date.toLocaleTimeString(undefined, {
     hour: 'numeric',
     minute: '2-digit',
   });
-}
-
-function statusChipLabel(
-  status: NextClassSummary['status'],
-  reservation: NextClassReservationStatus,
-): string {
-  if (reservation === 'checked_in') return 'Checked In';
-  if (reservation === 'check_in') return 'Check In';
-  if (reservation === 'reserved') return 'Reserved';
-  if (status === 'live') return 'Live';
-  if (status === 'soon') return 'Soon';
-  return 'Upcoming';
+  return `${day}, ${month} ${dayNum} • ${time}`;
 }
 
 function primaryLabel(
@@ -79,99 +72,101 @@ export function NextClassCard({
     reservationStatus === 'reserved' ||
     reservationStatus === 'checked_in';
 
+  const formatChip = nextClass.format.replace(/\s*\/\s*/g, '/');
+
   return (
     <SurfaceCard
       accessibilityLabel={`Next class ${nextClass.title}`}
       style={styles.card}
+      padded={false}
     >
-      <View style={styles.header}>
-        <SectionLabel>Next Class</SectionLabel>
-        <StatusChip
-          label={statusChipLabel(nextClass.status, reservationStatus)}
-        />
-      </View>
+      <View style={styles.inner}>
+        <View style={styles.header}>
+          <SectionLabel style={styles.headerLabel}>Next Class</SectionLabel>
+          <StatusChip label={formatChip} variant="filled" />
+        </View>
 
-      <Text style={[styles.title, { color: colors.text }]} numberOfLines={2}>
-        {nextClass.title.toUpperCase()}
-      </Text>
-
-      <View style={styles.metaBlock}>
-        <MetaRow
-          icon="calendar-outline"
-          text={formatClassWhen(nextClass.startsAt)}
-        />
-        <MetaRow
-          icon="people-outline"
-          text={`${nextClass.coach} · ${nextClass.format} · ${nextClass.location}`}
-        />
-        <MetaRow icon="time-outline" text={`${nextClass.durationMinutes} min`} />
-      </View>
-
-      <Pressable
-        accessibilityRole="button"
-        accessibilityState={{ disabled }}
-        disabled={disabled}
-        onPress={onPrimaryAction}
-        style={({ pressed }) => [
-          styles.primaryBtn,
-          {
-            backgroundColor: checkedIn
-              ? colors.goldMuted
-              : colors.goldTintSurface,
-            borderColor: colors.goldAccent,
-            opacity: pressed || actionLoading ? 0.85 : 1,
-          },
-        ]}
-      >
-        {checkedIn ? (
-          <View
-            style={[styles.checkIcon, { backgroundColor: colors.goldAccent }]}
-          >
-            <Ionicons name="checkmark" size={14} color={colors.cardBackground} />
-          </View>
-        ) : null}
-        <Text style={[styles.primaryLabel, { color: colors.goldAccent }]}>
-          {primaryLabel(reservationStatus, actionLoading)}
+        <Text
+          style={[styles.title, { color: colors.text }]}
+          numberOfLines={2}
+          adjustsFontSizeToFit
+          minimumFontScale={0.78}
+        >
+          {nextClass.title.toUpperCase()}
         </Text>
-        {xpEarnedLabel ? (
-          <Text style={[styles.xpLabel, { color: colors.goldAccent }]}>
-            {xpEarnedLabel}
-          </Text>
-        ) : null}
-      </Pressable>
 
-      <View style={styles.secondaryRow}>
-        <SecondaryAction
-          icon="calendar-outline"
-          label="Add to Calendar"
-          onPress={() => {
-            void Linking.openURL(
-              `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(nextClass.title)}`,
-            ).catch(() => onOpenDetails?.());
-          }}
-        />
-        <SecondaryAction
-          icon="navigate-outline"
-          label="Directions"
-          onPress={() => {
-            void Linking.openURL(
-              'https://maps.apple.com/?q=Open+Mat+Academy+Tracy+CA',
-            ).catch(() => onOpenDetails?.());
-          }}
-        />
-      </View>
-      {onOpenDetails ? (
+        <View style={styles.metaBlock}>
+          <MetaRow
+            icon="calendar-outline"
+            text={formatClassWhen(nextClass.startsAt)}
+          />
+          <MetaRow
+            icon="people-outline"
+            text={`${nextClass.coach} - ${nextClass.format} - ${nextClass.location} ${nextClass.durationMinutes} MIN`.toUpperCase()}
+          />
+        </View>
+
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel="View class on schedule"
-          onPress={onOpenDetails}
-          style={styles.detailsLink}
+          accessibilityState={{ disabled }}
+          disabled={disabled}
+          onPress={onPrimaryAction}
+          style={({ pressed }) => [
+            styles.primaryBtn,
+            {
+              backgroundColor: checkedIn
+                ? 'rgba(32, 32, 30, 0.05)'
+                : colors.goldTintSurface,
+              borderColor: 'rgba(32, 32, 30, 0.06)',
+              opacity: pressed || actionLoading ? 0.85 : 1,
+            },
+          ]}
         >
-          <Text style={[styles.detailsText, { color: colors.secondaryText }]}>
-            View on schedule
+          {checkedIn ? (
+            <Ionicons
+              name="checkmark"
+              size={16}
+              color={colors.goldAccent}
+            />
+          ) : null}
+          <Text
+            style={[
+              styles.primaryLabel,
+              { color: checkedIn ? colors.text : colors.goldAccent },
+            ]}
+            numberOfLines={1}
+            adjustsFontSizeToFit
+          >
+            {primaryLabel(reservationStatus, actionLoading)}
           </Text>
+          {xpEarnedLabel ? (
+            <Text style={[styles.xpLabel, { color: colors.goldAccent }]}>
+              {xpEarnedLabel}
+            </Text>
+          ) : null}
         </Pressable>
-      ) : null}
+
+        <View style={styles.secondaryRow}>
+          <SecondaryAction
+            icon="calendar-outline"
+            label="Add to Calendar"
+            onPress={() => {
+              void Linking.openURL(
+                `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(nextClass.title)}`,
+              ).catch(() => onOpenDetails?.());
+            }}
+          />
+          <SecondaryAction
+            icon="navigate-outline"
+            label="Directions"
+            onPress={() => {
+              void Linking.openURL(
+                'https://maps.apple.com/?q=Open+Mat+Academy+Tracy+CA',
+              ).catch(() => onOpenDetails?.());
+            }}
+          />
+        </View>
+      </View>
     </SurfaceCard>
   );
 }
@@ -186,7 +181,7 @@ function MetaRow({
   const { colors } = useAppTheme();
   return (
     <View style={styles.metaRow}>
-      <Ionicons name={icon} size={14} color={colors.secondaryText} />
+      <Ionicons name={icon} size={12} color={colors.secondaryText} />
       <Text
         style={[styles.metaText, { color: colors.secondaryText }]}
         numberOfLines={2}
@@ -212,11 +207,16 @@ function SecondaryAction({
       accessibilityRole="button"
       accessibilityLabel={label}
       onPress={onPress}
-      hitSlop={8}
+      hitSlop={6}
       style={styles.secondaryAction}
     >
-      <Ionicons name={icon} size={13} color={colors.secondaryText} />
-      <Text style={[styles.secondaryLabel, { color: colors.secondaryText }]}>
+      <Ionicons name={icon} size={12} color={colors.secondaryText} />
+      <Text
+        style={[styles.secondaryLabel, { color: colors.secondaryText }]}
+        numberOfLines={1}
+        adjustsFontSizeToFit
+        minimumFontScale={0.8}
+      >
         {label}
       </Text>
     </Pressable>
@@ -226,90 +226,85 @@ function SecondaryAction({
 const styles = StyleSheet.create({
   card: {
     flex: 1,
-    minHeight: 280,
+    minHeight: 260,
+  },
+  inner: {
+    flex: 1,
+    padding: 14,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: spacing.sm,
+    gap: 6,
+    marginBottom: 8,
+  },
+  headerLabel: {
+    flexShrink: 1,
   },
   title: {
     fontFamily: fontFamilies.bold,
-    fontSize: 22,
-    letterSpacing: 0.6,
-    lineHeight: 26,
-    marginBottom: spacing.sm,
+    fontSize: 16,
+    letterSpacing: 0.5,
+    lineHeight: 20,
+    marginBottom: 10,
   },
   metaBlock: {
-    gap: 8,
-    marginBottom: spacing.md,
+    gap: 7,
+    marginBottom: 12,
   },
   metaRow: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    gap: 8,
+    gap: 6,
   },
   metaText: {
     flex: 1,
+    minWidth: 0,
     fontFamily: fontFamilies.regular,
-    fontSize: 12,
-    lineHeight: 17,
+    fontSize: 11,
+    lineHeight: 15,
   },
   primaryBtn: {
-    minHeight: 44,
-    borderRadius: 14,
+    minHeight: 40,
+    borderRadius: 12,
     borderWidth: StyleSheet.hairlineWidth,
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
-    gap: 8,
-    paddingHorizontal: spacing.sm,
-    marginBottom: spacing.sm,
-  },
-  checkIcon: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
+    gap: 6,
+    paddingHorizontal: 8,
+    marginBottom: 10,
   },
   primaryLabel: {
     fontFamily: fontFamilies.semibold,
-    fontSize: 13,
-    letterSpacing: 1,
+    fontSize: 11,
+    letterSpacing: 0.9,
     textTransform: 'uppercase',
   },
   xpLabel: {
     fontFamily: fontFamilies.medium,
-    fontSize: 12,
+    fontSize: 11,
   },
   secondaryRow: {
     flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'space-between',
-    gap: spacing.sm,
+    gap: 8,
   },
   secondaryAction: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    minHeight: 32,
+    minHeight: 28,
+    minWidth: 0,
   },
   secondaryLabel: {
+    flexShrink: 1,
     fontFamily: fontFamilies.medium,
-    fontSize: 10,
-    letterSpacing: 0.7,
+    fontSize: 9,
+    letterSpacing: 0.35,
     textTransform: 'uppercase',
-  },
-  detailsLink: {
-    marginTop: spacing.xs,
-    alignSelf: 'flex-start',
-    minHeight: 28,
-    justifyContent: 'center',
-  },
-  detailsText: {
-    fontFamily: fontFamilies.medium,
-    fontSize: 11,
-    letterSpacing: 0.4,
   },
 });

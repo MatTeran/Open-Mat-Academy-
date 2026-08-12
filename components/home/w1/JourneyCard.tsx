@@ -25,45 +25,65 @@ export function JourneyCard({ summary, onOpenJourney }: JourneyCardProps) {
       onPress={onOpenJourney}
       accessibilityLabel={`Your journey, level ${summary.level}, ${percent} percent to next level`}
       style={styles.card}
+      padded={false}
     >
-      <SectionLabel>Your Journey</SectionLabel>
+      <View style={styles.inner}>
+        <View style={styles.header}>
+          <SectionLabel style={styles.headerLabel}>Your Journey</SectionLabel>
+          <Text style={[styles.percent, { color: colors.goldAccent }]}>
+            {`${percent}%`}
+          </Text>
+        </View>
 
-      <View style={styles.levelRow}>
-        <Text style={[styles.level, { color: colors.text }]}>
+        <Text
+          style={[styles.level, { color: colors.text }]}
+          numberOfLines={1}
+          adjustsFontSizeToFit
+          minimumFontScale={0.8}
+        >
           {`LEVEL ${summary.level}`}
         </Text>
-        <Text style={[styles.percent, { color: colors.goldAccent }]}>
-          {`${percent}%`}
-        </Text>
-      </View>
 
-      <JourneyProgressBar progress={progress} />
+        <View style={styles.barWrap}>
+          <JourneyProgressBar progress={progress} height={5} />
+        </View>
 
-      <View style={styles.xpBlock}>
-        <Text style={[styles.xpLine, { color: colors.secondaryText }]}>
-          {`${summary.currentXP.toLocaleString()} / ${summary.nextLevelXP.toLocaleString()} XP`}
-        </Text>
-        <Text style={[styles.xpUntil, { color: colors.secondaryText }]}>
-          {`${remaining.toLocaleString()} XP UNTIL LEVEL ${summary.level + 1}`}
-        </Text>
-      </View>
+        <View style={styles.xpBlock}>
+          <Text
+            style={[styles.xpLine, { color: colors.secondaryText }]}
+            numberOfLines={1}
+            adjustsFontSizeToFit
+          >
+            {`${summary.currentXP.toLocaleString()} / ${summary.nextLevelXP.toLocaleString()} XP`}
+          </Text>
+          <Text
+            style={[styles.xpUntil, { color: colors.secondaryText }]}
+            numberOfLines={2}
+          >
+            {`${remaining.toLocaleString()} XP UNTIL LEVEL ${summary.level + 1}`}
+          </Text>
+        </View>
 
-      <View style={[styles.metrics, { borderTopColor: colors.border }]}>
-        <MetricItem
-          icon="calendar-outline"
-          label="Training Days"
-          value={`${summary.weeklyTrainingDays}`}
-        />
-        <MetricItem
-          icon="flag-outline"
-          label="Weekly Goal"
-          value={`${summary.weeklyClassesCompleted} / ${summary.weeklyClassGoal}`}
-        />
-        <MetricItem
-          icon="flame-outline"
-          label="Streak"
-          value={`${summary.currentStreak} Days`}
-        />
+        <View style={styles.metrics}>
+          <MetricItem
+            icon="calendar-outline"
+            label="Training Days"
+            value={`${summary.weeklyTrainingDays}`}
+            layout="label-first"
+          />
+          <MetricItem
+            icon="flag-outline"
+            label="Weekly Goal"
+            value={`${summary.weeklyClassesCompleted} / ${summary.weeklyClassGoal}`}
+            layout="label-first"
+          />
+          <MetricItem
+            icon="flame-outline"
+            label="Streak"
+            value={`${summary.currentStreak} Days`}
+            layout="label-first"
+          />
+        </View>
       </View>
     </SurfaceCard>
   );
@@ -72,44 +92,56 @@ export function JourneyCard({ summary, onOpenJourney }: JourneyCardProps) {
 const styles = StyleSheet.create({
   card: {
     flex: 1,
-    minHeight: 280,
+    minHeight: 260,
   },
-  levelRow: {
+  inner: {
+    flex: 1,
+    padding: 14,
+  },
+  header: {
     flexDirection: 'row',
-    alignItems: 'baseline',
+    alignItems: 'center',
     justifyContent: 'space-between',
-    marginTop: spacing.sm,
+    gap: 8,
     marginBottom: spacing.sm,
   },
-  level: {
-    fontFamily: fontFamilies.bold,
-    fontSize: 22,
-    letterSpacing: 0.8,
+  headerLabel: {
+    flexShrink: 1,
   },
   percent: {
     fontFamily: fontFamilies.bold,
+    fontSize: 13,
+    letterSpacing: 0.2,
+  },
+  level: {
+    fontFamily: fontFamilies.bold,
     fontSize: 20,
-    letterSpacing: 0.4,
+    letterSpacing: 0.6,
+    marginBottom: spacing.sm,
+  },
+  barWrap: {
+    marginBottom: spacing.sm,
   },
   xpBlock: {
-    marginTop: spacing.sm,
-    gap: 2,
+    gap: 3,
+    marginBottom: spacing.md,
   },
   xpLine: {
     fontFamily: fontFamilies.medium,
-    fontSize: 12,
-    letterSpacing: 0.3,
+    fontSize: 11,
+    letterSpacing: 0.2,
   },
   xpUntil: {
     fontFamily: fontFamilies.medium,
     fontSize: 10,
-    letterSpacing: 0.8,
+    letterSpacing: 0.5,
+    lineHeight: 13,
     textTransform: 'uppercase',
   },
   metrics: {
     flexDirection: 'row',
-    marginTop: spacing.md,
-    paddingTop: spacing.sm,
-    borderTopWidth: StyleSheet.hairlineWidth,
+    alignItems: 'flex-start',
+    gap: 4,
+    marginTop: 'auto',
   },
 });

@@ -1,9 +1,12 @@
 import type {
-  TechniqueId,
+  IntensityBand,
   TrainingIntensity,
   WorkoutClassType,
   WorkoutMood,
 } from '../../types/workout';
+import type { TechniqueCategory, TechniqueId } from '../../types/technique';
+import { SYSTEM_TECHNIQUES } from './systemTechniques';
+import { getCategoryLabel } from './techniqueMeta';
 
 export const CLASS_TYPE_OPTIONS: { value: WorkoutClassType; label: string }[] = [
   { value: 'fundamentals', label: 'Fundamentals' },
@@ -22,18 +25,44 @@ export const INTENSITY_OPTIONS: { value: TrainingIntensity; label: string }[] = 
   { value: 'competition_pace', label: 'Competition Pace' },
 ];
 
-export const TECHNIQUE_OPTIONS: { value: TechniqueId; label: string }[] = [
-  { value: 'armbar', label: 'Armbar' },
-  { value: 'triangle', label: 'Triangle' },
-  { value: 'kimura', label: 'Kimura' },
-  { value: 'rear_naked_choke', label: 'Rear Naked Choke' },
-  { value: 'guillotine', label: 'Guillotine' },
-  { value: 'ankle_lock', label: 'Ankle Lock' },
-  { value: 'sweep', label: 'Sweep' },
-  { value: 'guard_pass', label: 'Guard Pass' },
-  { value: 'mount', label: 'Mount' },
-  { value: 'back_control', label: 'Back Control' },
+/** System library options for chips / fallbacks. */
+export const TECHNIQUE_OPTIONS: {
+  value: TechniqueId;
+  label: string;
+  category: TechniqueCategory;
+}[] = SYSTEM_TECHNIQUES.map((technique) => ({
+  value: technique.id,
+  label: technique.name,
+  category: technique.category,
+}));
+
+export const TECHNIQUE_FILTER_OPTIONS: {
+  value: 'all' | TechniqueCategory;
+  label: string;
+}[] = [
+  { value: 'all', label: 'All' },
+  { value: 'submission', label: 'Submissions' },
+  { value: 'sweep', label: 'Sweeps' },
+  { value: 'takedown', label: 'Takedowns' },
+  { value: 'escape', label: 'Escapes' },
+  { value: 'position', label: 'Positions' },
+  { value: 'guard', label: 'Guards' },
+  { value: 'guard_pass', label: 'Passes' },
+  { value: 'transition', label: 'Transitions' },
+  { value: 'other', label: 'Other' },
 ];
+
+export const SUGGESTED_PARTNERS = [
+  'Marco',
+  'James',
+  'Chris',
+  'David',
+  'Jordan',
+  'Alex',
+  'Sam',
+  'Diego',
+  'Maya',
+] as const;
 
 export const MOOD_OPTIONS: {
   value: WorkoutMood;
@@ -57,10 +86,88 @@ export function getClassTypeLabel(value: WorkoutClassType): string {
   return CLASS_TYPE_OPTIONS.find((item) => item.value === value)?.label ?? value;
 }
 
+/** Fallback label lookup from the system library only. */
 export function getTechniqueLabel(value: TechniqueId): string {
-  return TECHNIQUE_OPTIONS.find((item) => item.value === value)?.label ?? value;
+  return (
+    TECHNIQUE_OPTIONS.find((item) => item.value === value)?.label ??
+    value
+      .replace(/^custom[-_]/, '')
+      .replace(/[-_]/g, ' ')
+      .replace(/\b\w/g, (char) => char.toUpperCase())
+  );
+}
+
+export function getTechniqueCategory(
+  value: TechniqueId,
+): TechniqueCategory | undefined {
+  return TECHNIQUE_OPTIONS.find((item) => item.value === value)?.category;
 }
 
 export function getIntensityLabel(value: TrainingIntensity): string {
   return INTENSITY_OPTIONS.find((item) => item.value === value)?.label ?? value;
 }
+
+export function intensityCategoryToScore(
+  intensity: TrainingIntensity,
+): number {
+  switch (intensity) {
+    case 'easy':
+      return 3;
+    case 'moderate':
+      return 5;
+    case 'hard':
+      return 7;
+    case 'competition_pace':
+      return 9;
+    default:
+      return 5;
+  }
+}
+
+export function intensityScoreToCategory(score: number): TrainingIntensity {
+  if (score <= 3) {
+    return 'easy';
+  }
+  if (score <= 6) {
+    return 'moderate';
+  }
+  if (score <= 8) {
+    return 'hard';
+  }
+  return 'competition_pace';
+}
+
+export function intensityScoreToBand(score: number): IntensityBand {
+  if (score <= 3) {
+    return 'Light';
+  }
+  if (score <= 6) {
+    return 'Moderate';
+  }
+  if (score <= 8) {
+    return 'Hard';
+  }
+  return 'Competition';
+}
+
+export function clampIntensityScore(score: number): number {
+  return Math.min(10, Math.max(1, Math.round(score)));
+}
+
+export function resolveIntensityScore(workout: {
+  intensity: TrainingIntensity;
+  intensityScore?: number | null;
+}): number | null {
+  if (workout.intensityScore === null) {
+    return null;
+  }
+  if (
+    typeof workout.intensityScore === 'number' &&
+    Number.isFinite(workout.intensityScore)
+  ) {
+    return clampIntensityScore(workout.intensityScore);
+  }
+  return intensityCategoryToScore(workout.intensity);
+}
+
+export { getCategoryLabel };

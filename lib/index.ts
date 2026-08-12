@@ -20,6 +20,10 @@ export {
   useAppTheme,
 } from './providers/ThemeProvider';
 export type { AppearancePreference } from './providers/ThemeProvider';
+export {
+  TechniqueProvider,
+  useTechniques,
+} from './providers/TechniqueProvider';
 export { WorkoutProvider, useWorkouts } from './providers/WorkoutProvider';
 export { useThemedStyles } from './theme/useThemedStyles';
 
