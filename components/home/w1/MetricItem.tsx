@@ -2,7 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { useAppTheme } from '../../../lib/providers/ThemeProvider';
-import { fontFamilies, spacing } from '../../../lib/theme';
+import { fontFamilies } from '../../../lib/theme';
 
 interface MetricItemProps {
   label: string;
@@ -16,10 +16,20 @@ export function MetricItem({ label, value, icon }: MetricItemProps) {
   return (
     <View style={styles.wrap} accessibilityLabel={`${label}: ${value}`}>
       {icon ? (
-        <Ionicons name={icon} size={14} color={colors.goldAccent} />
+        <Ionicons name={icon} size={13} color={colors.goldAccent} />
       ) : null}
-      <Text style={[styles.value, { color: colors.text }]}>{value}</Text>
-      <Text style={[styles.label, { color: colors.secondaryText }]}>
+      <Text
+        style={[styles.value, { color: colors.text }]}
+        numberOfLines={1}
+        adjustsFontSizeToFit
+        minimumFontScale={0.85}
+      >
+        {value}
+      </Text>
+      <Text
+        style={[styles.label, { color: colors.secondaryText }]}
+        numberOfLines={2}
+      >
         {label}
       </Text>
     </View>
@@ -29,19 +39,22 @@ export function MetricItem({ label, value, icon }: MetricItemProps) {
 const styles = StyleSheet.create({
   wrap: {
     flex: 1,
+    minWidth: 0,
     alignItems: 'center',
-    gap: 3,
-    paddingVertical: spacing.xxs,
+    gap: 2,
+    paddingHorizontal: 2,
   },
   value: {
     fontFamily: fontFamilies.bold,
-    fontSize: 16,
-    letterSpacing: 0.2,
+    fontSize: 15,
+    letterSpacing: 0.1,
+    textAlign: 'center',
   },
   label: {
     fontFamily: fontFamilies.medium,
-    fontSize: 9,
-    letterSpacing: 0.9,
+    fontSize: 8,
+    letterSpacing: 0.4,
+    lineHeight: 10,
     textTransform: 'uppercase',
     textAlign: 'center',
   },

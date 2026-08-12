@@ -25,45 +25,60 @@ export function JourneyCard({ summary, onOpenJourney }: JourneyCardProps) {
       onPress={onOpenJourney}
       accessibilityLabel={`Your journey, level ${summary.level}, ${percent} percent to next level`}
       style={styles.card}
+      padded={false}
     >
-      <SectionLabel>Your Journey</SectionLabel>
+      <View style={styles.inner}>
+        <SectionLabel>Your Journey</SectionLabel>
 
-      <View style={styles.levelRow}>
-        <Text style={[styles.level, { color: colors.text }]}>
-          {`LEVEL ${summary.level}`}
-        </Text>
-        <Text style={[styles.percent, { color: colors.goldAccent }]}>
-          {`${percent}%`}
-        </Text>
-      </View>
+        <View style={styles.levelRow}>
+          <Text
+            style={[styles.level, { color: colors.text }]}
+            numberOfLines={1}
+            adjustsFontSizeToFit
+            minimumFontScale={0.8}
+          >
+            {`LEVEL ${summary.level}`}
+          </Text>
+          <Text style={[styles.percent, { color: colors.goldAccent }]}>
+            {`${percent}%`}
+          </Text>
+        </View>
 
-      <JourneyProgressBar progress={progress} />
+        <JourneyProgressBar progress={progress} />
 
-      <View style={styles.xpBlock}>
-        <Text style={[styles.xpLine, { color: colors.secondaryText }]}>
-          {`${summary.currentXP.toLocaleString()} / ${summary.nextLevelXP.toLocaleString()} XP`}
-        </Text>
-        <Text style={[styles.xpUntil, { color: colors.secondaryText }]}>
-          {`${remaining.toLocaleString()} XP UNTIL LEVEL ${summary.level + 1}`}
-        </Text>
-      </View>
+        <View style={styles.xpBlock}>
+          <Text
+            style={[styles.xpLine, { color: colors.secondaryText }]}
+            numberOfLines={1}
+            adjustsFontSizeToFit
+          >
+            {`${summary.currentXP.toLocaleString()} / ${summary.nextLevelXP.toLocaleString()} XP`}
+          </Text>
+          <Text
+            style={[styles.xpUntil, { color: colors.secondaryText }]}
+            numberOfLines={2}
+          >
+            {`${remaining.toLocaleString()} XP to Level ${summary.level + 1}`}
+          </Text>
+        </View>
 
-      <View style={[styles.metrics, { borderTopColor: colors.border }]}>
-        <MetricItem
-          icon="calendar-outline"
-          label="Training Days"
-          value={`${summary.weeklyTrainingDays}`}
-        />
-        <MetricItem
-          icon="flag-outline"
-          label="Weekly Goal"
-          value={`${summary.weeklyClassesCompleted} / ${summary.weeklyClassGoal}`}
-        />
-        <MetricItem
-          icon="flame-outline"
-          label="Streak"
-          value={`${summary.currentStreak} Days`}
-        />
+        <View style={[styles.metrics, { borderTopColor: colors.border }]}>
+          <MetricItem
+            icon="calendar-outline"
+            label="Days"
+            value={`${summary.weeklyTrainingDays}`}
+          />
+          <MetricItem
+            icon="flag-outline"
+            label="Goal"
+            value={`${summary.weeklyClassesCompleted}/${summary.weeklyClassGoal}`}
+          />
+          <MetricItem
+            icon="flame-outline"
+            label="Streak"
+            value={`${summary.currentStreak}`}
+          />
+        </View>
       </View>
     </SurfaceCard>
   );
@@ -72,43 +87,52 @@ export function JourneyCard({ summary, onOpenJourney }: JourneyCardProps) {
 const styles = StyleSheet.create({
   card: {
     flex: 1,
-    minHeight: 280,
+    minHeight: 268,
+  },
+  inner: {
+    flex: 1,
+    padding: 14,
   },
   levelRow: {
     flexDirection: 'row',
     alignItems: 'baseline',
     justifyContent: 'space-between',
+    gap: 8,
     marginTop: spacing.sm,
     marginBottom: spacing.sm,
   },
   level: {
+    flex: 1,
+    minWidth: 0,
     fontFamily: fontFamilies.bold,
-    fontSize: 22,
-    letterSpacing: 0.8,
+    fontSize: 18,
+    letterSpacing: 0.5,
   },
   percent: {
     fontFamily: fontFamilies.bold,
-    fontSize: 20,
-    letterSpacing: 0.4,
+    fontSize: 16,
+    letterSpacing: 0.2,
   },
   xpBlock: {
     marginTop: spacing.sm,
-    gap: 2,
+    gap: 3,
   },
   xpLine: {
     fontFamily: fontFamilies.medium,
-    fontSize: 12,
-    letterSpacing: 0.3,
+    fontSize: 11,
+    letterSpacing: 0.2,
   },
   xpUntil: {
     fontFamily: fontFamilies.medium,
     fontSize: 10,
-    letterSpacing: 0.8,
-    textTransform: 'uppercase',
+    letterSpacing: 0.3,
+    lineHeight: 13,
   },
   metrics: {
     flexDirection: 'row',
-    marginTop: spacing.md,
+    alignItems: 'flex-start',
+    gap: 4,
+    marginTop: 'auto',
     paddingTop: spacing.sm,
     borderTopWidth: StyleSheet.hairlineWidth,
   },
