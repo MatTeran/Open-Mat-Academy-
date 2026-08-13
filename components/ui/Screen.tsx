@@ -25,7 +25,7 @@ export interface ScreenProps extends PropsWithChildren {
 }
 
 /**
- * Standard screen shell with Open Mat background + safe areas.
+ * Standard screen shell with My Gi background + safe areas.
  * Safe-area padding is applied last so callers cannot override it.
  */
 export function Screen({

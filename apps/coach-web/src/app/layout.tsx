@@ -16,8 +16,8 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: 'Open Mat Coach',
-  description: 'Desktop command center for Open Mat academies.',
+  title: 'My Gi Coach',
+  description: 'Desktop command center for My Gi academies.',
 };
 
 export default function RootLayout({

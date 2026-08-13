@@ -44,7 +44,7 @@ export function MembershipScreen({ navigation }: Props) {
       <Spacer size="md" />
       <Text variant="hero">Membership</Text>
       <Spacer size="sm" />
-      <Text variant="bodyMuted">Your Open Mat membership details.</Text>
+      <Text variant="bodyMuted">Your My Gi membership details.</Text>
 
       <Spacer size="xl" />
 

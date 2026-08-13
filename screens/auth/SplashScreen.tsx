@@ -58,7 +58,7 @@ export function SplashScreen({ navigation }: Props) {
           source={require('../../assets/brand-logo.png')}
           style={styles.logo}
           resizeMode="contain"
-          accessibilityLabel="Open Mat"
+          accessibilityLabel="My Gi"
         />
         <Text variant="bodyMuted" style={styles.tagline}>
           {APP_TAGLINE}

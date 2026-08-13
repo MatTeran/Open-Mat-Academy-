@@ -10,7 +10,7 @@ export type Weekday =
 export type GiType = 'gi' | 'no_gi' | 'gi_no_gi' | 'none';
 
 /**
- * Open Mat Academy flyer programs (+ seminar for one-off events).
+ * My Gi flyer programs (+ seminar for one-off events).
  */
 export type ClassLevel =
   | 'adult_bjj'

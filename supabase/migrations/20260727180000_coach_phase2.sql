@@ -1,4 +1,4 @@
--- Open Mat Coach Phase 2 schema
+-- My Gi Coach Phase 2 schema
 -- Techniques, challenges, achievements, events, media, notification drafts.
 -- Journey XP remains system-owned (no coach write path).
 

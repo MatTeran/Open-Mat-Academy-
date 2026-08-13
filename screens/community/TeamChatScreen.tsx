@@ -75,7 +75,7 @@ export function TeamChatScreen({ navigation }: Props) {
   const handleSend = () => {
     sendChatMessage(
       draft,
-      user?.fullName || user?.email || 'Open Mat Athlete',
+      user?.fullName || user?.email || 'My Gi Athlete',
     );
     setDraft('');
   };
@@ -85,7 +85,7 @@ export function TeamChatScreen({ navigation }: Props) {
       <View style={styles.header}>
         <Button label="Back" variant="ghost" onPress={() => navigation.goBack()} />
         <Text variant="subtitle">Team Chat</Text>
-        <Text variant="caption">Open Mat athletes</Text>
+        <Text variant="caption">My Gi athletes</Text>
       </View>
 
       <FlatList

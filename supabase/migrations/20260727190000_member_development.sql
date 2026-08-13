@@ -1,4 +1,4 @@
--- Open Mat Coach — Member Development schema
+-- My Gi Coach — Member Development schema
 -- Official academy progression records (belt, stripes, competition, roles).
 -- Journey XP is intentionally separate and NEVER drives promotions.
 -- Coach notes remain private (coach/manager/owner only).
