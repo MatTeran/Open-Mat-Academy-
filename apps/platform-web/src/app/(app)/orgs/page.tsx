@@ -6,7 +6,7 @@ import { getTenantDirectory } from '@/lib/data/tenantDirectory';
 
 export default async function OrganizationsPage() {
   const session = await requirePlatformSession();
-  const orgs = await getTenantDirectory().listOrganizations();
+  const orgs = await (await getTenantDirectory()).listOrganizations();
 
   return (
     <div className="space-y-10">

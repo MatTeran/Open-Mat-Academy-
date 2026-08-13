@@ -33,12 +33,21 @@ Academy `owner` / `coach` does **not** grant Command Center access.
 
 ## Live setup
 
-1. Apply `supabase/migrations/20260813140000_platform_admins.sql`
-2. Insert a platform admin for your user id (see `scripts/seed-platform-admin.sql`)
-3. Configure `NEXT_PUBLIC_SUPABASE_URL` + publishable key for `platform-web`
-4. Wire Supabase SSR session (next slice) — demo mode ships today
+1. In Supabase SQL Editor, run `scripts/apply-platform-admins-live.sql`  
+   (creates `platform_admins`, RLS helpers, seeds test ops user)
+2. Copy `apps/platform-web/.env.example` → `.env.local` with your project URL + publishable key  
+   Set `NEXT_PUBLIC_PLATFORM_WEB_DEMO=0`
+3. `npm run start:platform-web` → sign in with platform ops credentials
+
+### Test ops login (seeded by apply script)
+
+- Email: `platform.ops@mygi.test`
+- Password: `PlatformOps!23456`
+
+Live mode reads/writes the same `organizations`, `academies`, `locations`, and `academy_memberships` tables used by Coach and Member apps.
 
 ## Security notes
 
 - Never put `SUPABASE_SERVICE_ROLE_KEY` in client bundles
 - Platform RLS policies are additive; academy membership RLS remains in force for non-platform users
+- Academy `owner`/`coach` JWT roles do **not** grant Command Center access

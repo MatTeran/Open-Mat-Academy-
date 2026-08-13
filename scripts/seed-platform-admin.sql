@@ -1,12 +1,16 @@
--- Seed a My Gi Command Center platform admin.
--- Replace the UUID with a real auth.users id before running.
+-- Seed My Gi Command Center platform admin(s).
+-- Requires platform_admins table (apply-platform-admins-live.sql / migration).
 
--- Example:
+-- Test ops user used for live Command Center verification:
+insert into public.platform_admins (user_id, role)
+values ('443cb189-f73e-4b42-ba6c-8effb79733af'::uuid, 'ops')
+on conflict (user_id) do update
+  set role = excluded.role,
+      updated_at = timezone('utc', now());
+
+-- Optional: add your own auth user as superadmin
 -- insert into public.platform_admins (user_id, role)
--- values ('00000000-0000-0000-0000-000000000000'::uuid, 'ops')
--- on conflict (user_id) do update
---   set role = excluded.role,
---       updated_at = timezone('utc', now());
+-- values ('YOUR-AUTH-USER-UUID'::uuid, 'superadmin')
+-- on conflict (user_id) do update set role = excluded.role;
 
-select
-  'Replace the UUID in this script with your auth user id, then uncomment the insert.' as next_step;
+select user_id, role from public.platform_admins order by created_at;

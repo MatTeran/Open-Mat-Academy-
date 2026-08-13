@@ -1,9 +1,15 @@
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
+import type { AuthUser, PlatformAdmin } from '@openmat/shared/types';
+
+import { createSupabaseServerClient } from '@/lib/supabase/server';
+
 import {
+  buildPlatformSession,
   getDemoPlatformSession,
   isDemoMode,
+  mapPlatformAdminRow,
   type PlatformSession,
 } from './permissions';
 
@@ -18,8 +24,39 @@ export async function getPlatformSession(): Promise<PlatformSession | null> {
     return getDemoPlatformSession();
   }
 
-  // Live Supabase SSR + platform_admins lookup lands with env keys.
-  return null;
+  const supabase = await createSupabaseServerClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) {
+    return null;
+  }
+
+  const { data: adminRow, error } = await supabase
+    .from('platform_admins')
+    .select('*')
+    .eq('user_id', user.id)
+    .maybeSingle();
+
+  if (error || !adminRow) {
+    return null;
+  }
+
+  const authUser: AuthUser = {
+    id: user.id,
+    email: user.email ?? '',
+    fullName:
+      (user.user_metadata?.full_name as string | undefined) ??
+      user.email ??
+      'Platform admin',
+    role: 'admin',
+  };
+
+  const admins: PlatformAdmin[] = [
+    mapPlatformAdminRow(adminRow as Record<string, unknown>),
+  ];
+
+  return buildPlatformSession(authUser, admins);
 }
 
 export async function requirePlatformSession(): Promise<PlatformSession> {

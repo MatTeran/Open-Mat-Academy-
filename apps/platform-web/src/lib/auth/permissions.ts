@@ -5,6 +5,8 @@ import {
   isPlatformAdmin,
 } from '@openmat/shared/auth/platform';
 
+import { isSupabasePublicConfigured } from '@/lib/supabase/env';
+
 export interface PlatformSession {
   user: AuthUser;
   platformRole: PlatformAdminRole;
@@ -27,12 +29,18 @@ export const DEMO_PLATFORM_ADMINS: PlatformAdmin[] = [
   },
 ];
 
+/**
+ * Demo when explicitly forced, or when no Supabase public keys are present.
+ * Set NEXT_PUBLIC_PLATFORM_WEB_DEMO=0 to require live auth when keys exist.
+ */
 export function isDemoMode(): boolean {
-  return (
-    process.env.NEXT_PUBLIC_PLATFORM_WEB_DEMO === '1' ||
-    !process.env.NEXT_PUBLIC_SUPABASE_URL ||
-    !process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
-  );
+  if (process.env.NEXT_PUBLIC_PLATFORM_WEB_DEMO === '1') {
+    return true;
+  }
+  if (process.env.NEXT_PUBLIC_PLATFORM_WEB_DEMO === '0') {
+    return false;
+  }
+  return !isSupabasePublicConfigured();
 }
 
 export function getDemoPlatformSession(): PlatformSession {
@@ -51,5 +59,16 @@ export function buildPlatformSession(
     user,
     platformRole: admin.role,
     canMutateTenants: canManagePlatformTenants(admins, user.id),
+  };
+}
+
+export function mapPlatformAdminRow(
+  row: Record<string, unknown>,
+): PlatformAdmin {
+  return {
+    userId: String(row.user_id),
+    role: row.role as PlatformAdminRole,
+    createdAt: String(row.created_at),
+    updatedAt: String(row.updated_at),
   };
 }

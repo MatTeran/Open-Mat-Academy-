@@ -7,12 +7,16 @@ import type {
   OrganizationStatus,
 } from '@openmat/shared/types';
 
+import { isDemoMode } from '@/lib/auth/permissions';
+import { createSupabaseServerClient } from '@/lib/supabase/server';
+
 import {
   FIXTURE_ACADEMIES,
   FIXTURE_LOCATIONS,
   FIXTURE_MEMBERSHIPS,
   FIXTURE_ORGS,
 } from './fixtures';
+import { createSupabaseTenantDirectory } from './supabaseTenantDirectory';
 
 export interface TenantDirectory {
   listOrganizations(): Promise<Organization[]>;
@@ -132,11 +136,16 @@ export function createMemoryTenantDirectory(
   };
 }
 
-let singleton: TenantDirectory | null = null;
+let memorySingleton: TenantDirectory | null = null;
 
-export function getTenantDirectory(): TenantDirectory {
-  if (!singleton) {
-    singleton = createMemoryTenantDirectory();
+export async function getTenantDirectory(): Promise<TenantDirectory> {
+  if (isDemoMode()) {
+    if (!memorySingleton) {
+      memorySingleton = createMemoryTenantDirectory();
+    }
+    return memorySingleton;
   }
-  return singleton;
+
+  const client = await createSupabaseServerClient();
+  return createSupabaseTenantDirectory(client);
 }

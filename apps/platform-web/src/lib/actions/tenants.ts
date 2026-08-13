@@ -23,7 +23,8 @@ export async function createOrganizationAction(formData: FormData) {
   }
 
   const id = `org-${slug}`;
-  const org = await getTenantDirectory().createOrganization({ id, name, slug });
+  const directory = await getTenantDirectory();
+  const org = await directory.createOrganization({ id, name, slug });
   revalidatePath('/orgs');
   redirect(`/orgs/${org.id}`);
 }
@@ -39,7 +40,8 @@ export async function createAcademyAction(formData: FormData) {
     throw new Error('Organization, name, and slug are required.');
   }
 
-  const academy = await getTenantDirectory().createAcademy({
+  const directory = await getTenantDirectory();
+  const academy = await directory.createAcademy({
     id: `academy-${slug}`,
     name,
     organizationId,
@@ -59,6 +61,7 @@ export async function assignOwnerAction(formData: FormData) {
     throw new Error('Academy and user id are required.');
   }
 
-  await getTenantDirectory().assignAcademyOwner({ academyId, userId });
+  const directory = await getTenantDirectory();
+  await directory.assignAcademyOwner({ academyId, userId });
   revalidatePath(`/academies/${academyId}`);
 }

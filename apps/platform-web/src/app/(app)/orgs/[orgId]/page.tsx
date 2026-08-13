@@ -12,7 +12,7 @@ export default async function OrganizationDetailPage({
 }) {
   const { orgId } = await params;
   const session = await requirePlatformSession();
-  const directory = getTenantDirectory();
+  const directory = await getTenantDirectory();
   const org = await directory.getOrganization(orgId);
   if (!org) notFound();
 

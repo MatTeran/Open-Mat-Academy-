@@ -1,14 +1,25 @@
 import { redirect } from 'next/navigation';
 
-import { BrandMark, SignInButton } from '@/components/auth/AuthActions';
+import {
+  BrandMark,
+  LiveSignInForm,
+  SignInButton,
+} from '@/components/auth/AuthActions';
 import { isDemoMode } from '@/lib/auth/permissions';
 import { getPlatformSession } from '@/lib/auth/session';
 
-export default async function LoginPage() {
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams?: Promise<{ error?: string }>;
+}) {
   const session = await getPlatformSession();
   if (session) {
     redirect('/orgs');
   }
+
+  const params = (await searchParams) ?? {};
+  const demo = isDemoMode();
 
   return (
     <div className="relative flex min-h-screen items-center px-6">
@@ -20,7 +31,8 @@ export default async function LoginPage() {
           </h1>
           <p className="mt-5 max-w-lg text-base leading-7 text-mute">
             My Gi Command Center manages organizations, academies, locations, and
-            owner assignment — separate from Coach Web mission control.
+            owner assignment — wired to the same Supabase tenant tables as Coach
+            and Member apps.
           </p>
         </section>
         <section className="rounded-2xl border border-line bg-panel/90 p-8 shadow-[0_20px_60px_rgba(20,32,26,0.08)]">
@@ -30,18 +42,22 @@ export default async function LoginPage() {
             not enough.
           </p>
           <div className="mt-8">
-            {isDemoMode() ? (
+            {demo ? (
               <>
                 <SignInButton />
                 <p className="mt-4 text-xs text-mute">
-                  Demo mode uses in-memory tenant fixtures for local review.
+                  Demo mode (in-memory fixtures). Set Supabase env keys and
+                  `NEXT_PUBLIC_PLATFORM_WEB_DEMO=0` for live data.
                 </p>
               </>
             ) : (
-              <p className="rounded-lg border border-line bg-canvas px-4 py-3 text-sm text-mute">
-                Configure Supabase env keys and seed a platform admin to enable
-                live auth.
-              </p>
+              <>
+                <LiveSignInForm error={params.error} />
+                <p className="mt-4 text-xs text-mute">
+                  Live mode reads organizations, academies, locations, and
+                  memberships from Supabase.
+                </p>
+              </>
             )}
           </div>
         </section>

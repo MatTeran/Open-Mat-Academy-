@@ -12,7 +12,7 @@ export default async function AcademyDetailPage({
 }) {
   const { academyId } = await params;
   const session = await requirePlatformSession();
-  const directory = getTenantDirectory();
+  const directory = await getTenantDirectory();
   const academy = await directory.getAcademy(academyId);
   if (!academy) notFound();
 
