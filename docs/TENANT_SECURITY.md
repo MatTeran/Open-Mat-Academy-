@@ -46,3 +46,18 @@ UI hiding is not security. Enforcement is in Postgres RLS + server/repository ac
 ## Isolation tests
 
 See `apps/coach-web/src/__tests__/tenancy.test.ts` (synthetic `academy-test-a` / `academy-test-b`).
+
+### Live Supabase verification (2026-08-13)
+
+Project `saaeseerywmcpmnjjgap` with test academies A/B and six auth users:
+
+| Surface | Result |
+| --- | --- |
+| classes / notes / academies / locations read isolation | PASS |
+| cross-tenant class/note writes denied | PASS |
+| same-tenant class/note writes allowed for coaches | PASS |
+| memberships roster scoped to coached academies | PASS (after policy hard-reset) |
+| members see only own membership row | PASS |
+| dual-academy coach sees A+B only | PASS |
+
+Authenticated REST matrix: **36/36 passed**.

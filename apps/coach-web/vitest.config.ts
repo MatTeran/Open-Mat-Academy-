@@ -6,6 +6,15 @@ export default defineConfig({
     environment: 'node',
     include: ['src/__tests__/**/*.test.ts'],
     globals: false,
+    // Unit tests exercise memory repositories / local fixtures.
+    // Clear live Supabase secrets so CI/agents with injected env don't hit PostgREST.
+    env: {
+      EXPO_PUBLIC_SUPABASE_URL: '',
+      EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY: '',
+      EXPO_PUBLIC_SUPABASE_ANON_KEY: '',
+      SUPABASE_SERVICE_ROLE_KEY: '',
+      SUPABASE_DB_URL: '',
+    },
   },
   define: {
     __DEV__: false,
