@@ -13,7 +13,7 @@ UI hiding is not security. Enforcement is in Postgres RLS + server/repository ac
 | organizations | members of org academies | — | — | — | via academies↔memberships | membership |
 | academies | member | — | — | — | `is_academy_member(id)` | membership |
 | locations | member | manager | manager | manager | `academy_id` | coach/manage |
-| academy_memberships | self or manager | manager | manager | manager | `academy_id` | manage |
+| academy_memberships | self or coach-at-academy | manager | manager | manager | `academy_id` | coach read / manage write |
 | announcements | member (published/own/coach) | coach | coach | manager | `academy_id` | coach/manage |
 | coach_classes | member | coach | coach | manager | `academy_id` | coach/manage |
 | attendance | own or coach | coach | coach | manager | via `class_academy_id` | coach/manage |

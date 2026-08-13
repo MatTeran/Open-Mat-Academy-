@@ -453,12 +453,14 @@ create policy "Managers can delete academy locations"
   using (public.can_manage_academy(academy_id));
 
 -- academy_memberships
+-- Coaches/managers may read the roster for academies they coach at; members see self only.
 drop policy if exists "Users can read own academy memberships" on public.academy_memberships;
-create policy "Users can read relevant academy memberships"
+drop policy if exists "Users can read relevant academy memberships" on public.academy_memberships;
+create policy "Users can read academy memberships in scope"
   on public.academy_memberships for select to authenticated
   using (
     user_id = auth.uid()
-    or public.can_manage_academy(academy_id)
+    or public.can_coach_at_academy(academy_id)
   );
 
 create policy "Managers can insert academy memberships"
