@@ -42,8 +42,8 @@ yarn-error.*
 /android
 
 # Next.js
-apps/coach-web/.next/
-apps/coach-web/out/
+apps/*/.next/
+apps/*/out/
 
 
 # App Store Connect API keys
