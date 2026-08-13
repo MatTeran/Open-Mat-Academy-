@@ -176,3 +176,8 @@ export {
   TEST_ACADEMY_A_ID,
   TEST_ACADEMY_B_ID,
 } from './tenancy';
+export type {
+  PlatformAdmin,
+  PlatformAdminRole,
+  PlatformSessionContext,
+} from './platform';

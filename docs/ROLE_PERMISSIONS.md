@@ -42,7 +42,19 @@ Legacy JWT helpers in `auth/roles.ts` remain for demo UI gates only.
 
 ## Platform roles
 
-Deferred to My Gi Command Center. Do not overload academy `admin`/`owner` for platform administration.
+Stored on `platform_admins.role` (My Gi Command Center only):
+
+| Role | Directory read | Create org/academy / assign owner | Manage platform allowlist |
+| --- | --- | --- | --- |
+| `support` | Yes | No | No |
+| `ops` | Yes | Yes | No |
+| `superadmin` | Yes | Yes | Yes (future UI) |
+
+Helpers: `isPlatformAdmin`, `canManagePlatformTenants`, `canAssignPlatformAdmins` in `@openmat/shared/auth/platform`.
+
+SQL: `is_platform_admin()`, `platform_admin_role()`.
+
+Do **not** overload academy `admin`/`owner` for platform administration.
 
 ## Leadership tags vs login roles
 

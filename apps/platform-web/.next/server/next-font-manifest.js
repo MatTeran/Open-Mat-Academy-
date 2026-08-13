@@ -1,0 +1,1 @@
+self.__NEXT_FONT_MANIFEST='{"pages":{},"app":{"/workspace/apps/platform-web/src/app/layout":["static/media/af4bf8399d1aacdf-s.p.woff2","static/media/de42cfb9a3b980ae-s.p.woff2"]},"appUsingSizeAdjust":true,"pagesUsingSizeAdjust":false}';
