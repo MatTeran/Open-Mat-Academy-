@@ -59,7 +59,7 @@ async function ensureAndroidChannel(): Promise<void> {
   }
 
   await Notifications.setNotificationChannelAsync(ANDROID_CHANNEL_ID, {
-    name: 'Open Mat',
+    name: 'My Gi',
     importance: Notifications.AndroidImportance.DEFAULT,
     vibrationPattern: [0, 180],
     lightColor: '#FFFFFF',
@@ -121,7 +121,7 @@ export async function enablePushNotifications(input: {
       return {
         status: 'blocked',
         message:
-          'Notifications are turned off for Open Mat. Enable them in device Settings.',
+          'Notifications are turned off for My Gi. Enable them in device Settings.',
         canOpenSettings: true,
       };
     }

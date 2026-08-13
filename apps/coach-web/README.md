@@ -1,6 +1,6 @@
-# Open Mat Coach Web
+# My Gi Coach Web
 
-Desktop-first Coach dashboard (Next.js App Router) in the Open Mat monorepo.
+Desktop-first Coach dashboard (Next.js App Router) in the My Gi monorepo.
 
 ## Stack
 

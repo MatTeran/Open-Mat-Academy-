@@ -50,7 +50,7 @@ export function AnnouncementDetailScreen({ navigation, route }: Props) {
     addComment(
       announcement.id,
       comment,
-      user?.fullName || user?.email || 'Open Mat Athlete',
+      user?.fullName || user?.email || 'My Gi Athlete',
     );
     setComment('');
   };

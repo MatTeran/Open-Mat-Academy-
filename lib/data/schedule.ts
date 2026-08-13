@@ -96,7 +96,7 @@ function cls(
 }
 
 /**
- * Official Open Mat Academy weekly class board
+ * Official My Gi weekly class board
  * (3200 Naglee Rd STE #106, Tracy CA).
  */
 export const WEEKLY_SCHEDULE: ScheduleClass[] = [
@@ -105,7 +105,7 @@ export const WEEKLY_SCHEDULE: ScheduleClass[] = [
     note: 'Roll Call · Band App',
     spotsLeft: 10,
   }),
-  cls('mon', '10:00', '11:00', 'Peak Performance', 'peak_performance', 'none', 'Open Mat Staff'),
+  cls('mon', '10:00', '11:00', 'Peak Performance', 'peak_performance', 'none', 'My Gi Staff'),
   cls('mon', '11:00', '12:30', 'Jiu Jitsu GI', 'adult_bjj', 'gi', 'Coach Silva', {
     id: 'mon-1100-jiu-jitsu-gi',
     spotsLeft: 14,
@@ -124,7 +124,7 @@ export const WEEKLY_SCHEDULE: ScheduleClass[] = [
     id: 'mon-1630-youth-boxing',
     spotsLeft: 12,
   }),
-  cls('mon', '16:30', '17:30', 'Peak Performance', 'peak_performance', 'none', 'Open Mat Staff', {
+  cls('mon', '16:30', '17:30', 'Peak Performance', 'peak_performance', 'none', 'My Gi Staff', {
     id: 'mon-1630-peak',
   }),
   cls('mon', '17:00', '18:30', 'Muay Thai (Teens/Adults)', 'muay_thai', 'none', 'Coach MT', {
@@ -137,7 +137,7 @@ export const WEEKLY_SCHEDULE: ScheduleClass[] = [
   cls('mon', '17:30', '18:15', 'Tae Kwon Do (Beginner)', 'taekwondo', 'none', 'Coach TKD', {
     spotsLeft: 12,
   }),
-  cls('mon', '17:30', '18:30', 'Peak Performance', 'peak_performance', 'none', 'Open Mat Staff', {
+  cls('mon', '17:30', '18:30', 'Peak Performance', 'peak_performance', 'none', 'My Gi Staff', {
     id: 'mon-1730-peak',
   }),
   cls('mon', '18:15', '19:00', 'Tae Kwon Do (Inter/Adv)', 'taekwondo', 'none', 'Coach TKD', {
@@ -153,14 +153,14 @@ export const WEEKLY_SCHEDULE: ScheduleClass[] = [
   }),
 
   // —— Tuesday ——
-  cls('tue', '10:00', '11:00', 'Peak Performance', 'peak_performance', 'none', 'Open Mat Staff'),
+  cls('tue', '10:00', '11:00', 'Peak Performance', 'peak_performance', 'none', 'My Gi Staff'),
   cls('tue', '16:00', '16:30', 'Pee Wee BJJ (Ages 4–7)', 'pee_wee_bjj', 'gi', 'Coach Park', {
     spotsLeft: 8,
   }),
   cls('tue', '16:30', '17:30', 'Youth BJJ (Ages 8–12)', 'youth_bjj', 'gi', 'Coach Park', {
     spotsLeft: 10,
   }),
-  cls('tue', '16:30', '17:30', 'Peak Performance', 'peak_performance', 'none', 'Open Mat Staff', {
+  cls('tue', '16:30', '17:30', 'Peak Performance', 'peak_performance', 'none', 'My Gi Staff', {
     id: 'tue-1630-peak',
   }),
   cls('tue', '17:00', '18:30', 'Muay Thai (Youth/Adults)', 'muay_thai', 'none', 'Coach MT', {
@@ -169,7 +169,7 @@ export const WEEKLY_SCHEDULE: ScheduleClass[] = [
   cls('tue', '17:30', '18:00', 'Wrestling (Ages 5–11)', 'wrestling', 'none', 'Coach Wrestling', {
     spotsLeft: 12,
   }),
-  cls('tue', '17:30', '18:30', 'Peak Performance', 'peak_performance', 'none', 'Open Mat Staff', {
+  cls('tue', '17:30', '18:30', 'Peak Performance', 'peak_performance', 'none', 'My Gi Staff', {
     id: 'tue-1730-peak',
   }),
   cls('tue', '18:00', '19:00', 'Wrestling (Ages 12–17)', 'wrestling', 'none', 'Coach Wrestling', {
@@ -188,7 +188,7 @@ export const WEEKLY_SCHEDULE: ScheduleClass[] = [
     note: 'Roll Call · Band App',
     spotsLeft: 10,
   }),
-  cls('wed', '10:00', '11:00', 'Peak Performance', 'peak_performance', 'none', 'Open Mat Staff'),
+  cls('wed', '10:00', '11:00', 'Peak Performance', 'peak_performance', 'none', 'My Gi Staff'),
   cls('wed', '10:00', '11:00', "Women's BJJ", 'womens_bjj', 'gi', 'Coach Mendes', {
     id: 'wed-1000-womens-bjj',
     spotsLeft: 10,
@@ -207,7 +207,7 @@ export const WEEKLY_SCHEDULE: ScheduleClass[] = [
     id: 'wed-1630-youth-boxing',
     spotsLeft: 12,
   }),
-  cls('wed', '16:30', '17:30', 'Peak Performance', 'peak_performance', 'none', 'Open Mat Staff', {
+  cls('wed', '16:30', '17:30', 'Peak Performance', 'peak_performance', 'none', 'My Gi Staff', {
     id: 'wed-1630-peak',
   }),
   cls('wed', '17:00', '18:30', 'Muay Thai (Teens/Adults)', 'muay_thai', 'none', 'Coach MT', {
@@ -220,7 +220,7 @@ export const WEEKLY_SCHEDULE: ScheduleClass[] = [
   cls('wed', '17:30', '18:15', 'Tae Kwon Do (Beginner)', 'taekwondo', 'none', 'Coach TKD', {
     spotsLeft: 12,
   }),
-  cls('wed', '17:30', '18:30', 'Peak Performance', 'peak_performance', 'none', 'Open Mat Staff', {
+  cls('wed', '17:30', '18:30', 'Peak Performance', 'peak_performance', 'none', 'My Gi Staff', {
     id: 'wed-1730-peak',
   }),
   cls('wed', '18:15', '19:00', 'Tae Kwon Do (Inter/Adv)', 'taekwondo', 'none', 'Coach TKD', {
@@ -236,14 +236,14 @@ export const WEEKLY_SCHEDULE: ScheduleClass[] = [
   }),
 
   // —— Thursday ——
-  cls('thu', '10:00', '11:00', 'Peak Performance', 'peak_performance', 'none', 'Open Mat Staff'),
+  cls('thu', '10:00', '11:00', 'Peak Performance', 'peak_performance', 'none', 'My Gi Staff'),
   cls('thu', '16:00', '16:30', 'Pee Wee BJJ (No GI Ages 4–7)', 'pee_wee_bjj', 'no_gi', 'Coach Park', {
     spotsLeft: 8,
   }),
   cls('thu', '16:30', '17:30', 'Youth BJJ (No GI Ages 8–12)', 'youth_bjj', 'no_gi', 'Coach Park', {
     spotsLeft: 10,
   }),
-  cls('thu', '16:30', '17:30', 'Peak Performance', 'peak_performance', 'none', 'Open Mat Staff', {
+  cls('thu', '16:30', '17:30', 'Peak Performance', 'peak_performance', 'none', 'My Gi Staff', {
     id: 'thu-1630-peak',
   }),
   cls('thu', '17:00', '18:30', 'Muay Thai (Teens/Adults)', 'muay_thai', 'none', 'Coach MT', {
@@ -256,7 +256,7 @@ export const WEEKLY_SCHEDULE: ScheduleClass[] = [
   cls('thu', '17:30', '18:00', 'Wrestling (Ages 5–11)', 'wrestling', 'none', 'Coach Wrestling', {
     spotsLeft: 12,
   }),
-  cls('thu', '17:30', '18:30', 'Peak Performance', 'peak_performance', 'none', 'Open Mat Staff', {
+  cls('thu', '17:30', '18:30', 'Peak Performance', 'peak_performance', 'none', 'My Gi Staff', {
     id: 'thu-1730-peak',
   }),
   cls('thu', '18:00', '19:00', 'Wrestling (Ages 12–17)', 'wrestling', 'none', 'Coach Wrestling', {
@@ -315,20 +315,20 @@ export const WEEKLY_SCHEDULE: ScheduleClass[] = [
   cls('sat', '10:00', '12:00', 'Open Mat (GI / No GI)', 'open_mat', 'gi_no_gi', 'Coach Silva', {
     spotsLeft: 30,
   }),
-  cls('sat', '10:00', '17:30', 'Open Gym', 'open_mat', 'none', 'Open Mat Staff', {
+  cls('sat', '10:00', '17:30', 'Open Gym', 'open_mat', 'none', 'My Gi Staff', {
     id: 'sat-1000-open-gym',
     spotsLeft: 40,
     note: 'Boxing open during gym hours (except during class)',
   }),
 
   // —— Sunday ——
-  cls('sun', '10:00', '17:30', 'Open Gym', 'open_mat', 'none', 'Open Mat Staff', {
+  cls('sun', '10:00', '17:30', 'Open Gym', 'open_mat', 'none', 'My Gi Staff', {
     spotsLeft: 40,
   }),
 ];
 
 export const SCHEDULE_META = {
-  academy: 'Open Mat Academy',
+  academy: 'My Gi',
   address: '3200 Naglee Rd, STE #106, Tracy CA',
   phone: '(209) 752-8013',
   website: 'openmatacademy.com',

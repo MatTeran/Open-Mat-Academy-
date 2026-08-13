@@ -13,7 +13,7 @@ type Props = {
   showDetail?: boolean;
 };
 
-/** Tiny Open Mat mark + optional serial — readable mostly in detail view. */
+/** Tiny My Gi mark + optional serial — readable mostly in detail view. */
 export function MedalSerialMark({
   cx,
   cy,
