@@ -1,5 +1,5 @@
 /**
- * Open Mat notification domain types.
+ * My Gi notification domain types.
  * Designed so a future Edge Function can emit the same payload shape.
  */
 

@@ -19,7 +19,7 @@ export type MedalMaterial = {
   engraving: string;
 };
 
-/** Open Mat material palette — physical medal language. */
+/** My Gi material palette — physical medal language. */
 export const materialPalette = {
   gunmetal: '#2C3036',
   gunmetalLight: '#5A616B',

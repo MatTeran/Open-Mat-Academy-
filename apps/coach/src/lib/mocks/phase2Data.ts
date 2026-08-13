@@ -230,7 +230,7 @@ export const MOCK_EVENTS: CoachEvent[] = [
     description: 'Inter-academy competition showcase.',
     type: 'competition',
     status: 'published',
-    location: 'Open Mat Academy',
+    location: 'My Gi',
     startAt: `${addDays(TODAY, 12)}T18:00:00.000Z`,
     endAt: `${addDays(TODAY, 12)}T22:00:00.000Z`,
     capacity: 120,

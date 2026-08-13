@@ -2,7 +2,7 @@ import * as Location from 'expo-location';
 
 import type { UserGeoLocation } from '../../types/localEvents';
 
-/** Default to Open Mat academy area when permission is denied. */
+/** Default to My Gi academy area when permission is denied. */
 export const FALLBACK_LOCATION: UserGeoLocation = {
   latitude: 37.7397,
   longitude: -121.4252,

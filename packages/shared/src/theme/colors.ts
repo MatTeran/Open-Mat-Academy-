@@ -1,5 +1,5 @@
 /**
- * Open Mat brand color palettes.
+ * My Gi brand color palettes.
  * Member and Coach share white accents; Coach uses a deeper charcoal surface scale.
  */
 
