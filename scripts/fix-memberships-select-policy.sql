@@ -1,25 +1,40 @@
--- LIVE FIX: academy_memberships cross-tenant SELECT leak
--- Run in Supabase SQL Editor, then reply "memberships fixed"
+-- LIVE FIX v2: hard-reset ALL academy_memberships policies
+-- Previous fix may have left a legacy SELECT policy (policies OR together).
+-- Run entire script in Supabase SQL Editor.
+-- Paste the final "policies_after" result here, then reply "memberships fixed".
 
--- 1) Show current policies (for the record)
-select pol.polname as policy_name,
-       pol.polcmd as cmd,
-       pg_get_expr(pol.polqual, pol.polrelid) as using_expr,
-       pg_get_expr(pol.polwithcheck, pol.polrelid) as with_check_expr
-from pg_policy pol
-join pg_class cls on cls.oid = pol.polrelid
-join pg_namespace nsp on nsp.oid = cls.relnamespace
-where nsp.nspname = 'public'
-  and cls.relname = 'academy_memberships'
-order by pol.polname;
+-- A) Before
+select 'policies_before' as stage,
+       policyname,
+       cmd,
+       roles::text,
+       permissive,
+       qual as using_expr,
+       with_check
+from pg_policies
+where schemaname = 'public'
+  and tablename = 'academy_memberships'
+order by policyname;
 
--- 2) Replace SELECT policies
-drop policy if exists "Users can read own academy memberships" on public.academy_memberships;
-drop policy if exists "Users can read relevant academy memberships" on public.academy_memberships;
-drop policy if exists "Coaches can read academy memberships" on public.academy_memberships;
-drop policy if exists "Members can read academy memberships" on public.academy_memberships;
-drop policy if exists "Users can read academy memberships in scope" on public.academy_memberships;
+-- B) Drop EVERY policy on the table
+do $$
+declare
+  r record;
+begin
+  for r in
+    select policyname
+    from pg_policies
+    where schemaname = 'public'
+      and tablename = 'academy_memberships'
+  loop
+    execute format(
+      'drop policy if exists %I on public.academy_memberships',
+      r.policyname
+    );
+  end loop;
+end $$;
 
+-- C) Recreate only membership-scoped policies
 create policy "Users can read academy memberships in scope"
   on public.academy_memberships for select to authenticated
   using (
@@ -27,13 +42,32 @@ create policy "Users can read academy memberships in scope"
     or public.can_coach_at_academy(academy_id)
   );
 
--- 3) Confirm replacement
-select pol.polname as policy_name,
-       pg_get_expr(pol.polqual, pol.polrelid) as using_expr
-from pg_policy pol
-join pg_class cls on cls.oid = pol.polrelid
-join pg_namespace nsp on nsp.oid = cls.relnamespace
-where nsp.nspname = 'public'
-  and cls.relname = 'academy_memberships'
-  and pol.polcmd = 'r'
-order by pol.polname;
+create policy "Managers can insert academy memberships"
+  on public.academy_memberships for insert to authenticated
+  with check (public.can_manage_academy(academy_id));
+
+create policy "Managers can update academy memberships"
+  on public.academy_memberships for update to authenticated
+  using (public.can_manage_academy(academy_id))
+  with check (public.can_manage_academy(academy_id));
+
+create policy "Managers can delete academy memberships"
+  on public.academy_memberships for delete to authenticated
+  using (public.can_manage_academy(academy_id));
+
+-- D) After (must show exactly 4 policies; SELECT using_expr must mention can_coach_at_academy)
+select 'policies_after' as stage,
+       policyname,
+       cmd,
+       roles::text,
+       qual as using_expr,
+       with_check
+from pg_policies
+where schemaname = 'public'
+  and tablename = 'academy_memberships'
+order by cmd, policyname;
+
+-- E) Helper sanity (optional)
+select
+  public.can_coach_at_academy('academy-test-a') as coach_a_as_sql_editor_uid_null,
+  public.can_manage_academy('academy-test-a') as manage_a_as_sql_editor_uid_null;
