@@ -159,3 +159,20 @@ export type {
   QuickCommandId,
   UpcomingCommandEvent,
 } from './commandCenter';
+export type {
+  Academy,
+  AcademyMembership,
+  AcademyMembershipRole,
+  AcademySessionContext,
+  AcademyStatus,
+  Location,
+  Organization,
+  OrganizationStatus,
+} from './tenancy';
+export {
+  OPEN_MAT_ACADEMY_ID,
+  OPEN_MAT_LOCATION_ID,
+  OPEN_MAT_ORG_ID,
+  TEST_ACADEMY_A_ID,
+  TEST_ACADEMY_B_ID,
+} from './tenancy';

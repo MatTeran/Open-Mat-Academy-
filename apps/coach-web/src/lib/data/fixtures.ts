@@ -76,6 +76,7 @@ const members: CoachMemberProfile[] = [
         authorName: 'Coach Rivera',
         body: 'Strong pressure passer. Work left-side knee cut consistency.',
         isPrivate: true,
+        academyId: 'academy-open-mat',
         createdAt: `${addDays(TODAY, -3)}T15:00:00.000Z`,
         updatedAt: `${addDays(TODAY, -3)}T15:00:00.000Z`,
       },
@@ -201,6 +202,7 @@ const members: CoachMemberProfile[] = [
         authorName: 'Coach Rivera',
         body: 'Consider assistant coaching path.',
         isPrivate: true,
+        academyId: 'academy-open-mat',
         createdAt: `${addDays(TODAY, -10)}T12:00:00.000Z`,
         updatedAt: `${addDays(TODAY, -10)}T12:00:00.000Z`,
       },
@@ -275,6 +277,7 @@ const members: CoachMemberProfile[] = [
 /** Full Open Mat Academy Tracy flyer board for the current week. */
 const classes: CoachClass[] = buildWeeklyCoachClasses({
   academyId: ACADEMY_ID,
+  locationId: 'location-tracy-naglee',
   todayISO: TODAY,
 });
 
@@ -448,6 +451,7 @@ const promotionHistory: PromotionHistoryEntry[] = [
     coachId: 'guest-coach-user',
     coachName: 'Coach Rivera',
     notes: 'Consistent pressure passing.',
+    academyId: 'academy-open-mat',
     createdAt: '2025-09-10T20:00:00.000Z',
   },
   {
@@ -460,6 +464,7 @@ const promotionHistory: PromotionHistoryEntry[] = [
     coachId: 'guest-coach-user',
     coachName: 'Coach Rivera',
     notes: 'Promoted after open mat evaluation.',
+    academyId: 'academy-open-mat',
     createdAt: '2025-03-15T18:30:00.000Z',
   },
   {
@@ -472,6 +477,7 @@ const promotionHistory: PromotionHistoryEntry[] = [
     coachId: 'guest-coach-user',
     coachName: 'Coach Rivera',
     notes: 'Ready for blue belt evaluation.',
+    academyId: 'academy-open-mat',
     createdAt: '2025-11-02T18:00:00.000Z',
   },
 ];
@@ -496,6 +502,7 @@ const academyRoles: AcademyRoleAssignment[] = [
     id: 'role-1',
     memberId: 'member-1',
     role: 'competition_team',
+    academyId: 'academy-open-mat',
     assignedAt: `${addDays(TODAY, -40)}T00:00:00.000Z`,
     assignedById: 'guest-coach-user',
     assignedByName: 'Coach Rivera',
@@ -504,6 +511,7 @@ const academyRoles: AcademyRoleAssignment[] = [
     id: 'role-3',
     memberId: 'member-3',
     role: 'assistant_coach',
+    academyId: 'academy-open-mat',
     assignedAt: `${addDays(TODAY, -60)}T00:00:00.000Z`,
     assignedById: 'guest-coach-user',
     assignedByName: 'Coach Rivera',

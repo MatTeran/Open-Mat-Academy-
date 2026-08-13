@@ -57,6 +57,8 @@ export interface CoachNote {
   body: string;
   /** Private to coaches/staff — never shown in Member app. */
   isPrivate: true;
+  /** Academy that owns this private note (tenant boundary). */
+  academyId: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -64,6 +66,7 @@ export interface CoachNote {
 export interface CreateCoachNoteInput {
   memberId: string;
   body: string;
+  academyId?: string;
 }
 
 export interface CoachMemberProfile {
