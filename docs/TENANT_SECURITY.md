@@ -37,7 +37,7 @@ UI hiding is not security. Enforcement is in Postgres RLS + server/repository ac
 1. **Live memberships must exist** for real Supabase users — demo/guest uses memory fallback and does not insert `auth.users`.
 2. **Member roster repository** is still memory-backed (`profiles` table not yet shared).
 3. **Member development Supabase repository** is still a stub (memory fallback).
-4. **Platform admin** path not implemented — do not grant service-role keys to client apps.
+4. **Platform admin** uses `platform_admins` + `is_platform_admin()` (Command Center). Still do not grant service-role keys to client apps.
 5. Apply migration to the live Supabase project before relying on RLS in production.
 6. Legacy `is_coach_role()` / `is_manager_role()` remain defined but must not be reintroduced into tenant policies.
 7. **Table GRANTs required** — RLS policies alone are not enough. `authenticated` must have `SELECT/INSERT/UPDATE/DELETE` on tenant tables (see `20260813120000_grant_authenticated_table_privileges.sql`). Without grants, PostgREST returns `42501` before RLS runs.

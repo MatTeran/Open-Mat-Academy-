@@ -31,3 +31,10 @@ export {
   resolveAcademySessionContext,
   sharesCoachableAcademyWith,
 } from './membership';
+export {
+  canAssignPlatformAdmins,
+  canManagePlatformTenants,
+  findPlatformAdmin,
+  isPlatformAdmin,
+  isPlatformAdminRole,
+} from './platform';
