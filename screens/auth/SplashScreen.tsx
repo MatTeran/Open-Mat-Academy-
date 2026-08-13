@@ -56,7 +56,7 @@ export function SplashScreen({ navigation }: Props) {
           resizeMode="contain"
           accessibilityLabel="My Gi"
         />
-        <Text variant="bodyMuted" style={styles.tagline}>
+        <Text variant="bodyMuted" style={[styles.tagline, { color: '#C4C0B8' }]}>
           {APP_TAGLINE}
         </Text>
       </Animated.View>
