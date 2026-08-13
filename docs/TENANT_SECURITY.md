@@ -41,6 +41,7 @@ UI hiding is not security. Enforcement is in Postgres RLS + server/repository ac
 5. Apply migration to the live Supabase project before relying on RLS in production.
 6. Legacy `is_coach_role()` / `is_manager_role()` remain defined but must not be reintroduced into tenant policies.
 7. **Table GRANTs required** — RLS policies alone are not enough. `authenticated` must have `SELECT/INSERT/UPDATE/DELETE` on tenant tables (see `20260813120000_grant_authenticated_table_privileges.sql`). Without grants, PostgREST returns `42501` before RLS runs.
+8. **academy_memberships SELECT** must use `can_coach_at_academy(academy_id)` (or tighter), never JWT-only `is_coach_role()` / `is_manager_role()`. A JWT coach role with an unscoped policy exposes every academy roster.
 
 ## Isolation tests
 
