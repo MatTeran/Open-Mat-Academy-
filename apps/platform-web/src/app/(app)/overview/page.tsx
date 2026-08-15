@@ -48,7 +48,7 @@ export default async function OverviewPage() {
         actions={
           <Link
             href="/onboarding/new"
-            className="rounded-lg bg-ink px-4 py-2.5 text-sm font-semibold text-panel hover:bg-ink-soft"
+            className="rounded-xl bg-bronze px-4 py-2.5 text-sm font-semibold text-panel shadow-soft transition hover:bg-bronze-soft"
           >
             Onboard academy
           </Link>

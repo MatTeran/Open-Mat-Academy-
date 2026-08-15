@@ -44,6 +44,7 @@ export const PLATFORM_NAV: NavSection[] = [
       { href: '/data/academy-health', label: 'Academy Health' },
       { href: '/data/engagement', label: 'Engagement' },
       { href: '/data/onboarding-funnel', label: 'Onboarding Funnel' },
+      { href: '/data/integrations', label: 'Integrations' },
     ],
   },
   {
@@ -51,6 +52,7 @@ export const PLATFORM_NAV: NavSection[] = [
     items: [
       { href: '/features', label: 'Features' },
       { href: '/media', label: 'Media' },
+      { href: '/integrations', label: 'Integrations' },
       { href: '/content', label: 'Content' },
       { href: '/notifications', label: 'Notifications' },
     ],

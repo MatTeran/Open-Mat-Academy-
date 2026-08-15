@@ -19,5 +19,5 @@ export const COACH_NAV: CoachNavItem[] = [
   { href: '/community', label: 'Community', soon: true },
   { href: '/announcements', label: 'Announcements' },
   { href: '/analytics', label: 'Analytics', soon: true },
-  { href: '/settings', label: 'Settings', soon: true },
+  { href: '/settings', label: 'Academy Settings' },
 ];

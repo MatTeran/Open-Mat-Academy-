@@ -39,17 +39,17 @@ export interface CoachSession {
 }
 
 const DEMO_USER: AuthUser = {
-  id: 'guest-coach-user',
-  email: 'coach@openmat.demo',
-  fullName: 'Coach Rivera',
-  role: 'coach',
+  id: 'guest-owner-user',
+  email: 'owner@openmat.demo',
+  fullName: 'Owner Rivera',
+  role: 'owner',
 };
 
 const DEMO_MEMBERSHIP: AcademyMembership = {
   id: 'demo-membership-open-mat',
   academyId: OPEN_MAT_ACADEMY_ID,
   userId: DEMO_USER.id,
-  role: 'coach',
+  role: 'owner',
   createdAt: new Date(0).toISOString(),
 };
 

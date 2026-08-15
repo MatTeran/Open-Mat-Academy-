@@ -1,6 +1,7 @@
 import Link from 'next/link';
 
 import { provisionAcademyAction } from '@/lib/actions/provision';
+import { OnboardingStepper } from '@/components/onboarding/OnboardingStepper';
 import { PageHeader } from '@/components/ui/Primitives';
 import { requirePlatformSession } from '@/lib/auth/session';
 import { getTenantDirectory } from '@/lib/data/tenantDirectory';
@@ -26,7 +27,17 @@ export default async function OnboardAcademyPage() {
         description="Create organization (optional), academy, location, owner membership, and trial plan without touching Supabase manually."
       />
 
-      <form action={provisionAcademyAction} className="space-y-8 rounded-card border border-line bg-panel p-6 shadow-soft">
+      <OnboardingStepper activeIndex={0} />
+
+      <p className="mb-6 rounded-xl border border-line bg-panel px-4 py-3 text-sm text-mute">
+        Steps 1–5 are required for launch. Branding and Integrations are optional and never block
+        academy launch.
+      </p>
+
+      <form
+        action={provisionAcademyAction}
+        className="space-y-8 rounded-card border border-line bg-panel p-6 shadow-soft"
+      >
         <section className="space-y-3">
           <h2 className="font-display text-xl text-ink">1. Organization</h2>
           <label className="flex items-center gap-2 text-sm text-ink-soft">
@@ -90,9 +101,21 @@ export default async function OnboardAcademyPage() {
             className="w-full rounded-lg border border-line bg-ivory px-3 py-2 text-sm"
           />
           <div className="grid gap-3 sm:grid-cols-3">
-            <input name="city" placeholder="City" className="rounded-lg border border-line bg-ivory px-3 py-2 text-sm" />
-            <input name="state" placeholder="State" className="rounded-lg border border-line bg-ivory px-3 py-2 text-sm" />
-            <input name="postalCode" placeholder="ZIP" className="rounded-lg border border-line bg-ivory px-3 py-2 text-sm" />
+            <input
+              name="city"
+              placeholder="City"
+              className="rounded-lg border border-line bg-ivory px-3 py-2 text-sm"
+            />
+            <input
+              name="state"
+              placeholder="State"
+              className="rounded-lg border border-line bg-ivory px-3 py-2 text-sm"
+            />
+            <input
+              name="postalCode"
+              placeholder="ZIP"
+              className="rounded-lg border border-line bg-ivory px-3 py-2 text-sm"
+            />
           </div>
           <div className="grid gap-3 sm:grid-cols-2">
             <input
@@ -122,7 +145,8 @@ export default async function OnboardAcademyPage() {
             className="w-full rounded-lg border border-line bg-ivory px-3 py-2 text-sm"
           />
           <p className="text-xs text-mute">
-            Live mode currently requires an existing auth user UUID. Demo mode can assign any id string.
+            Live mode currently requires an existing auth user UUID. Demo mode can assign any id
+            string.
           </p>
         </section>
 
@@ -140,8 +164,18 @@ export default async function OnboardAcademyPage() {
             <option value="enterprise">Enterprise</option>
           </select>
           <p className="text-xs text-mute">
-            Plan records are stored when the operations migration is applied. No payment is charged until Stripe is connected.
+            Plan records are stored when the operations migration is applied. No payment is charged
+            until Stripe is connected.
           </p>
+        </section>
+
+        <section className="space-y-3 rounded-xl border border-dashed border-line bg-ivory/60 p-4">
+          <h2 className="font-display text-xl text-ink">8. Integrations (optional)</h2>
+          <p className="text-sm text-mute">
+            Connect Zendesk or custom webhooks after launch from Academy Settings. Skipping never
+            blocks launch readiness.
+          </p>
+          <p className="text-sm text-mute">Connect now · Skip for later</p>
         </section>
 
         <div className="flex items-center justify-between border-t border-line pt-5">
@@ -150,7 +184,7 @@ export default async function OnboardAcademyPage() {
           </Link>
           <button
             type="submit"
-            className="rounded-lg bg-ink px-5 py-2.5 text-sm font-semibold text-panel hover:bg-ink-soft"
+            className="rounded-xl bg-bronze px-5 py-2.5 text-sm font-semibold text-panel shadow-soft hover:bg-bronze-soft"
           >
             Create academy
           </button>

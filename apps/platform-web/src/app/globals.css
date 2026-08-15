@@ -4,15 +4,15 @@
 
 :root {
   color-scheme: light;
-  --ivory: #f7f4ef;
-  --ivory-2: #f1ece4;
+  --ivory: #f5f3ee;
+  --surface: #faf9f6;
   --panel: #fffcf8;
-  --ink: #1a1a1a;
-  --ink-soft: #3a3a3a;
-  --mute: #6b6560;
-  --line: #e6e0d6;
-  --bronze: #8c6b3e;
-  --bronze-soft: #b08a55;
+  --ink: #20201e;
+  --ink-soft: #3a3936;
+  --mute: #6f6c66;
+  --line: #e8e4dc;
+  --bronze: #9a6735;
+  --bronze-soft: #b07d45;
   --success: #2f6b4f;
   --warning: #9a6b1f;
   --danger: #8b2e2e;
@@ -22,9 +22,7 @@
 html,
 body {
   min-height: 100%;
-  background:
-    radial-gradient(ellipse at top right, rgba(176, 138, 85, 0.08), transparent 42%),
-    var(--ivory);
+  background: var(--ivory);
   color: var(--ink);
 }
 
@@ -38,5 +36,5 @@ body {
 }
 
 ::selection {
-  background: rgba(140, 107, 62, 0.22);
+  background: rgba(154, 103, 53, 0.2);
 }

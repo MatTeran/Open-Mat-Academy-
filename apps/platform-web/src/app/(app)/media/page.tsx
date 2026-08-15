@@ -1,16 +1,8 @@
-import { OpsPlaceholderPage } from '@/components/ui/OpsPlaceholder';
+import { PlatformMediaLibrary } from '@/components/media/PlatformMediaLibrary';
 import { requirePlatformSession } from '@/lib/auth/session';
 
-export default async function Page() {
+export default async function MediaPage() {
   await requirePlatformSession();
-  return (
-    <OpsPlaceholderPage
-      eyebrow='Platform'
-      title='Media'
-      description='Academy branding and media assets.'
-      reasons={[
-    'Uses media_assets + academy-branding / academy-media storage buckets.'
-  ]}
-    />
-  );
+  // Live media_assets query attaches when ops schema is applied; empty is honest.
+  return <PlatformMediaLibrary assets={[]} />;
 }
