@@ -1,31 +1,42 @@
 import type { BeltRank } from '../../../types/user';
+import type { ImageSourcePropType } from 'react-native';
 
 export type BeltStripeCount = 0 | 1 | 2 | 3 | 4;
 
 export interface BeltAppearance {
-  /** Mid cloth fill. */
+  /** Mid cloth fill (legacy / fallback). */
   beltColor: string;
-  /** Deep fold / underside shade. */
   beltShade: string;
-  /** Raised-edge highlight. */
   beltHighlight: string;
-  /** Soft mid-tone for cylindrical roll. */
   beltMid: string;
-  /** Contact / crease shadow. */
   beltDeep: string;
-  /** Rank / degree bar fill. */
   rankBarColor: string;
-  /** Rank bar rim highlight. */
   rankBarHighlight: string;
-  /** Promotion / degree tape color on the rank bar. */
   stripeColor: string;
-  /** Soft outline when cloth is very light or very dark. */
   outlineColor: string;
+  /** Photorealistic tied-belt product image. */
+  image: ImageSourcePropType;
+  /**
+   * Stripe overlay placement on the rank tip (percent of display box).
+   * Tuned per asset so stripes sit on the black/red tip.
+   */
+  stripeOverlay: {
+    /** Distance from right edge as % of width. */
+    rightPct: number;
+    /** Distance from top as % of height. */
+    topPct: number;
+    /** Overlay box width as % of width. */
+    widthPct: number;
+    /** Overlay box height as % of height. */
+    heightPct: number;
+    /** Rotation in degrees (matches tip angle). */
+    rotateDeg: number;
+  };
 }
 
 /**
- * Traditional adult BJJ belt appearance — tuned for 3D fabric shading.
- * Black belt uses a red rank bar; others use a black rank bar + white stripes.
+ * Adult BJJ belt appearance — photorealistic image + stripe overlay geometry.
+ * Black belt uses a red rank tip; others use a black tip + white stripes.
  */
 export const BELT_APPEARANCE: Record<BeltRank, BeltAppearance> = {
   white: {
@@ -38,6 +49,14 @@ export const BELT_APPEARANCE: Record<BeltRank, BeltAppearance> = {
     rankBarHighlight: '#2A2A2A',
     stripeColor: '#F8F7F4',
     outlineColor: 'rgba(40,36,30,0.16)',
+    image: require('../../../assets/belts/white.png'),
+    stripeOverlay: {
+      rightPct: 7,
+      topPct: 38,
+      widthPct: 9.5,
+      heightPct: 30,
+      rotateDeg: 18,
+    },
   },
   blue: {
     beltColor: '#1A5CB0',
@@ -49,6 +68,14 @@ export const BELT_APPEARANCE: Record<BeltRank, BeltAppearance> = {
     rankBarHighlight: '#2A2A2A',
     stripeColor: '#F8F7F4',
     outlineColor: 'rgba(0,0,0,0.22)',
+    image: require('../../../assets/belts/blue.png'),
+    stripeOverlay: {
+      rightPct: 6.5,
+      topPct: 36,
+      widthPct: 10,
+      heightPct: 32,
+      rotateDeg: 16,
+    },
   },
   purple: {
     beltColor: '#663A92',
@@ -60,6 +87,14 @@ export const BELT_APPEARANCE: Record<BeltRank, BeltAppearance> = {
     rankBarHighlight: '#2A2A2A',
     stripeColor: '#F8F7F4',
     outlineColor: 'rgba(0,0,0,0.22)',
+    image: require('../../../assets/belts/purple.png'),
+    stripeOverlay: {
+      rightPct: 8,
+      topPct: 34,
+      widthPct: 9.5,
+      heightPct: 34,
+      rotateDeg: 20,
+    },
   },
   brown: {
     beltColor: '#7A4725',
@@ -71,6 +106,14 @@ export const BELT_APPEARANCE: Record<BeltRank, BeltAppearance> = {
     rankBarHighlight: '#2A2A2A',
     stripeColor: '#F8F7F4',
     outlineColor: 'rgba(0,0,0,0.24)',
+    image: require('../../../assets/belts/brown.png'),
+    stripeOverlay: {
+      rightPct: 7.5,
+      topPct: 36,
+      widthPct: 10,
+      heightPct: 32,
+      rotateDeg: 14,
+    },
   },
   black: {
     beltColor: '#1A1A1A',
@@ -82,6 +125,14 @@ export const BELT_APPEARANCE: Record<BeltRank, BeltAppearance> = {
     rankBarHighlight: '#D64545',
     stripeColor: '#F8F7F4',
     outlineColor: 'rgba(255,255,255,0.18)',
+    image: require('../../../assets/belts/black.png'),
+    stripeOverlay: {
+      rightPct: 7,
+      topPct: 38,
+      widthPct: 10,
+      heightPct: 30,
+      rotateDeg: 12,
+    },
   },
 };
 

@@ -181,13 +181,13 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     paddingVertical: spacing.sm,
-    minHeight: 100,
+    minHeight: 148,
   },
   rankTitle: {
     textAlign: 'center',
     fontSize: 17,
     letterSpacing: 0.6,
-    marginTop: spacing.sm,
+    marginTop: spacing.xs,
     marginBottom: spacing.sm,
   },
   metaRow: {
