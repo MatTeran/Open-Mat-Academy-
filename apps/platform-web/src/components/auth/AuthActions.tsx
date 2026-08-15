@@ -3,8 +3,8 @@ import { demoSignIn, liveSignIn, signOut } from '@/lib/auth/actions';
 export function BrandMark() {
   return (
     <div>
-      <p className="font-display text-3xl tracking-tight text-pine">My Gi</p>
-      <p className="mt-1 text-xs uppercase tracking-[0.22em] text-mute">
+      <p className="font-display text-3xl tracking-tight text-ink">My Gi</p>
+      <p className="mt-1 text-xs uppercase tracking-[0.22em] text-bronze">
         Command Center
       </p>
     </div>
@@ -16,7 +16,7 @@ export function SignInButton() {
     <form action={demoSignIn}>
       <button
         type="submit"
-        className="w-full rounded-md bg-pine px-4 py-3 text-sm font-semibold text-panel transition hover:bg-moss"
+        className="w-full rounded-lg bg-ink px-4 py-3 text-sm font-semibold text-panel transition hover:bg-ink-soft"
       >
         Enter as platform ops (demo)
       </button>
@@ -42,7 +42,7 @@ export function LiveSignInForm({ error }: { error?: string | null }) {
         required
         autoComplete="username"
         placeholder="ops@yourdomain.com"
-        className="w-full rounded-md border border-line bg-canvas px-3 py-2 text-sm"
+        className="w-full rounded-lg border border-line bg-ivory px-3 py-2 text-sm"
       />
       <input
         name="password"
@@ -50,12 +50,12 @@ export function LiveSignInForm({ error }: { error?: string | null }) {
         required
         autoComplete="current-password"
         placeholder="Password"
-        className="w-full rounded-md border border-line bg-canvas px-3 py-2 text-sm"
+        className="w-full rounded-lg border border-line bg-ivory px-3 py-2 text-sm"
       />
       {message ? <p className="text-sm text-danger">{message}</p> : null}
       <button
         type="submit"
-        className="w-full rounded-md bg-pine px-4 py-3 text-sm font-semibold text-panel transition hover:bg-moss"
+        className="w-full rounded-lg bg-ink px-4 py-3 text-sm font-semibold text-panel transition hover:bg-ink-soft"
       >
         Sign in to Command Center
       </button>

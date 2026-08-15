@@ -4,5 +4,5 @@ import { getPlatformSession } from '@/lib/auth/session';
 
 export default async function HomePage() {
   const session = await getPlatformSession();
-  redirect(session ? '/orgs' : '/login');
+  redirect(session ? '/overview' : '/login');
 }

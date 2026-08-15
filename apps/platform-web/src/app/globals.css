@@ -4,23 +4,27 @@
 
 :root {
   color-scheme: light;
-  --canvas: #e8eee9;
-  --panel: #f4f7f4;
-  --ink: #14201a;
-  --pine: #1f4d3a;
-  --moss: #3f6b54;
-  --sand: #d7c4a3;
-  --mute: #5c6b62;
-  --line: #c5d0c7;
+  --ivory: #f7f4ef;
+  --ivory-2: #f1ece4;
+  --panel: #fffcf8;
+  --ink: #1a1a1a;
+  --ink-soft: #3a3a3a;
+  --mute: #6b6560;
+  --line: #e6e0d6;
+  --bronze: #8c6b3e;
+  --bronze-soft: #b08a55;
+  --success: #2f6b4f;
+  --warning: #9a6b1f;
+  --danger: #8b2e2e;
+  --info: #3d5a73;
 }
 
 html,
 body {
   min-height: 100%;
   background:
-    radial-gradient(ellipse at top left, rgba(215, 196, 163, 0.45), transparent 42%),
-    radial-gradient(ellipse at bottom right, rgba(31, 77, 58, 0.12), transparent 48%),
-    var(--canvas);
+    radial-gradient(ellipse at top right, rgba(176, 138, 85, 0.08), transparent 42%),
+    var(--ivory);
   color: var(--ink);
 }
 
@@ -29,10 +33,10 @@ body {
 }
 
 *:focus-visible {
-  outline: 2px solid var(--pine);
+  outline: 2px solid var(--bronze);
   outline-offset: 2px;
 }
 
 ::selection {
-  background: rgba(31, 77, 58, 0.22);
+  background: rgba(140, 107, 62, 0.22);
 }

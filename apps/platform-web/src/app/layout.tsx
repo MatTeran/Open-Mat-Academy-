@@ -17,7 +17,7 @@ const figtree = Figtree({
 
 export const metadata: Metadata = {
   title: 'My Gi Command Center',
-  description: 'Platform directory for My Gi organizations and academies.',
+  description: 'Operate, onboard, and monitor academies across the My Gi platform.',
 };
 
 export default function RootLayout({

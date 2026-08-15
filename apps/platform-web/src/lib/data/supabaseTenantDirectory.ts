@@ -110,6 +110,29 @@ export function createSupabaseTenantDirectory(
       if (error) throw error;
       return mapAcademy(data as Record<string, unknown>);
     },
+    async createLocation(input) {
+      const { data, error } = await client
+        .from('locations')
+        .upsert(
+          {
+            id: input.id,
+            academy_id: input.academyId,
+            name: input.name,
+            address_line_1: input.addressLine1 ?? null,
+            city: input.city ?? null,
+            state: input.state ?? null,
+            postal_code: input.postalCode ?? null,
+            country: input.country ?? 'United States',
+            timezone: input.timezone ?? 'America/Los_Angeles',
+            is_active: true,
+          },
+          { onConflict: 'id' },
+        )
+        .select('*')
+        .single();
+      if (error) throw error;
+      return mapLocation(data as Record<string, unknown>);
+    },
     async assignAcademyOwner(input) {
       const { data: existing, error: readError } = await client
         .from('academy_memberships')

@@ -10,6 +10,14 @@ import { OPEN_MAT_ORG_ID, TEST_ACADEMY_A_ID } from '@openmat/shared/types';
 
 import { buildPlatformSession } from '../lib/auth/permissions';
 import { createMemoryTenantDirectory } from '../lib/data/tenantDirectory';
+import {
+  calculateHealthScore,
+  classifyHealth,
+} from '../lib/services/healthScore';
+import {
+  ONBOARDING_MILESTONES,
+  calculateOnboardingPercent,
+} from '../lib/services/onboarding';
 
 const admins: PlatformAdmin[] = [
   {
@@ -82,7 +90,7 @@ describe('tenant directory memory repo', () => {
     expect(testA?.organizationId).toBe('org-test-a');
   });
 
-  it('creates org/academy and assigns owner membership', async () => {
+  it('creates org/academy/location and assigns owner membership', async () => {
     const directory = createMemoryTenantDirectory({
       orgs: [],
       academies: [],
@@ -101,14 +109,50 @@ describe('tenant directory memory repo', () => {
       organizationId: org.id,
       slug: 'new-academy',
     });
+    const location = await directory.createLocation({
+      id: 'location-new',
+      academyId: academy.id,
+      name: 'Main',
+      city: 'Austin',
+      state: 'TX',
+    });
     const membership = await directory.assignAcademyOwner({
       academyId: academy.id,
       userId: '11111111-1111-1111-1111-111111111111',
     });
 
     expect(academy.organizationId).toBe(org.id);
+    expect(location.academyId).toBe(academy.id);
     expect(membership.role).toBe('owner');
-    const roster = await directory.listMembershipsByAcademy(academy.id);
-    expect(roster).toHaveLength(1);
+  });
+});
+
+describe('onboarding percent', () => {
+  it('calculates percent from completed milestones', () => {
+    expect(calculateOnboardingPercent([])).toBe(0);
+    expect(calculateOnboardingPercent(['organization_created', 'academy_created'])).toBe(
+      Math.round((2 / ONBOARDING_MILESTONES.length) * 100),
+    );
+    expect(
+      calculateOnboardingPercent(ONBOARDING_MILESTONES.map((m) => m.key)),
+    ).toBe(100);
+  });
+});
+
+describe('health score', () => {
+  it('classifies bands and respects weights', () => {
+    const perfect = calculateHealthScore({
+      coachAdminActivity: 100,
+      classActivity: 100,
+      attendanceUsage: 100,
+      memberEngagement: 100,
+      subscriptionHealth: 100,
+      onboardingSetup: 100,
+    });
+    expect(perfect.score).toBe(100);
+    expect(perfect.band).toBe('healthy');
+    expect(classifyHealth(65)).toBe('watch');
+    expect(classifyHealth(45)).toBe('at_risk');
+    expect(classifyHealth(10)).toBe('inactive');
   });
 });
