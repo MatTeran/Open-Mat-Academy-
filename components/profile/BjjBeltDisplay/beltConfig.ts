@@ -4,7 +4,6 @@ import type { ImageSourcePropType } from 'react-native';
 export type BeltStripeCount = 0 | 1 | 2 | 3 | 4;
 
 export interface BeltAppearance {
-  /** Mid cloth fill (legacy / fallback). */
   beltColor: string;
   beltShade: string;
   beltHighlight: string;
@@ -14,30 +13,50 @@ export interface BeltAppearance {
   rankBarHighlight: string;
   stripeColor: string;
   outlineColor: string;
-  /** Photorealistic tied-belt product image. */
-  image: ImageSourcePropType;
-  /**
-   * Stripe overlay placement on the rank tip (percent of display box).
-   * Tuned per asset so stripes sit on the black/red tip.
-   */
-  stripeOverlay: {
-    /** Distance from right edge as % of width. */
-    rightPct: number;
-    /** Distance from top as % of height. */
-    topPct: number;
-    /** Overlay box width as % of width. */
-    widthPct: number;
-    /** Overlay box height as % of height. */
-    heightPct: number;
-    /** Rotation in degrees (matches tip angle). */
-    rotateDeg: number;
-  };
 }
 
 /**
- * Adult BJJ belt appearance — photorealistic image + stripe overlay geometry.
- * Black belt uses a red rank tip; others use a black tip + white stripes.
+ * Photorealistic tied-belt assets with promotion stripes baked onto the
+ * black (or red for black belt) rank tip. Index = stripe count 0–4.
  */
+const BELT_IMAGES: Record<BeltRank, ImageSourcePropType[]> = {
+  white: [
+    require('../../../assets/belts/white-0.png'),
+    require('../../../assets/belts/white-1.png'),
+    require('../../../assets/belts/white-2.png'),
+    require('../../../assets/belts/white-3.png'),
+    require('../../../assets/belts/white-4.png'),
+  ],
+  blue: [
+    require('../../../assets/belts/blue-0.png'),
+    require('../../../assets/belts/blue-1.png'),
+    require('../../../assets/belts/blue-2.png'),
+    require('../../../assets/belts/blue-3.png'),
+    require('../../../assets/belts/blue-4.png'),
+  ],
+  purple: [
+    require('../../../assets/belts/purple-0.png'),
+    require('../../../assets/belts/purple-1.png'),
+    require('../../../assets/belts/purple-2.png'),
+    require('../../../assets/belts/purple-3.png'),
+    require('../../../assets/belts/purple-4.png'),
+  ],
+  brown: [
+    require('../../../assets/belts/brown-0.png'),
+    require('../../../assets/belts/brown-1.png'),
+    require('../../../assets/belts/brown-2.png'),
+    require('../../../assets/belts/brown-3.png'),
+    require('../../../assets/belts/brown-4.png'),
+  ],
+  black: [
+    require('../../../assets/belts/black-0.png'),
+    require('../../../assets/belts/black-1.png'),
+    require('../../../assets/belts/black-2.png'),
+    require('../../../assets/belts/black-3.png'),
+    require('../../../assets/belts/black-4.png'),
+  ],
+};
+
 export const BELT_APPEARANCE: Record<BeltRank, BeltAppearance> = {
   white: {
     beltColor: '#EDEAE2',
@@ -49,14 +68,6 @@ export const BELT_APPEARANCE: Record<BeltRank, BeltAppearance> = {
     rankBarHighlight: '#2A2A2A',
     stripeColor: '#F8F7F4',
     outlineColor: 'rgba(40,36,30,0.16)',
-    image: require('../../../assets/belts/white.png'),
-    stripeOverlay: {
-      rightPct: 7,
-      topPct: 38,
-      widthPct: 9.5,
-      heightPct: 30,
-      rotateDeg: 18,
-    },
   },
   blue: {
     beltColor: '#1A5CB0',
@@ -68,14 +79,6 @@ export const BELT_APPEARANCE: Record<BeltRank, BeltAppearance> = {
     rankBarHighlight: '#2A2A2A',
     stripeColor: '#F8F7F4',
     outlineColor: 'rgba(0,0,0,0.22)',
-    image: require('../../../assets/belts/blue.png'),
-    stripeOverlay: {
-      rightPct: 6.5,
-      topPct: 36,
-      widthPct: 10,
-      heightPct: 32,
-      rotateDeg: 16,
-    },
   },
   purple: {
     beltColor: '#663A92',
@@ -87,14 +90,6 @@ export const BELT_APPEARANCE: Record<BeltRank, BeltAppearance> = {
     rankBarHighlight: '#2A2A2A',
     stripeColor: '#F8F7F4',
     outlineColor: 'rgba(0,0,0,0.22)',
-    image: require('../../../assets/belts/purple.png'),
-    stripeOverlay: {
-      rightPct: 8,
-      topPct: 34,
-      widthPct: 9.5,
-      heightPct: 34,
-      rotateDeg: 20,
-    },
   },
   brown: {
     beltColor: '#7A4725',
@@ -106,14 +101,6 @@ export const BELT_APPEARANCE: Record<BeltRank, BeltAppearance> = {
     rankBarHighlight: '#2A2A2A',
     stripeColor: '#F8F7F4',
     outlineColor: 'rgba(0,0,0,0.24)',
-    image: require('../../../assets/belts/brown.png'),
-    stripeOverlay: {
-      rightPct: 7.5,
-      topPct: 36,
-      widthPct: 10,
-      heightPct: 32,
-      rotateDeg: 14,
-    },
   },
   black: {
     beltColor: '#1A1A1A',
@@ -125,19 +112,19 @@ export const BELT_APPEARANCE: Record<BeltRank, BeltAppearance> = {
     rankBarHighlight: '#D64545',
     stripeColor: '#F8F7F4',
     outlineColor: 'rgba(255,255,255,0.18)',
-    image: require('../../../assets/belts/black.png'),
-    stripeOverlay: {
-      rightPct: 7,
-      topPct: 38,
-      widthPct: 10,
-      heightPct: 30,
-      rotateDeg: 12,
-    },
   },
 };
 
 export function getBeltAppearance(belt: BeltRank): BeltAppearance {
   return BELT_APPEARANCE[belt];
+}
+
+export function getBeltImage(
+  belt: BeltRank,
+  stripes: BeltStripeCount,
+): ImageSourcePropType {
+  const safe = Math.max(0, Math.min(4, stripes)) as BeltStripeCount;
+  return BELT_IMAGES[belt][safe];
 }
 
 /** Profile rank title, e.g. "BLUE BELT · 2 STRIPES". */

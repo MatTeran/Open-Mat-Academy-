@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     paddingVertical: spacing.sm,
-    minHeight: 148,
+    minHeight: 160,
   },
   rankTitle: {
     textAlign: 'center',

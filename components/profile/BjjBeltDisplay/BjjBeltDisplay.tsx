@@ -5,13 +5,12 @@ import {
   Image,
   StyleSheet,
   useWindowDimensions,
-  View,
 } from 'react-native';
 
 import type { BeltRank } from '../../../types/user';
 import {
   type BeltStripeCount,
-  getBeltAppearance,
+  getBeltImage,
 } from './beltConfig';
 
 export interface BjjBeltDisplayProps {
@@ -23,9 +22,12 @@ export interface BjjBeltDisplayProps {
   animate?: boolean;
 }
 
+/** Asset intrinsic aspect (~720×479 after compress). */
+const BELT_ASPECT = 720 / 479;
+
 /**
- * Photorealistic tied adult BJJ belt — product image per rank,
- * with dynamic promotion stripes overlaid on the rank tip.
+ * Photorealistic tied adult BJJ belt — product image per rank with
+ * promotion stripes baked onto the black/red tip (no drop shadow).
  */
 export function BjjBeltDisplay({
   belt,
@@ -34,7 +36,7 @@ export function BjjBeltDisplay({
   animate = true,
 }: BjjBeltDisplayProps) {
   const { width: windowWidth } = useWindowDimensions();
-  const appearance = getBeltAppearance(belt);
+  const image = getBeltImage(belt, stripes);
   const opacity = useRef(new Animated.Value(animate ? 0 : 1)).current;
   const scale = useRef(new Animated.Value(animate ? 0.96 : 1)).current;
   const settleY = useRef(new Animated.Value(animate ? 6 : 0)).current;
@@ -46,8 +48,7 @@ export function BjjBeltDisplay({
     return Math.min(348, Math.max(260, Math.round(windowWidth * 0.82)));
   }, [width, windowWidth]);
 
-  // Asset aspect ~1.5 (880x587 after resize) — keep card-friendly height.
-  const stageHeight = Math.round(beltWidth * 0.58);
+  const stageHeight = Math.round(beltWidth / BELT_ASPECT);
 
   useEffect(() => {
     if (!animate) {
@@ -75,22 +76,6 @@ export function BjjBeltDisplay({
     ]).start();
   }, [animate, opacity, scale, settleY]);
 
-  const stripeIndexes = useMemo(
-    () => Array.from({ length: stripes }, (_, index) => index),
-    [stripes],
-  );
-
-  const overlay = appearance.stripeOverlay;
-  const overlayWidth = (beltWidth * overlay.widthPct) / 100;
-  const overlayHeight = (stageHeight * overlay.heightPct) / 100;
-  const stripeGap = Math.max(3, overlayWidth * 0.14);
-  const stripeW = Math.max(3, overlayWidth * 0.16);
-  const stripeH = overlayHeight * 0.72;
-  const stripeSpan =
-    stripeIndexes.length > 0
-      ? stripeIndexes.length * stripeW + (stripeIndexes.length - 1) * stripeGap
-      : 0;
-
   return (
     <Animated.View
       accessibilityRole="image"
@@ -106,54 +91,11 @@ export function BjjBeltDisplay({
       ]}
     >
       <Image
-        source={appearance.image}
+        source={image}
         style={styles.image}
         resizeMode="contain"
         accessibilityIgnoresInvertColors
       />
-
-      {/* Dynamic promotion stripes on the rank tip */}
-      {stripeIndexes.length > 0 ? (
-        <View
-          pointerEvents="none"
-          style={[
-            styles.stripeOverlay,
-            {
-              right: (beltWidth * overlay.rightPct) / 100,
-              top: (stageHeight * overlay.topPct) / 100,
-              width: overlayWidth,
-              height: overlayHeight,
-              transform: [{ rotate: `${overlay.rotateDeg}deg` }],
-            },
-          ]}
-        >
-          <View
-            style={[
-              styles.stripeRow,
-              {
-                width: stripeSpan,
-                gap: stripeGap,
-              },
-            ]}
-          >
-            {stripeIndexes.map((index) => (
-              <View
-                key={`stripe-${index}`}
-                style={{
-                  width: stripeW,
-                  height: stripeH,
-                  borderRadius: 1.5,
-                  backgroundColor: appearance.stripeColor,
-                  shadowColor: '#000',
-                  shadowOpacity: 0.25,
-                  shadowRadius: 1,
-                  shadowOffset: { width: 0, height: 0.5 },
-                }}
-              />
-            ))}
-          </View>
-        </View>
-      ) : null}
     </Animated.View>
   );
 }
@@ -163,20 +105,11 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     justifyContent: 'center',
     overflow: 'visible',
+    // No shadow — belt assets are already cleaned of contact shadows.
+    backgroundColor: 'transparent',
   },
   image: {
-    ...StyleSheet.absoluteFillObject,
     width: '100%',
     height: '100%',
-  },
-  stripeOverlay: {
-    position: 'absolute',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  stripeRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 });
