@@ -11,6 +11,7 @@ import Svg, {
   G,
   LinearGradient,
   Path,
+  RadialGradient,
   Rect,
   Stop,
 } from 'react-native-svg';
@@ -30,12 +31,13 @@ export interface BjjBeltDisplayProps {
   animate?: boolean;
 }
 
-const VB_W = 400;
-const VB_H = 112;
+const VB_W = 440;
+const VB_H = 128;
 
 /**
- * Realistic tied adult BJJ belt — layered SVG fabric, knot, draping tails,
- * rank bar, and promotion stripes (Proposal 3 silhouette).
+ * Photorealistic-inspired 3D tied adult BJJ belt (Proposal 3 silhouette):
+ * cylindrical fabric shading, layered knot wraps, draping tails,
+ * integrated rank bar + promotion stripes.
  */
 export function BjjBeltDisplay({
   belt,
@@ -54,12 +56,11 @@ export function BjjBeltDisplay({
     if (typeof width === 'number') {
       return width;
     }
-    // ~80–88% of card content width across phone sizes.
-    return Math.min(340, Math.max(248, Math.round(windowWidth * 0.78)));
+    return Math.min(348, Math.max(256, Math.round(windowWidth * 0.8)));
   }, [width, windowWidth]);
 
   const stageHeight = Math.round(
-    Math.min(105, Math.max(78, beltWidth * 0.28)),
+    Math.min(112, Math.max(86, beltWidth * 0.3)),
   );
 
   useEffect(() => {
@@ -93,15 +94,17 @@ export function BjjBeltDisplay({
     [stripes],
   );
 
-  const gCloth = `beltCloth-${uid}`;
-  const gKnot = `beltKnot-${uid}`;
-  const gBar = `beltBar-${uid}`;
-  const gShadow = `beltShadow-${uid}`;
+  const gRoll = `roll-${uid}`;
+  const gRollVert = `rollV-${uid}`;
+  const gKnotRad = `knotR-${uid}`;
+  const gKnotDiag = `knotD-${uid}`;
+  const gBar = `bar-${uid}`;
+  const gShadow = `sh-${uid}`;
+  const gTail = `tail-${uid}`;
 
-  // Stripe layout on rank bar (right tail).
   const stripeCount = stripeIndexes.length;
-  const stripeGap = 5.5;
-  const stripeW = 4.2;
+  const stripeGap = 6.2;
+  const stripeW = 4.6;
   const stripeSpan =
     stripeCount > 0 ? stripeCount * stripeW + (stripeCount - 1) * stripeGap : 0;
 
@@ -126,301 +129,458 @@ export function BjjBeltDisplay({
         preserveAspectRatio="xMidYMid meet"
       >
         <Defs>
-          <LinearGradient id={gCloth} x1="0" y1="0" x2="0" y2="1">
-            <Stop offset="0%" stopColor={palette.beltHighlight} stopOpacity="0.95" />
-            <Stop offset="28%" stopColor={palette.beltColor} stopOpacity="1" />
-            <Stop offset="72%" stopColor={palette.beltColor} stopOpacity="1" />
-            <Stop offset="100%" stopColor={palette.beltShade} stopOpacity="1" />
+          {/* Cylindrical cloth roll (top → bottom) */}
+          <LinearGradient id={gRoll} x1="0" y1="0" x2="0" y2="1">
+            <Stop offset="0%" stopColor={palette.beltHighlight} stopOpacity="1" />
+            <Stop offset="18%" stopColor={palette.beltMid} stopOpacity="1" />
+            <Stop offset="48%" stopColor={palette.beltColor} stopOpacity="1" />
+            <Stop offset="78%" stopColor={palette.beltShade} stopOpacity="1" />
+            <Stop offset="100%" stopColor={palette.beltDeep} stopOpacity="1" />
           </LinearGradient>
-          <LinearGradient id={gKnot} x1="0.15" y1="0" x2="0.85" y2="1">
-            <Stop offset="0%" stopColor={palette.beltHighlight} stopOpacity="0.9" />
+          {/* Lengthwise light falloff */}
+          <LinearGradient id={gRollVert} x1="0" y1="0.5" x2="1" y2="0.5">
+            <Stop offset="0%" stopColor={palette.beltDeep} stopOpacity="0.35" />
+            <Stop offset="18%" stopColor={palette.beltColor} stopOpacity="0" />
+            <Stop offset="82%" stopColor={palette.beltColor} stopOpacity="0" />
+            <Stop offset="100%" stopColor={palette.beltDeep} stopOpacity="0.32" />
+          </LinearGradient>
+          <LinearGradient id={gTail} x1="0.2" y1="0" x2="0.85" y2="1">
+            <Stop offset="0%" stopColor={palette.beltHighlight} stopOpacity="0.95" />
+            <Stop offset="35%" stopColor={palette.beltColor} stopOpacity="1" />
+            <Stop offset="100%" stopColor={palette.beltDeep} stopOpacity="1" />
+          </LinearGradient>
+          <RadialGradient id={gKnotRad} cx="42%" cy="32%" rx="62%" ry="58%">
+            <Stop offset="0%" stopColor={palette.beltHighlight} stopOpacity="1" />
+            <Stop offset="40%" stopColor={palette.beltMid} stopOpacity="1" />
+            <Stop offset="78%" stopColor={palette.beltShade} stopOpacity="1" />
+            <Stop offset="100%" stopColor={palette.beltDeep} stopOpacity="1" />
+          </RadialGradient>
+          <LinearGradient id={gKnotDiag} x1="0" y1="0" x2="1" y2="1">
+            <Stop offset="0%" stopColor={palette.beltHighlight} stopOpacity="0.95" />
             <Stop offset="45%" stopColor={palette.beltColor} stopOpacity="1" />
-            <Stop offset="100%" stopColor={palette.beltShade} stopOpacity="1" />
+            <Stop offset="100%" stopColor={palette.beltDeep} stopOpacity="1" />
           </LinearGradient>
           <LinearGradient id={gBar} x1="0" y1="0" x2="0" y2="1">
-            <Stop offset="0%" stopColor={palette.rankBarColor} stopOpacity="1" />
-            <Stop
-              offset="100%"
-              stopColor={palette.rankBarColor}
-              stopOpacity="0.88"
-            />
+            <Stop offset="0%" stopColor={palette.rankBarHighlight} stopOpacity="1" />
+            <Stop offset="40%" stopColor={palette.rankBarColor} stopOpacity="1" />
+            <Stop offset="100%" stopColor={palette.rankBarColor} stopOpacity="1" />
           </LinearGradient>
-          <LinearGradient id={gShadow} x1="0.5" y1="0" x2="0.5" y2="1">
-            <Stop offset="0%" stopColor="#1A1510" stopOpacity="0.22" />
+          <RadialGradient id={gShadow} cx="50%" cy="50%" rx="50%" ry="50%">
+            <Stop offset="0%" stopColor="#1A1510" stopOpacity="0.28" />
+            <Stop offset="70%" stopColor="#1A1510" stopOpacity="0.1" />
             <Stop offset="100%" stopColor="#1A1510" stopOpacity="0" />
-          </LinearGradient>
+          </RadialGradient>
         </Defs>
 
-        {/* Soft ground shadow */}
-        <Ellipse
-          cx="200"
-          cy="102"
-          rx="148"
-          ry="7"
-          fill={`url(#${gShadow})`}
-        />
+        {/* Ground contact shadow */}
+        <Ellipse cx="220" cy="116" rx="168" ry="9" fill={`url(#${gShadow})`} />
 
-        {/* —— Rear horizontal band (behind knot) —— */}
-        <G id="rearBelt">
+        {/* ========== LEFT HORIZONTAL BAND ========== */}
+        <G id="leftBand">
+          {/* Underside thickness */}
           <Path
-            d="M28 34
-               C 55 30, 95 29, 145 30
-               L 175 31
-               C 182 31, 186 35, 186 40
-               C 186 47, 181 51, 173 51
-               L 145 52
-               C 95 54, 55 54, 28 50
-               C 18 48, 16 42, 18 38
-               C 20 34, 24 35, 28 34 Z"
-            fill={`url(#${gCloth})`}
-            stroke={palette.outlineColor}
-            strokeWidth={0.8}
+            d="M22 44
+               C 48 38, 90 36, 140 37
+               L 178 39
+               C 186 40, 190 45, 188 52
+               L 176 58
+               C 140 60, 90 60, 48 58
+               L 24 56
+               C 14 54, 12 48, 16 45
+               C 18 43, 20 44, 22 44 Z"
+            fill={palette.beltDeep}
+            opacity={0.55}
           />
+          {/* Main cloth */}
           <Path
-            d="M226 31
-               L 255 30
-               C 305 29, 345 30, 372 34
-               C 380 36, 382 40, 380 44
-               C 378 49, 372 51, 364 50
-               C 340 54, 300 54, 255 52
-               L 228 51
-               C 220 51, 216 47, 216 41
-               C 216 35, 220 31, 226 31 Z"
-            fill={`url(#${gCloth})`}
+            d="M24 36
+               C 52 31, 95 29, 145 30
+               L 176 32
+               C 184 33, 188 38, 186 45
+               C 184 53, 176 56, 166 56
+               L 145 57
+               C 95 59, 52 58, 26 53
+               C 16 51, 14 44, 18 40
+               C 20 37, 22 36, 24 36 Z"
+            fill={`url(#${gRoll})`}
             stroke={palette.outlineColor}
-            strokeWidth={0.8}
+            strokeWidth={0.85}
           />
-          {/* Stitching lines */}
+          {/* Lengthwise shading overlay */}
           <Path
-            d="M34 38 C 70 35, 110 35, 160 37"
-            stroke={palette.beltShade}
-            strokeWidth={0.9}
-            opacity={0.45}
+            d="M24 36
+               C 52 31, 95 29, 145 30
+               L 176 32
+               C 184 33, 188 38, 186 45
+               C 184 53, 176 56, 166 56
+               L 145 57
+               C 95 59, 52 58, 26 53
+               C 16 51, 14 44, 18 40
+               C 20 37, 22 36, 24 36 Z"
+            fill={`url(#${gRollVert})`}
+          />
+          {/* Specular ridge */}
+          <Path
+            d="M30 39 C 70 35, 120 35, 168 38"
+            stroke={palette.beltHighlight}
+            strokeWidth={2.2}
+            opacity={0.55}
             fill="none"
+            strokeLinecap="round"
           />
+          {/* Weave stitches */}
           <Path
-            d="M34 45 C 70 47, 110 48, 160 46"
+            d="M32 42 C 75 39, 120 39, 168 42"
             stroke={palette.beltShade}
             strokeWidth={0.7}
-            opacity={0.35}
-            fill="none"
-          />
-          <Path
-            d="M240 37 C 280 35, 330 35, 366 38"
-            stroke={palette.beltShade}
-            strokeWidth={0.9}
-            opacity={0.45}
-            fill="none"
-          />
-          <Path
-            d="M240 46 C 280 48, 330 48, 366 45"
-            stroke={palette.beltShade}
-            strokeWidth={0.7}
-            opacity={0.35}
-            fill="none"
-          />
-        </G>
-
-        {/* —— Left draping tail —— */}
-        <G id="leftTail">
-          <Path
-            d="M118 48
-               C 108 52, 96 62, 88 74
-               C 82 84, 76 94, 72 98
-               C 70 100, 66 99, 66 96
-               C 68 88, 78 72, 92 60
-               C 100 54, 110 50, 122 48
-               Z"
-            fill={palette.beltShade}
-            opacity={0.85}
-          />
-          <Path
-            d="M124 46
-               C 112 52, 98 64, 90 78
-               C 84 88, 78 96, 76 99
-               C 74 101, 78 102, 82 100
-               C 90 92, 104 74, 118 60
-               C 124 54, 130 50, 136 48
-               L 128 46 Z"
-            fill={`url(#${gCloth})`}
-            stroke={palette.outlineColor}
-            strokeWidth={0.7}
-          />
-          <Path
-            d="M112 58 C 102 70, 94 84, 88 94"
-            stroke={palette.beltShade}
-            strokeWidth={0.8}
             opacity={0.4}
             fill="none"
           />
+          <Path
+            d="M32 49 C 75 51, 120 52, 168 49"
+            stroke={palette.beltDeep}
+            strokeWidth={0.65}
+            opacity={0.28}
+            fill="none"
+          />
         </G>
 
-        {/* —— Right draping tail + rank bar —— */}
+        {/* ========== RIGHT HORIZONTAL BAND ========== */}
+        <G id="rightBand">
+          <Path
+            d="M262 39
+               L 300 37
+               C 350 36, 390 38, 414 44
+               C 424 46, 426 52, 418 56
+               C 390 60, 350 60, 300 58
+               L 264 56
+               C 254 55, 250 50, 252 44
+               C 253 40, 257 39, 262 39 Z"
+            fill={palette.beltDeep}
+            opacity={0.5}
+          />
+          <Path
+            d="M264 32
+               L 300 30
+               C 350 29, 392 31, 416 36
+               C 426 38, 428 45, 420 50
+               C 416 54, 406 56, 396 55
+               C 360 58, 320 58, 300 57
+               L 266 55
+               C 256 54, 252 48, 254 42
+               C 255 36, 259 32, 264 32 Z"
+            fill={`url(#${gRoll})`}
+            stroke={palette.outlineColor}
+            strokeWidth={0.85}
+          />
+          <Path
+            d="M264 32
+               L 300 30
+               C 350 29, 392 31, 416 36
+               C 426 38, 428 45, 420 50
+               C 416 54, 406 56, 396 55
+               C 360 58, 320 58, 300 57
+               L 266 55
+               C 256 54, 252 48, 254 42
+               C 255 36, 259 32, 264 32 Z"
+            fill={`url(#${gRollVert})`}
+          />
+          <Path
+            d="M272 38 C 320 34, 370 35, 410 40"
+            stroke={palette.beltHighlight}
+            strokeWidth={2.2}
+            opacity={0.55}
+            fill="none"
+            strokeLinecap="round"
+          />
+          <Path
+            d="M272 42 C 320 39, 370 40, 410 44"
+            stroke={palette.beltShade}
+            strokeWidth={0.7}
+            opacity={0.4}
+            fill="none"
+          />
+          <Path
+            d="M272 49 C 320 51, 370 52, 410 48"
+            stroke={palette.beltDeep}
+            strokeWidth={0.65}
+            opacity={0.28}
+            fill="none"
+          />
+        </G>
+
+        {/* ========== LEFT DRAPING TAIL ========== */}
+        <G id="leftTail">
+          <Path
+            d="M128 52
+               C 112 58, 96 72, 84 88
+               C 76 100, 70 110, 68 114
+               C 66 117, 62 116, 62 112
+               C 64 100, 78 78, 98 64
+               C 108 58, 120 54, 132 52 Z"
+            fill={palette.beltDeep}
+            opacity={0.45}
+          />
+          <Path
+            d="M136 50
+               C 118 56, 98 72, 86 90
+               C 78 102, 72 112, 74 116
+               C 76 119, 82 118, 86 114
+               C 96 100, 116 76, 134 62
+               C 140 56, 146 52, 152 50
+               Z"
+            fill={`url(#${gTail})`}
+            stroke={palette.outlineColor}
+            strokeWidth={0.75}
+          />
+          <Path
+            d="M120 62 C 106 76, 94 94, 86 108"
+            stroke={palette.beltHighlight}
+            strokeWidth={1.6}
+            opacity={0.35}
+            fill="none"
+            strokeLinecap="round"
+          />
+          <Path
+            d="M128 66 C 114 82, 100 98, 92 110"
+            stroke={palette.beltDeep}
+            strokeWidth={0.8}
+            opacity={0.35}
+            fill="none"
+          />
+        </G>
+
+        {/* ========== RIGHT DRAPING TAIL + RANK BAR ========== */}
         <G id="rightTail">
           <Path
-            d="M278 48
-               C 292 54, 310 68, 322 82
-               C 330 92, 336 98, 340 100
-               C 344 102, 346 98, 344 94
-               C 338 84, 322 66, 302 54
-               C 294 50, 286 48, 278 48 Z"
-            fill={palette.beltShade}
-            opacity={0.8}
+            d="M308 52
+               C 328 58, 350 74, 364 90
+               C 372 100, 378 110, 382 114
+               C 385 117, 388 114, 386 110
+               C 380 98, 360 74, 336 60
+               C 326 54, 316 52, 308 52 Z"
+            fill={palette.beltDeep}
+            opacity={0.42}
           />
           <Path
-            d="M272 46
-               C 288 50, 308 64, 322 78
-               C 332 90, 340 98, 342 100
-               C 344 102, 348 100, 346 96
-               C 340 86, 322 68, 300 54
-               C 290 48, 280 46, 268 46
+            d="M300 50
+               C 322 54, 348 72, 364 88
+               C 374 100, 382 110, 384 114
+               C 386 117, 392 115, 390 110
+               C 384 98, 362 74, 334 58
+               C 322 52, 310 50, 298 50
                Z"
-            fill={`url(#${gCloth})`}
+            fill={`url(#${gTail})`}
             stroke={palette.outlineColor}
-            strokeWidth={0.7}
+            strokeWidth={0.75}
           />
-          {/* Rank bar — rectangular wrap on the right tail */}
-          <G transform="translate(312 70) rotate(32)">
+          <Path
+            d="M318 60 C 338 74, 356 92, 370 106"
+            stroke={palette.beltHighlight}
+            strokeWidth={1.6}
+            opacity={0.32}
+            fill="none"
+            strokeLinecap="round"
+          />
+
+          {/* Rank bar wrapped around tail — clear rectangular fabric band */}
+          <G transform="translate(348 82) rotate(34)">
+            {/* Soft bar shadow */}
             <Rect
-              x={-16}
+              x={-15}
+              y={-12}
+              width={34}
+              height={30}
+              rx={3}
+              fill="#000"
+              opacity={0.22}
+            />
+            <Rect
+              x={-17}
               y={-14}
-              width={32}
+              width={34}
               height={28}
-              rx={2.5}
+              rx={3}
               fill={`url(#${gBar})`}
             />
+            {/* Top edge catch-light */}
             <Rect
               x={-14}
               y={-12}
               width={28}
-              height={1.2}
+              height={2}
+              rx={1}
               fill="#FFFFFF"
-              opacity={0.12}
+              opacity={0.18}
             />
+            {/* Side seam */}
+            <Rect
+              x={-17}
+              y={-12}
+              width={1.5}
+              height={24}
+              fill="#000"
+              opacity={0.25}
+            />
+            <Rect
+              x={15.5}
+              y={-12}
+              width={1.5}
+              height={24}
+              fill="#000"
+              opacity={0.25}
+            />
+            {/* Promotion stripes */}
             {stripeIndexes.map((index) => {
-              const x =
-                -stripeSpan / 2 + index * (stripeW + stripeGap);
+              const x = -stripeSpan / 2 + index * (stripeW + stripeGap);
               return (
-                <Rect
-                  key={`stripe-${index}`}
-                  x={x}
-                  y={-10}
-                  width={stripeW}
-                  height={20}
-                  rx={1}
-                  fill={palette.stripeColor}
-                />
+                <G key={`stripe-${index}`}>
+                  <Rect
+                    x={x}
+                    y={-9}
+                    width={stripeW}
+                    height={18}
+                    rx={1.1}
+                    fill={palette.stripeColor}
+                  />
+                  <Rect
+                    x={x + 0.6}
+                    y={-8.2}
+                    width={stripeW * 0.35}
+                    height={16.4}
+                    rx={0.6}
+                    fill="#FFFFFF"
+                    opacity={0.35}
+                  />
+                </G>
               );
             })}
           </G>
+        </G>
+
+        {/* ========== FRONT OVERLAP NEAR KNOT ========== */}
+        <G id="frontOverlap">
           <Path
-            d="M286 56 C 300 66, 318 82, 330 94"
-            stroke={palette.beltShade}
-            strokeWidth={0.8}
-            opacity={0.35}
-            fill="none"
+            d="M158 34
+               C 170 31, 184 31, 194 36
+               C 198 39, 198 46, 194 52
+               C 188 56, 176 57, 164 56
+               C 156 55, 150 50, 150 44
+               C 150 38, 154 35, 158 34 Z"
+            fill={`url(#${gRoll})`}
+            stroke={palette.outlineColor}
+            strokeWidth={0.55}
+          />
+          <Path
+            d="M246 36
+               C 256 31, 272 31, 284 34
+               C 290 36, 292 42, 288 48
+               C 284 54, 272 57, 258 56
+               C 250 55, 244 50, 244 44
+               C 244 38, 246 36, 246 36 Z"
+            fill={`url(#${gRoll})`}
+            stroke={palette.outlineColor}
+            strokeWidth={0.55}
           />
         </G>
 
-        {/* —— Front band segments near knot —— */}
-        <G id="frontBelt">
-          <Path
-            d="M148 32
-               C 160 30, 172 30, 182 33
-               C 188 35, 190 40, 188 46
-               C 186 52, 178 54, 168 54
-               C 158 54, 148 52, 142 48
-               C 138 45, 140 36, 148 32 Z"
-            fill={`url(#${gCloth})`}
-            stroke={palette.outlineColor}
-            strokeWidth={0.6}
-          />
-          <Path
-            d="M218 33
-               C 228 30, 240 30, 252 32
-               C 260 34, 262 42, 258 48
-               C 254 52, 244 54, 232 54
-               C 222 54, 214 52, 210 46
-               C 208 40, 212 35, 218 33 Z"
-            fill={`url(#${gCloth})`}
-            stroke={palette.outlineColor}
-            strokeWidth={0.6}
-          />
-        </G>
-
-        {/* —— Central knot (layered wraps) —— */}
+        {/* ========== CENTRAL KNOT (square-knot inspired) ========== */}
         <G id="knot">
+          {/* Knot contact shadow */}
           <Ellipse
-            cx="200"
-            cy="58"
-            rx="28"
-            ry="10"
+            cx="220"
+            cy="66"
+            rx="34"
+            ry="14"
             fill="#1A1510"
-            opacity={0.22}
+            opacity={0.26}
           />
-          {/* Lower wrap */}
+
+          {/* Rear horizontal wrap */}
           <Path
-            d="M176 42
-               C 184 36, 196 34, 208 36
-               C 220 38, 228 44, 226 52
-               C 224 60, 214 66, 200 68
-               C 186 66, 174 60, 172 52
-               C 170 44, 172 40, 176 42 Z"
-            fill={palette.beltShade}
-            stroke={palette.outlineColor}
-            strokeWidth={0.7}
-          />
-          {/* Diagonal wrap left */}
-          <Path
-            d="M182 38
-               C 190 32, 204 30, 214 36
-               C 220 40, 218 48, 210 52
-               C 200 56, 188 54, 182 48
-               C 178 44, 178 40, 182 38 Z"
-            fill={`url(#${gKnot})`}
+            d="M188 40
+               C 198 34, 214 32, 230 34
+               C 244 36, 254 44, 252 54
+               C 250 64, 238 72, 220 74
+               C 202 72, 188 64, 186 54
+               C 184 44, 186 40, 188 40 Z"
+            fill={palette.beltDeep}
             stroke={palette.outlineColor}
             strokeWidth={0.6}
-            transform="rotate(-18 200 44)"
           />
-          {/* Diagonal wrap right */}
-          <Path
-            d="M186 40
-               C 198 34, 214 34, 222 42
-               C 226 48, 220 56, 208 58
-               C 196 60, 184 54, 182 46
-               C 180 42, 182 40, 186 40 Z"
-            fill={`url(#${gKnot})`}
-            stroke={palette.outlineColor}
-            strokeWidth={0.6}
-            transform="rotate(16 204 46)"
-          />
-          {/* Center compressed fold */}
+
+          {/* Left diagonal loop */}
           <Path
             d="M192 36
-               C 198 32, 206 32, 210 38
-               C 212 44, 208 52, 200 54
-               C 192 52, 188 44, 190 38
-               C 190 36, 192 36, 192 36 Z"
-            fill={palette.beltShade}
+               C 204 28, 222 28, 234 38
+               C 240 44, 236 54, 226 58
+               C 214 62, 198 58, 192 50
+               C 188 44, 188 38, 192 36 Z"
+            fill={`url(#${gKnotDiag})`}
             stroke={palette.outlineColor}
-            strokeWidth={0.5}
+            strokeWidth={0.65}
+            transform="rotate(-22 212 46)"
+          />
+
+          {/* Right diagonal loop (overlaps) */}
+          <Path
+            d="M198 38
+               C 214 30, 234 32, 242 44
+               C 246 52, 238 62, 224 64
+               C 210 66, 196 58, 194 48
+               C 192 42, 194 38, 198 38 Z"
+            fill={`url(#${gKnotRad})`}
+            stroke={palette.outlineColor}
+            strokeWidth={0.65}
+            transform="rotate(18 218 48)"
+          />
+
+          {/* Center compressed fold / vertical core */}
+          <Path
+            d="M208 34
+               C 216 28, 228 28, 232 38
+               C 234 46, 228 58, 220 62
+               C 212 58, 206 46, 208 38
+               C 208 36, 208 34, 208 34 Z"
+            fill={`url(#${gKnotRad})`}
+            stroke={palette.outlineColor}
+            strokeWidth={0.55}
+          />
+
+          {/* Highlight crease across knot */}
+          <Path
+            d="M210 36 C 218 32, 226 34, 230 42"
+            stroke={palette.beltHighlight}
+            strokeWidth={1.8}
+            opacity={0.6}
+            fill="none"
+            strokeLinecap="round"
           />
           <Path
-            d="M194 38 C 200 36, 206 38, 208 44"
+            d="M206 48 C 214 52, 224 52, 230 46"
+            stroke={palette.beltDeep}
+            strokeWidth={1.1}
+            opacity={0.35}
+            fill="none"
+            strokeLinecap="round"
+          />
+
+          {/* Loose tuck hanging from knot (asymmetry) */}
+          <Path
+            d="M224 58
+               C 232 62, 238 72, 236 84
+               C 234 90, 226 88, 224 82
+               C 222 74, 222 64, 224 58 Z"
+            fill={`url(#${gTail})`}
+            stroke={palette.outlineColor}
+            strokeWidth={0.55}
+          />
+          <Path
+            d="M228 64 C 232 70, 234 78, 232 84"
             stroke={palette.beltHighlight}
             strokeWidth={1.2}
-            opacity={0.55}
+            opacity={0.35}
             fill="none"
-          />
-          {/* Small loose tuck under knot */}
-          <Path
-            d="M204 54
-               C 210 58, 214 66, 212 74
-               C 210 78, 204 76, 202 72
-               C 200 66, 200 58, 204 54 Z"
-            fill={`url(#${gCloth})`}
-            stroke={palette.outlineColor}
-            strokeWidth={0.5}
           />
         </G>
       </Svg>

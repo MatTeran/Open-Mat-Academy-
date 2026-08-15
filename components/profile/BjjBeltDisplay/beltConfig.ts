@@ -3,14 +3,20 @@ import type { BeltRank } from '../../../types/user';
 export type BeltStripeCount = 0 | 1 | 2 | 3 | 4;
 
 export interface BeltAppearance {
-  /** Primary cloth fill. */
+  /** Mid cloth fill. */
   beltColor: string;
-  /** Secondary cloth shade for folds / weave depth. */
+  /** Deep fold / underside shade. */
   beltShade: string;
-  /** Highlight along the top edge of the cloth. */
+  /** Raised-edge highlight. */
   beltHighlight: string;
+  /** Soft mid-tone for cylindrical roll. */
+  beltMid: string;
+  /** Contact / crease shadow. */
+  beltDeep: string;
   /** Rank / degree bar fill. */
   rankBarColor: string;
+  /** Rank bar rim highlight. */
+  rankBarHighlight: string;
   /** Promotion / degree tape color on the rank bar. */
   stripeColor: string;
   /** Soft outline when cloth is very light or very dark. */
@@ -18,49 +24,64 @@ export interface BeltAppearance {
 }
 
 /**
- * Traditional adult BJJ belt appearance.
+ * Traditional adult BJJ belt appearance — tuned for 3D fabric shading.
  * Black belt uses a red rank bar; others use a black rank bar + white stripes.
  */
 export const BELT_APPEARANCE: Record<BeltRank, BeltAppearance> = {
   white: {
-    beltColor: '#F1EFE8',
-    beltShade: '#CCC9C0',
+    beltColor: '#EDEAE2',
+    beltShade: '#C4C0B6',
     beltHighlight: '#FFFFFF',
-    rankBarColor: '#111111',
-    stripeColor: '#F7F7F5',
-    outlineColor: 'rgba(0,0,0,0.14)',
+    beltMid: '#F7F5F0',
+    beltDeep: '#A8A49A',
+    rankBarColor: '#141414',
+    rankBarHighlight: '#2A2A2A',
+    stripeColor: '#F8F7F4',
+    outlineColor: 'rgba(40,36,30,0.16)',
   },
   blue: {
-    beltColor: '#1857A4',
-    beltShade: '#103C73',
-    beltHighlight: '#2E73C7',
-    rankBarColor: '#111111',
-    stripeColor: '#F7F7F5',
-    outlineColor: 'rgba(0,0,0,0.2)',
-  },
-  purple: {
-    beltColor: '#60378C',
-    beltShade: '#42245F',
-    beltHighlight: '#7751A3',
-    rankBarColor: '#111111',
-    stripeColor: '#F7F7F5',
-    outlineColor: 'rgba(0,0,0,0.2)',
-  },
-  brown: {
-    beltColor: '#704021',
-    beltShade: '#4D2B17',
-    beltHighlight: '#8B5834',
-    rankBarColor: '#111111',
-    stripeColor: '#F7F7F5',
+    beltColor: '#1A5CB0',
+    beltShade: '#0E3A74',
+    beltHighlight: '#4A8AD9',
+    beltMid: '#2469C2',
+    beltDeep: '#08264F',
+    rankBarColor: '#121212',
+    rankBarHighlight: '#2A2A2A',
+    stripeColor: '#F8F7F4',
     outlineColor: 'rgba(0,0,0,0.22)',
   },
+  purple: {
+    beltColor: '#663A92',
+    beltShade: '#3F245C',
+    beltHighlight: '#8A5BB8',
+    beltMid: '#7447A3',
+    beltDeep: '#2A1740',
+    rankBarColor: '#121212',
+    rankBarHighlight: '#2A2A2A',
+    stripeColor: '#F8F7F4',
+    outlineColor: 'rgba(0,0,0,0.22)',
+  },
+  brown: {
+    beltColor: '#7A4725',
+    beltShade: '#4A2A14',
+    beltHighlight: '#A0663A',
+    beltMid: '#8A5530',
+    beltDeep: '#301C0C',
+    rankBarColor: '#121212',
+    rankBarHighlight: '#2A2A2A',
+    stripeColor: '#F8F7F4',
+    outlineColor: 'rgba(0,0,0,0.24)',
+  },
   black: {
-    beltColor: '#151515',
+    beltColor: '#1A1A1A',
     beltShade: '#050505',
-    beltHighlight: '#333333',
-    rankBarColor: '#A82020',
-    stripeColor: '#F7F7F5',
-    outlineColor: 'rgba(255,255,255,0.2)',
+    beltHighlight: '#3F3F3F',
+    beltMid: '#262626',
+    beltDeep: '#000000',
+    rankBarColor: '#B01E1E',
+    rankBarHighlight: '#D64545',
+    stripeColor: '#F8F7F4',
+    outlineColor: 'rgba(255,255,255,0.18)',
   },
 };
 
