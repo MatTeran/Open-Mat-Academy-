@@ -180,14 +180,14 @@ const styles = StyleSheet.create({
   beltStage: {
     width: '100%',
     alignItems: 'center',
-    paddingVertical: spacing.xs,
-    minHeight: 64,
+    paddingVertical: spacing.sm,
+    minHeight: 88,
   },
   rankTitle: {
     textAlign: 'center',
     fontSize: 17,
     letterSpacing: 0.6,
-    marginTop: spacing.xs,
+    marginTop: spacing.sm,
     marginBottom: spacing.sm,
   },
   metaRow: {

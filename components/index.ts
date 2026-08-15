@@ -1,6 +1,19 @@
 export { AuthScreen } from './auth/AuthScreen';
+export { AcademyEventCard } from './community/AcademyEventCard';
+export { AcademyGroupCard } from './community/AcademyGroupCard';
 export { AnnouncementCard } from './community/AnnouncementCard';
+export { AnnouncementCarousel } from './community/AnnouncementCarousel';
 export { BirthdayCard } from './community/BirthdayCard';
+export { CommunityDetailSheet } from './community/CommunityDetailSheet';
+export { CommunityFeedSection } from './community/CommunityFeedSection';
+export { CommunityHeader } from './community/CommunityHeader';
+export { CommunityPostCard } from './community/CommunityPostCard';
+export { CompetitionCard } from './community/CompetitionCard';
+export { LocalEventsDiscoveryCard } from './community/LocalEventsDiscoveryCard';
+export {
+  MemberAvatar,
+  MemberAvatarStack,
+} from './community/MemberAvatarStack';
 export { OpenMatCard } from './community/OpenMatCard';
 export { SectionHeader } from './community/SectionHeader';
 export { SeminarCard } from './community/SeminarCard';
