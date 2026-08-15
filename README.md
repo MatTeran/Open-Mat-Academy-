@@ -13,13 +13,15 @@ Cloned and rebranded from Open Mat with the official Gracie Fighter / Open Mat A
 | **Member (User) App** | repo root | Athlete experience — schedule, workout log, journey, community, profile |
 | **Coach App** | `apps/coach` | Coach mobile — dashboard, check-in, members, announcements, command center |
 | **Coach Web** | `apps/coach-web` | Next.js desktop dashboard for coaches/staff |
+| **My Gi Command Center** | `apps/platform-web` | Platform org/academy directory for My Gi ops |
 | **Shared** | `packages/shared` | Theme tokens, types, auth roles, repositories |
 
 ```
 apps/coach/           Coach Expo app
 apps/coach-web/       Coach Next.js desktop dashboard
+apps/platform-web/    My Gi Command Center (platform admin)
 packages/shared/      Shared theme tokens, types, auth roles, repositories
-supabase/migrations/  Coach + Member Development + audit tables
+supabase/migrations/  Coach + Member Development + audit + platform tables
 docs/                 Architecture notes
 ```
 
@@ -48,8 +50,10 @@ Black & white athletic identity matching the official Gracie Fighter / Open Mat 
 - `npm run ios` / `npm run android` — open iOS Simulator / Android Emulator
 - `npm run start:coach` — Coach Expo app
 - `npm run start:coach-web` — Coach Web (Next.js)
-- `npm run typecheck:all` — Member + Coach + Coach Web TypeScript
+- `npm run start:platform-web` — My Gi Command Center (Next.js :3001)
+- `npm run typecheck:all` — Member + Coach + Coach Web + Platform Web TypeScript
 - `npm run test:coach-web` — Coach Web unit tests
+- `npm run test:platform-web` — Command Center unit tests
 - `npm run eas:member:testflight` — Production iOS build + TestFlight submit
 
 ## Local development (UI / Fast Refresh)

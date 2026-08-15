@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  --ivory: #f5f3ee;
+  --surface: #faf9f6;
+  --panel: #fffcf8;
+  --ink: #20201e;
+  --ink-soft: #3a3936;
+  --mute: #6f6c66;
+  --line: #e8e4dc;
+  --bronze: #9a6735;
+  --bronze-soft: #b07d45;
+  --success: #2f6b4f;
+  --warning: #9a6b1f;
+  --danger: #8b2e2e;
+  --info: #3d5a73;
+}
+
+html,
+body {
+  min-height: 100%;
+  background: var(--ivory);
+  color: var(--ink);
+}
+
+body {
+  font-family: var(--font-figtree), system-ui, sans-serif;
+}
+
+*:focus-visible {
+  outline: 2px solid var(--bronze);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: rgba(154, 103, 53, 0.2);
+}

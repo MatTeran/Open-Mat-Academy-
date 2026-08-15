@@ -92,6 +92,7 @@ export const MOCK_PROMOTION_HISTORY: PromotionHistoryEntry[] = [
     coachId: 'guest-coach-user',
     coachName: 'Coach Rivera',
     notes: 'Consistent pressure passing under fatigue.',
+    academyId: 'academy-open-mat',
     createdAt: '2025-09-10T20:00:00.000Z',
   },
   {
@@ -104,6 +105,7 @@ export const MOCK_PROMOTION_HISTORY: PromotionHistoryEntry[] = [
     coachId: 'guest-coach-user',
     coachName: 'Coach Rivera',
     notes: null,
+    academyId: 'academy-open-mat',
     createdAt: '2025-06-01T19:00:00.000Z',
   },
   {
@@ -116,6 +118,7 @@ export const MOCK_PROMOTION_HISTORY: PromotionHistoryEntry[] = [
     coachId: 'guest-coach-user',
     coachName: 'Coach Rivera',
     notes: 'Promoted after open mat evaluation.',
+    academyId: 'academy-open-mat',
     createdAt: '2025-03-15T18:30:00.000Z',
   },
   {
@@ -128,6 +131,7 @@ export const MOCK_PROMOTION_HISTORY: PromotionHistoryEntry[] = [
     coachId: 'guest-coach-user',
     coachName: 'Coach Rivera',
     notes: null,
+    academyId: 'academy-open-mat',
     createdAt: '2024-11-02T17:00:00.000Z',
   },
   {
@@ -140,6 +144,7 @@ export const MOCK_PROMOTION_HISTORY: PromotionHistoryEntry[] = [
     coachId: 'guest-coach-user',
     coachName: 'Coach Rivera',
     notes: 'Joined the academy.',
+    academyId: 'academy-open-mat',
     createdAt: '2023-04-12T12:00:00.000Z',
   },
   {
@@ -152,6 +157,7 @@ export const MOCK_PROMOTION_HISTORY: PromotionHistoryEntry[] = [
     coachId: 'guest-coach-user',
     coachName: 'Coach Rivera',
     notes: 'Ready for blue belt evaluation.',
+    academyId: 'academy-open-mat',
     createdAt: '2025-11-02T18:00:00.000Z',
   },
   {
@@ -164,6 +170,7 @@ export const MOCK_PROMOTION_HISTORY: PromotionHistoryEntry[] = [
     coachId: 'guest-coach-user',
     coachName: 'Coach Rivera',
     notes: null,
+    academyId: 'academy-open-mat',
     createdAt: '2025-08-14T18:00:00.000Z',
   },
   {
@@ -176,6 +183,7 @@ export const MOCK_PROMOTION_HISTORY: PromotionHistoryEntry[] = [
     coachId: 'guest-coach-user',
     coachName: 'Coach Rivera',
     notes: 'Started fundamentals program.',
+    academyId: 'academy-open-mat',
     createdAt: '2025-01-08T12:00:00.000Z',
   },
   {
@@ -188,6 +196,7 @@ export const MOCK_PROMOTION_HISTORY: PromotionHistoryEntry[] = [
     coachId: 'guest-coach-user',
     coachName: 'Coach Rivera',
     notes: 'Leadership on the mat.',
+    academyId: 'academy-open-mat',
     createdAt: '2025-01-20T19:00:00.000Z',
   },
   {
@@ -200,6 +209,7 @@ export const MOCK_PROMOTION_HISTORY: PromotionHistoryEntry[] = [
     coachId: 'guest-coach-user',
     coachName: 'Coach Rivera',
     notes: null,
+    academyId: 'academy-open-mat',
     createdAt: '2024-06-20T19:00:00.000Z',
   },
 ];
@@ -236,6 +246,7 @@ export const MOCK_ACADEMY_ROLES: AcademyRoleAssignment[] = [
     id: 'role-3-assistant',
     memberId: 'member-3',
     role: 'assistant_coach',
+    academyId: 'academy-open-mat',
     assignedAt: daysAgo(60),
     assignedById: 'guest-coach-user',
     assignedByName: 'Coach Rivera',
@@ -244,6 +255,7 @@ export const MOCK_ACADEMY_ROLES: AcademyRoleAssignment[] = [
     id: 'role-3-comp',
     memberId: 'member-3',
     role: 'competition_team',
+    academyId: 'academy-open-mat',
     assignedAt: daysAgo(90),
     assignedById: 'guest-coach-user',
     assignedByName: 'Coach Rivera',
@@ -252,6 +264,7 @@ export const MOCK_ACADEMY_ROLES: AcademyRoleAssignment[] = [
     id: 'role-1-comp',
     memberId: 'member-1',
     role: 'competition_team',
+    academyId: 'academy-open-mat',
     assignedAt: daysAgo(40),
     assignedById: 'guest-coach-user',
     assignedByName: 'Coach Rivera',
@@ -260,6 +273,7 @@ export const MOCK_ACADEMY_ROLES: AcademyRoleAssignment[] = [
     id: 'role-7-kids',
     memberId: 'member-7',
     role: 'volunteer',
+    academyId: 'academy-open-mat',
     assignedAt: daysAgo(20),
     assignedById: 'coach-park',
     assignedByName: 'Coach Park',

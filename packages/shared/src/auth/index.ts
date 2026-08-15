@@ -19,3 +19,22 @@ export {
   hasManagerAccess,
   hasOwnerAccess,
 } from './roles';
+export {
+  canAccessAcademy,
+  canCoachAtAcademy,
+  canManageAcademy,
+  filterByAcademyId,
+  getAcademyMembership,
+  hasAcademyRole,
+  isAcademyMember,
+  isAcademyMembershipRole,
+  resolveAcademySessionContext,
+  sharesCoachableAcademyWith,
+} from './membership';
+export {
+  canAssignPlatformAdmins,
+  canManagePlatformTenants,
+  findPlatformAdmin,
+  isPlatformAdmin,
+  isPlatformAdminRole,
+} from './platform';

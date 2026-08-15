@@ -32,6 +32,7 @@ import {
 import {
   buildDashboardOverview,
   COACH_ACADEMY_ID,
+  COACH_LOCATION_ID,
   MOCK_ANNOUNCEMENTS,
   MOCK_ATTENDANCE,
   MOCK_CLASSES,
@@ -201,6 +202,7 @@ export function CoachDataProvider({ children }: PropsWithChildren) {
       const created = await classesRepo.create(input, {
         instructorId: user?.id ?? 'guest-coach-user',
         academyId: COACH_ACADEMY_ID,
+        locationId: COACH_LOCATION_ID,
       });
       setClasses((current) => [...current, created]);
       return created;
@@ -346,6 +348,7 @@ export function CoachDataProvider({ children }: PropsWithChildren) {
       const note = await notesRepo.create(input, {
         id: user?.id ?? 'guest-coach-user',
         name: user?.fullName ?? 'Coach',
+        academyId: COACH_ACADEMY_ID,
       });
       setMemberProfiles((current) =>
         current.map((profile) =>

@@ -23,6 +23,8 @@ export interface CoachEvent {
   waitlistCount: number;
   allowRsvp: boolean;
   academyId: string;
+  /** Optional physical site under the academy. */
+  locationId?: string | null;
   createdAt: string;
   updatedAt: string;
 }
