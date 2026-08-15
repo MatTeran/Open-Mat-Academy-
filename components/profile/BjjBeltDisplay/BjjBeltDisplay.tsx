@@ -22,12 +22,12 @@ export interface BjjBeltDisplayProps {
   animate?: boolean;
 }
 
-/** Asset intrinsic aspect (~720×479 after compress). */
-const BELT_ASPECT = 720 / 479;
+/** Asset intrinsic aspect (~960×640). */
+const BELT_ASPECT = 960 / 640;
 
 /**
- * Photorealistic tied adult BJJ belt — product image per rank with
- * promotion stripes baked onto the black/red tip (no drop shadow).
+ * Photorealistic tied adult BJJ belt — clean product photo per rank/stripes.
+ * Stripes live on the tip in the asset; no runtime overlay or drop shadow.
  */
 export function BjjBeltDisplay({
   belt,
@@ -105,7 +105,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     justifyContent: 'center',
     overflow: 'visible',
-    // No shadow — belt assets are already cleaned of contact shadows.
     backgroundColor: 'transparent',
   },
   image: {

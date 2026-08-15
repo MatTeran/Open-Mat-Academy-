@@ -16,8 +16,9 @@ export interface BeltAppearance {
 }
 
 /**
- * Photorealistic tied-belt assets with promotion stripes baked onto the
- * black (or red for black belt) rank tip. Index = stripe count 0–4.
+ * Photorealistic tied-belt product photos.
+ * Default ranks (2 stripes) use clean AI studio photos; other counts use
+ * tip-clipped tape on the same clean bases — no rembg / shadow killing.
  */
 const BELT_IMAGES: Record<BeltRank, ImageSourcePropType[]> = {
   white: [
