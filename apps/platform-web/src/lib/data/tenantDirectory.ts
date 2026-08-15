@@ -37,6 +37,17 @@ export interface TenantDirectory {
     organizationId: string;
     slug: string;
   }): Promise<Academy>;
+  createLocation(input: {
+    id: string;
+    academyId: string;
+    name: string;
+    addressLine1?: string | null;
+    city?: string | null;
+    state?: string | null;
+    postalCode?: string | null;
+    country?: string;
+    timezone?: string;
+  }): Promise<Location>;
   assignAcademyOwner(input: {
     academyId: string;
     userId: string;
@@ -112,6 +123,32 @@ export function createMemoryTenantDirectory(
       };
       academies.push(academy);
       return academy;
+    },
+    async createLocation(input) {
+      const now = new Date().toISOString();
+      const location: Location = {
+        id: input.id,
+        academyId: input.academyId,
+        name: input.name,
+        addressLine1: input.addressLine1 ?? null,
+        addressLine2: null,
+        city: input.city ?? null,
+        state: input.state ?? null,
+        postalCode: input.postalCode ?? null,
+        country: input.country ?? 'United States',
+        timezone: input.timezone ?? 'America/Los_Angeles',
+        latitude: null,
+        longitude: null,
+        isActive: true,
+        createdAt: now,
+        updatedAt: now,
+      };
+      locations.push(location);
+      const academy = academies.find((row) => row.id === input.academyId);
+      if (academy && !academy.primaryLocationId) {
+        academy.primaryLocationId = location.id;
+      }
+      return location;
     },
     async assignAcademyOwner(input) {
       const now = new Date().toISOString();

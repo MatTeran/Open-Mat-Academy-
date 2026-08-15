@@ -18,7 +18,7 @@ export async function demoSignIn() {
     sameSite: 'lax',
     path: '/',
   });
-  redirect('/orgs');
+  redirect('/overview');
 }
 
 export async function liveSignIn(formData: FormData) {
@@ -57,7 +57,7 @@ export async function liveSignIn(formData: FormData) {
     redirect('/login?error=not_platform_admin');
   }
 
-  redirect('/orgs');
+  redirect('/overview');
 }
 
 export async function signOut() {
