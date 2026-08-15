@@ -37,7 +37,7 @@ const members: CoachMemberProfile[] = [
     stripes: 2,
     membershipPlan: 'unlimited',
     membershipStatus: 'active',
-    academyName: 'Open Mat Academy',
+    academyName: 'My Gi',
     journey: {
       belt: 'blue',
       stripes: 2,
@@ -118,7 +118,7 @@ const members: CoachMemberProfile[] = [
     stripes: 4,
     membershipPlan: 'fundamentals',
     membershipStatus: 'active',
-    academyName: 'Open Mat Academy',
+    academyName: 'My Gi',
     journey: {
       belt: 'white',
       stripes: 4,
@@ -173,7 +173,7 @@ const members: CoachMemberProfile[] = [
     stripes: 1,
     membershipPlan: 'unlimited',
     membershipStatus: 'active',
-    academyName: 'Open Mat Academy',
+    academyName: 'My Gi',
     journey: {
       belt: 'purple',
       stripes: 1,
@@ -236,7 +236,7 @@ const members: CoachMemberProfile[] = [
     stripes: 0,
     membershipPlan: 'unlimited',
     membershipStatus: 'past_due',
-    academyName: 'Open Mat Academy',
+    academyName: 'My Gi',
     journey: {
       belt: 'blue',
       stripes: 0,
@@ -272,7 +272,7 @@ const members: CoachMemberProfile[] = [
   },
 ];
 
-/** Full Open Mat Academy Tracy flyer board for the current week. */
+/** Full My Gi Tracy flyer board for the current week. */
 const classes: CoachClass[] = buildWeeklyCoachClasses({
   academyId: ACADEMY_ID,
   todayISO: TODAY,

@@ -25,7 +25,7 @@ const TODAY = todayISO();
 
 export const COACH_ACADEMY_ID = 'academy-open-mat';
 
-/** Full Open Mat Academy Tracy flyer board for the current week. */
+/** Full My Gi Tracy flyer board for the current week. */
 export const MOCK_CLASSES: CoachClass[] = buildWeeklyCoachClasses({
   academyId: COACH_ACADEMY_ID,
   todayISO: TODAY,
@@ -212,7 +212,7 @@ export const MOCK_MEMBERS: CoachMemberProfile[] = [
     stripes: 2,
     membershipPlan: 'unlimited',
     membershipStatus: 'active',
-    academyName: 'Open Mat Academy',
+    academyName: 'My Gi',
     journey: {
       belt: 'blue',
       stripes: 2,
@@ -312,7 +312,7 @@ export const MOCK_MEMBERS: CoachMemberProfile[] = [
     stripes: 4,
     membershipPlan: 'fundamentals',
     membershipStatus: 'active',
-    academyName: 'Open Mat Academy',
+    academyName: 'My Gi',
     journey: {
       belt: 'white',
       stripes: 4,
@@ -374,7 +374,7 @@ export const MOCK_MEMBERS: CoachMemberProfile[] = [
     stripes: 1,
     membershipPlan: 'unlimited',
     membershipStatus: 'active',
-    academyName: 'Open Mat Academy',
+    academyName: 'My Gi',
     journey: {
       belt: 'purple',
       stripes: 1,
@@ -437,7 +437,7 @@ export const MOCK_MEMBERS: CoachMemberProfile[] = [
     stripes: 0,
     membershipPlan: 'unlimited',
     membershipStatus: 'past_due',
-    academyName: 'Open Mat Academy',
+    academyName: 'My Gi',
     journey: {
       belt: 'blue',
       stripes: 0,
@@ -485,7 +485,7 @@ export const MOCK_MEMBERS: CoachMemberProfile[] = [
     stripes: 1,
     membershipPlan: 'kids',
     membershipStatus: 'active',
-    academyName: 'Open Mat Academy',
+    academyName: 'My Gi',
     journey: {
       belt: 'white',
       stripes: 1,

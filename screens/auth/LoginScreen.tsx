@@ -74,7 +74,7 @@ export function LoginScreen({ navigation }: Props) {
             onPress={() => {
               void handleGuest();
             }}
-            accessibilityHint="Opens Open Mat as Alex Chen with sample academy data"
+            accessibilityHint="Opens My Gi as Alex Chen with sample academy data"
           />
           <Spacer size="xs" />
           <Text variant="caption" style={styles.guestHint}>

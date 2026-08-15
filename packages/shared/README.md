@@ -1,6 +1,6 @@
 # @openmat/shared
 
-Shared foundation for Open Mat Member and Coach apps.
+Shared foundation for My Gi Member and Coach apps.
 
 ## Modules
 

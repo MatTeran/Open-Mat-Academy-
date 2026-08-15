@@ -7,7 +7,7 @@ function daysAgo(days: number, hour = 18): string {
   return date.toISOString();
 }
 
-/** Seed workouts spanning ~12 weeks so Training Insights has real local data. */
+/** Seed workouts for the My Gi log spanning ~12 weeks (Training Insights). */
 export const INITIAL_WORKOUTS: Workout[] = [
   {
     id: 'w-1',

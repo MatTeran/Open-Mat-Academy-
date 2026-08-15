@@ -10,7 +10,7 @@
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#F3F0EA"
+      "backgroundColor": "#000000"
     },
     "ios": {
       "supportsTablet": true,
@@ -18,8 +18,8 @@
       "buildNumber": "1",
       "infoPlist": {
         "CFBundleDisplayName": "My Gi",
-        "NSLocationWhenInUseUsageDescription": "Open Mat Academy uses your location to send reminders when you are near the gym for class.",
-        "NSLocationAlwaysAndWhenInUseUsageDescription": "Open Mat Academy uses your location to send reminders when you are near the gym for class.",
+        "NSLocationWhenInUseUsageDescription": "My Gi uses your location to send reminders when you are near the gym for class.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "My Gi uses your location to send reminders when you are near the gym for class.",
         "UIBackgroundModes": [
           "location",
           "remote-notification"
@@ -65,7 +65,7 @@
       [
         "expo-location",
         {
-          "locationAlwaysAndWhenInUsePermission": "Allow Open Mat Academy to use your location to remind you when you are near the gym.",
+          "locationAlwaysAndWhenInUsePermission": "Allow My Gi to use your location to remind you when you are near the gym.",
           "isAndroidBackgroundLocationEnabled": true
         }
       ]

@@ -33,7 +33,7 @@ export const ANNOUNCEMENTS: Announcement[] = [
     id: 'ann-2',
     title: 'New mats installed in Room B',
     body: 'Room B is back online with fresh mats. Please wipe down after open mat and keep shoes off the surface.',
-    authorName: 'Open Mat Staff',
+    authorName: 'My Gi Staff',
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 30).toISOString(),
     comments: [
       {

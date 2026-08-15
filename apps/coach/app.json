@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Open Mat Coach",
+    "name": "My Gi Coach",
     "slug": "open-mat-coach",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -17,7 +17,7 @@
       "bundleIdentifier": "OpenMatCoach",
       "buildNumber": "1",
       "infoPlist": {
-        "CFBundleDisplayName": "OM Coach",
+        "CFBundleDisplayName": "My Gi Coach",
         "UIBackgroundModes": [
           "remote-notification"
         ],

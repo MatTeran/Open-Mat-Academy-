@@ -1,5 +1,5 @@
 /**
- * Open Mat / My Gi brand color palettes.
+ * My Gi brand color palettes.
  * Light = Version W.1 warm ivory + bronze. Dark remains athletic charcoal.
  */
 

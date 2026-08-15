@@ -61,10 +61,10 @@ function parseAcademy(membershipName?: string | null): {
   academyName: string;
   locationLabel: string;
 } {
-  const raw = membershipName?.trim() || 'Open Mat · Tracy';
+  const raw = membershipName?.trim() || 'My Gi · Tracy';
   const [namePart, locationPart] = raw.split('·').map((part) => part.trim());
   return {
-    academyName: (namePart || 'Open Mat').toUpperCase(),
+    academyName: (namePart || 'My Gi').toUpperCase(),
     locationLabel: (locationPart || 'Tracy, California').toUpperCase(),
   };
 }
