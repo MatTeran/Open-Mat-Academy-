@@ -8,6 +8,7 @@ import type {
   RegisterPayload,
 } from '../../types';
 import { getSupabaseClient } from './client';
+import { ensureMemberRosterProfile } from './memberRoster';
 
 export class AuthServiceError extends Error {
   constructor(message: string) {
@@ -109,9 +110,16 @@ export async function signInWithEmail({
     throw new AuthServiceError(error?.message ?? 'Unable to sign in.');
   }
 
+  const user = mapAuthUser(data.user)!;
+  await ensureMemberRosterProfile({
+    userId: user.id,
+    fullName: user.fullName,
+    email: user.email,
+  });
+
   return {
     session: mapAuthSession(data.session)!,
-    user: mapAuthUser(data.user)!,
+    user,
   };
 }
 
@@ -126,12 +134,14 @@ export async function signUpWithEmail({
 }> {
   const supabase = requireClient();
   const redirectTo = Linking.createURL('/');
+  const normalizedEmail = email.trim().toLowerCase();
+  const normalizedName = fullName.trim();
 
   const { data, error } = await supabase.auth.signUp({
-    email: email.trim().toLowerCase(),
+    email: normalizedEmail,
     password,
     options: {
-      data: { full_name: fullName.trim() },
+      data: { full_name: normalizedName },
       emailRedirectTo: redirectTo,
     },
   });
@@ -142,6 +152,15 @@ export async function signUpWithEmail({
 
   const session = mapAuthSession(data.session);
   const user = mapAuthUser(data.user);
+
+  // Trigger creates the roster row; RPC ensures it when a session is present.
+  if (data.user && data.session) {
+    await ensureMemberRosterProfile({
+      userId: data.user.id,
+      fullName: normalizedName,
+      email: normalizedEmail,
+    });
+  }
 
   return {
     session,

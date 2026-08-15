@@ -64,7 +64,7 @@ export function PromoteBeltScreen({ navigation, route }: Props) {
     <Screen scroll keyboard>
       <Text variant="hero">Promote Belt</Text>
       <Text variant="body" muted>
-        A coach must confirm every promotion. Open Mat never auto-promotes.
+        A coach must confirm every promotion. My Gi never auto-promotes.
       </Text>
       <Spacer size="lg" />
 

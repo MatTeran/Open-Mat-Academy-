@@ -45,7 +45,7 @@ export function AcademyHero({
         <View
           style={[
             StyleSheet.absoluteFill,
-            { backgroundColor: 'rgba(18, 14, 10, 0.42)' },
+            { backgroundColor: 'rgba(18, 14, 10, 0.28)' },
           ]}
         />
         <View
@@ -60,7 +60,9 @@ export function AcademyHero({
           <View style={styles.topRow}>
             <View style={styles.brandBlock}>
               <View style={styles.logoRow}>
-                <Image source={brandLogo} style={styles.logo} />
+                <View style={styles.logoRing}>
+                  <Image source={brandLogo} style={styles.logo} />
+                </View>
                 <Text
                   style={styles.academyName}
                   numberOfLines={1}
@@ -85,12 +87,9 @@ export function AcademyHero({
               }
               onPress={onPressNotifications}
               hitSlop={12}
-              style={[
-                styles.bell,
-                { backgroundColor: 'rgba(255,255,255,0.14)' },
-              ]}
+              style={styles.bell}
             >
-              <Ionicons name="notifications-outline" size={20} color="#FFFFFF" />
+              <Ionicons name="notifications-outline" size={22} color="#FFFFFF" />
               {unreadCount > 0 ? (
                 <View
                   style={[styles.dot, { backgroundColor: colors.goldAccent }]}
@@ -128,10 +127,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 10,
   },
+  logoRing: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    overflow: 'hidden',
+    backgroundColor: 'rgba(255,255,255,0.92)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   logo: {
-    width: 28,
-    height: 28,
-    borderRadius: 6,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
   },
   academyName: {
     flexShrink: 1,
@@ -168,8 +176,8 @@ const styles = StyleSheet.create({
   },
   dot: {
     position: 'absolute',
-    top: 9,
-    right: 10,
+    top: 8,
+    right: 9,
     width: 7,
     height: 7,
     borderRadius: 4,

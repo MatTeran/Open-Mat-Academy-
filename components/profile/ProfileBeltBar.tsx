@@ -1,40 +1,64 @@
 import { Ionicons } from '@expo/vector-icons';
+import * as Haptics from 'expo-haptics';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { useAppTheme } from '../../lib/providers/ThemeProvider';
-import { radii, spacing } from '../../lib/theme';
+import { radii, spacing, w1Shadow } from '../../lib/theme';
 import type { BeltRank } from '../../types/user';
 import { Text } from '../ui/Text';
-import { ProfileMiniBelt } from './ProfileMiniBelt';
+import {
+  BjjBeltDisplay,
+  formatBeltRankTitle,
+  type BeltStripeCount,
+} from './BjjBeltDisplay';
 
 interface ProfileBeltBarProps {
   belt: BeltRank;
-  stripes: 0 | 1 | 2 | 3 | 4;
-  beltLabel: string;
-  stripesLabel: string;
+  stripes: BeltStripeCount;
+  promotedAt: string;
+  timeAtRankLabel: string;
   onPress: () => void;
 }
 
-/** Full-width belt highlight — rank + wide stripe bar. */
+function formatPromotedDate(iso: string): string {
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) {
+    return '—';
+  }
+  return date.toLocaleDateString(undefined, {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  });
+}
+
+/** Full-width "Your Rank" card — realistic belt + promotion meta. */
 export function ProfileBeltBar({
   belt,
   stripes,
-  beltLabel,
-  stripesLabel,
+  promotedAt,
+  timeAtRankLabel,
   onPress,
 }: ProfileBeltBarProps) {
   const { colors } = useAppTheme();
+  const rankTitle = formatBeltRankTitle(belt, stripes);
+
+  const handlePress = () => {
+    void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    onPress();
+  };
 
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityLabel={`Belt: ${beltLabel}, ${stripesLabel}`}
-      onPress={onPress}
+      accessibilityLabel={`Your rank: ${rankTitle}. Promoted ${formatPromotedDate(promotedAt)}. Time at rank ${timeAtRankLabel}.`}
+      onPress={handlePress}
       style={({ pressed }) => [pressed && styles.pressed]}
     >
       <View
         style={[
           styles.card,
+          w1Shadow.card,
           {
             backgroundColor: colors.secondaryBackground,
             borderColor: colors.border,
@@ -43,12 +67,15 @@ export function ProfileBeltBar({
       >
         <View style={styles.header}>
           <View style={styles.headerLeft}>
-            <Text variant="caption" style={{ color: colors.goldAccent }}>
-              Belt
+            <Text
+              variant="caption"
+              style={[styles.headerLabel, { color: colors.goldAccent }]}
+            >
+              YOUR RANK
             </Text>
             <Ionicons
               name="ribbon-outline"
-              size={16}
+              size={15}
               color={colors.goldAccent}
               style={styles.headerIcon}
             />
@@ -60,18 +87,59 @@ export function ProfileBeltBar({
           />
         </View>
 
-        <ProfileMiniBelt belt={belt} stripes={stripes} size="wide" />
+        <View style={styles.beltStage}>
+          <BjjBeltDisplay belt={belt} stripes={stripes} />
+        </View>
 
-        <View style={styles.copy}>
-          <Text variant="subtitle" style={[styles.title, { color: colors.text }]}>
-            {beltLabel}
-          </Text>
-          <Text
-            variant="caption"
-            style={[styles.subtitle, { color: colors.secondaryText }]}
-          >
-            {stripesLabel}
-          </Text>
+        <Text
+          variant="subtitle"
+          style={[styles.rankTitle, { color: colors.text }]}
+        >
+          {rankTitle}
+        </Text>
+
+        <View style={[styles.metaRow, { borderTopColor: colors.border }]}>
+          <View style={styles.metaCol}>
+            <View style={styles.metaLabelRow}>
+              <Ionicons
+                name="calendar-outline"
+                size={13}
+                color={colors.secondaryText}
+              />
+              <Text
+                variant="caption"
+                style={{ color: colors.secondaryText, marginLeft: 5 }}
+              >
+                Promoted
+              </Text>
+            </View>
+            <Text variant="body" style={[styles.metaValue, { color: colors.text }]}>
+              {formatPromotedDate(promotedAt)}
+            </Text>
+          </View>
+
+          <View
+            style={[styles.metaDivider, { backgroundColor: colors.border }]}
+          />
+
+          <View style={styles.metaCol}>
+            <View style={styles.metaLabelRow}>
+              <Ionicons
+                name="time-outline"
+                size={13}
+                color={colors.secondaryText}
+              />
+              <Text
+                variant="caption"
+                style={{ color: colors.secondaryText, marginLeft: 5 }}
+              >
+                Time at Rank
+              </Text>
+            </View>
+            <Text variant="body" style={[styles.metaValue, { color: colors.text }]}>
+              {timeAtRankLabel}
+            </Text>
+          </View>
         </View>
       </View>
     </Pressable>
@@ -81,36 +149,69 @@ export function ProfileBeltBar({
 const styles = StyleSheet.create({
   pressed: {
     opacity: 0.92,
+    transform: [{ scale: 0.995 }],
   },
   card: {
     width: '100%',
     borderRadius: radii.xl,
     borderWidth: 1,
-    padding: spacing.md,
+    paddingHorizontal: spacing.md,
+    paddingTop: spacing.md,
+    paddingBottom: spacing.sm,
+    overflow: 'visible',
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: spacing.sm,
+    marginBottom: spacing.xs,
   },
   headerLeft: {
     flexDirection: 'row',
     alignItems: 'center',
   },
+  headerLabel: {
+    letterSpacing: 1.1,
+    fontSize: 11,
+  },
   headerIcon: {
     marginLeft: 6,
   },
-  copy: {
-    marginTop: spacing.sm,
+  beltStage: {
+    width: '100%',
+    alignItems: 'center',
+    paddingVertical: spacing.sm,
+    minHeight: 160,
+  },
+  rankTitle: {
+    textAlign: 'center',
+    fontSize: 17,
+    letterSpacing: 0.6,
+    marginTop: spacing.xs,
+    marginBottom: spacing.sm,
+  },
+  metaRow: {
     flexDirection: 'row',
-    alignItems: 'baseline',
-    gap: spacing.sm,
+    alignItems: 'stretch',
+    borderTopWidth: StyleSheet.hairlineWidth,
+    paddingTop: spacing.sm,
+    marginTop: spacing.xxs,
   },
-  title: {
-    fontSize: 20,
+  metaCol: {
+    flex: 1,
+    gap: 3,
   },
-  subtitle: {
-    lineHeight: 18,
+  metaLabelRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  metaValue: {
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  metaDivider: {
+    width: StyleSheet.hairlineWidth,
+    marginHorizontal: spacing.md,
+    alignSelf: 'stretch',
   },
 });

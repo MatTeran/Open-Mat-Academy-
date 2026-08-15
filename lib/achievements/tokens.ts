@@ -1,4 +1,4 @@
-/** Premium Achievement Gallery palette — Open Mat trophy case. */
+/** Premium Achievement Gallery palette — My Gi trophy case. */
 export const achievementTokens = {
   background: '#090909',
   surface: '#141414',

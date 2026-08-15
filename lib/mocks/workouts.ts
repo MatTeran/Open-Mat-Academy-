@@ -1,10 +1,17 @@
-import type { Workout } from '../../types/workout';
+import type { TechniqueId, Workout } from '../../types/workout';
 
-/** Seed workouts for the Open Mat log — local only. */
+function daysAgo(days: number, hour = 18): string {
+  const date = new Date();
+  date.setHours(hour, 0, 0, 0);
+  date.setDate(date.getDate() - days);
+  return date.toISOString();
+}
+
+/** Seed workouts for the My Gi log spanning ~12 weeks (Training Insights). */
 export const INITIAL_WORKOUTS: Workout[] = [
   {
     id: 'w-1',
-    date: new Date(Date.now() - 1000 * 60 * 60 * 26).toISOString(),
+    date: daysAgo(1),
     className: 'Adult Advanced No-Gi',
     classType: 'advanced',
     instructor: 'Coach Rivera',
@@ -12,7 +19,8 @@ export const INITIAL_WORKOUTS: Workout[] = [
     rounds: 6,
     giType: 'no_gi',
     intensity: 'hard',
-    partners: ['Jordan', 'Alex'],
+    intensityScore: 8,
+    partners: ['Marco', 'Alex'],
     techniques: ['guard_pass', 'mount', 'armbar'],
     favoriteTechnique: 'armbar',
     notes: 'Felt sharp on top pressure. Need to tighten elbow control after the pass.',
@@ -22,7 +30,7 @@ export const INITIAL_WORKOUTS: Workout[] = [
   },
   {
     id: 'w-2',
-    date: new Date(Date.now() - 1000 * 60 * 60 * 50).toISOString(),
+    date: daysAgo(2),
     className: 'Adult Fundamentals GI',
     classType: 'fundamentals',
     instructor: 'Coach Mendes',
@@ -30,8 +38,9 @@ export const INITIAL_WORKOUTS: Workout[] = [
     rounds: 4,
     giType: 'gi',
     intensity: 'moderate',
-    partners: ['Sam'],
-    techniques: ['sweep', 'triangle'],
+    intensityScore: 5,
+    partners: ['James', 'Sam'],
+    techniques: ['scissor_sweep', 'triangle', 'closed_guard'],
     favoriteTechnique: 'triangle',
     notes: 'Worked closed guard retention and hip escapes.',
     rating: 4,
@@ -40,7 +49,7 @@ export const INITIAL_WORKOUTS: Workout[] = [
   },
   {
     id: 'w-3',
-    date: new Date(Date.now() - 1000 * 60 * 60 * 96).toISOString(),
+    date: daysAgo(4),
     className: 'Open Mat',
     classType: 'open_mat',
     instructor: 'Coach Silva',
@@ -48,12 +57,260 @@ export const INITIAL_WORKOUTS: Workout[] = [
     rounds: 8,
     giType: 'gi',
     intensity: 'competition_pace',
-    partners: ['Chris', 'Diego', 'Maya'],
+    intensityScore: 9,
+    partners: ['Chris', 'Diego', 'Maya', 'Marco'],
     techniques: ['back_control', 'rear_naked_choke', 'kimura'],
     favoriteTechnique: 'rear_naked_choke',
     notes: 'Long open mat. Breathing got sloppy in rounds 6–7.',
     rating: 4,
     mood: 'exhausted',
+    photoPlaceholder: true,
+  },
+  {
+    id: 'w-4',
+    date: daysAgo(6),
+    className: 'Adult Advanced GI',
+    classType: 'advanced',
+    instructor: 'Coach Rivera',
+    durationMinutes: 90,
+    rounds: 5,
+    giType: 'gi',
+    intensity: 'hard',
+    intensityScore: 7,
+    partners: ['Marco', 'David'],
+    techniques: ['armbar', 'single_leg', 'hip_bump_sweep'],
+    favoriteTechnique: 'armbar',
+    notes: 'Good chain wrestling into submissions.',
+    rating: 5,
+    mood: 'great',
+    photoPlaceholder: true,
+  },
+  {
+    id: 'w-5',
+    date: daysAgo(9),
+    className: 'No-Gi Fundamentals',
+    classType: 'fundamentals',
+    instructor: 'Coach Park',
+    durationMinutes: 70,
+    rounds: 4,
+    giType: 'no_gi',
+    intensity: 'moderate',
+    intensityScore: 6,
+    partners: ['James', 'Chris'],
+    techniques: ['guillotine', 'double_leg', 'side_control_escape'],
+    favoriteTechnique: 'guillotine',
+    notes: 'Focused on takedown entries.',
+    rating: 4,
+    mood: 'good',
+    photoPlaceholder: true,
+  },
+  {
+    id: 'w-6',
+    date: daysAgo(12),
+    className: 'Open Mat',
+    classType: 'open_mat',
+    instructor: 'Coach Silva',
+    durationMinutes: 100,
+    rounds: 7,
+    giType: 'no_gi',
+    intensity: 'hard',
+    intensityScore: 8,
+    partners: ['Marco', 'James', 'Alex'],
+    techniques: ['triangle', 'armbar', 'mount'],
+    favoriteTechnique: 'triangle',
+    notes: 'Lots of positional sparring.',
+    rating: 5,
+    mood: 'great',
+    photoPlaceholder: true,
+  },
+  {
+    id: 'w-7',
+    date: daysAgo(15),
+    className: 'Adult Fundamentals GI',
+    classType: 'fundamentals',
+    instructor: 'Coach Mendes',
+    durationMinutes: 75,
+    rounds: 4,
+    giType: 'gi',
+    intensity: 'easy',
+    intensityScore: 3,
+    partners: ['David', 'Sam'],
+    techniques: ['hip_escape', 'closed_guard', 'sweep'],
+    favoriteTechnique: 'hip_escape',
+    notes: 'Recovery session — light rounds.',
+    rating: 3,
+    mood: 'average',
+    photoPlaceholder: true,
+  },
+  {
+    id: 'w-8',
+    date: daysAgo(18),
+    className: 'Competition Class',
+    classType: 'competition',
+    instructor: 'Coach Rivera',
+    durationMinutes: 90,
+    rounds: 6,
+    giType: 'gi',
+    intensity: 'competition_pace',
+    intensityScore: 10,
+    partners: ['Marco', 'Chris'],
+    techniques: ['single_leg', 'guard_pass', 'rear_naked_choke'],
+    favoriteTechnique: 'single_leg',
+    notes: 'Match pace rounds.',
+    rating: 5,
+    mood: 'exhausted',
+    photoPlaceholder: true,
+  },
+  {
+    id: 'w-9',
+    date: daysAgo(22),
+    className: 'Adult Advanced No-Gi',
+    classType: 'advanced',
+    instructor: 'Coach Park',
+    durationMinutes: 85,
+    rounds: 5,
+    giType: 'no_gi',
+    intensity: 'hard',
+    intensityScore: 7,
+    partners: ['James', 'Diego'],
+    techniques: ['kimura', 'side_control', 'armbar'],
+    favoriteTechnique: 'kimura',
+    notes: 'Top control emphasis.',
+    rating: 4,
+    mood: 'good',
+    photoPlaceholder: true,
+  },
+  {
+    id: 'w-10',
+    date: daysAgo(27),
+    className: 'Open Mat',
+    classType: 'open_mat',
+    instructor: 'Coach Silva',
+    durationMinutes: 110,
+    rounds: 8,
+    giType: 'gi',
+    intensity: 'moderate',
+    intensityScore: 5,
+    partners: ['Marco', 'Maya', 'David'],
+    techniques: ['scissor_sweep', 'triangle', 'closed_guard'],
+    favoriteTechnique: 'scissor_sweep',
+    notes: 'Guard play focus.',
+    rating: 4,
+    mood: 'good',
+    photoPlaceholder: true,
+  },
+  {
+    id: 'w-11',
+    date: daysAgo(34),
+    className: 'Adult Fundamentals GI',
+    classType: 'fundamentals',
+    instructor: 'Coach Mendes',
+    durationMinutes: 75,
+    rounds: 4,
+    giType: 'gi',
+    intensity: 'moderate',
+    intensityScore: 4,
+    partners: ['Sam'],
+    techniques: ['hip_escape', 'guard_pass'],
+    favoriteTechnique: 'guard_pass',
+    notes: 'Basics refresh.',
+    rating: 4,
+    mood: 'good',
+    photoPlaceholder: true,
+  },
+  {
+    id: 'w-12',
+    date: daysAgo(41),
+    className: 'Adult Advanced GI',
+    classType: 'advanced',
+    instructor: 'Coach Rivera',
+    durationMinutes: 90,
+    rounds: 5,
+    giType: 'gi',
+    intensity: 'hard',
+    intensityScore: 7,
+    partners: ['Marco', 'Chris'],
+    techniques: ['armbar', 'back_control'],
+    favoriteTechnique: 'armbar',
+    notes: 'Back attacks.',
+    rating: 5,
+    mood: 'great',
+    photoPlaceholder: true,
+  },
+  {
+    id: 'w-13',
+    date: daysAgo(48),
+    className: 'No-Gi Open Mat',
+    classType: 'open_mat',
+    instructor: 'Coach Park',
+    durationMinutes: 100,
+    rounds: 6,
+    giType: 'no_gi',
+    intensity: 'hard',
+    intensityScore: 8,
+    partners: ['James', 'Alex'],
+    techniques: ['guillotine', 'double_leg', 'mount'],
+    favoriteTechnique: 'guillotine',
+    notes: 'Wrestling-heavy open mat.',
+    rating: 4,
+    mood: 'exhausted',
+    photoPlaceholder: true,
+  },
+  {
+    id: 'w-14',
+    date: daysAgo(55),
+    className: 'Adult Fundamentals GI',
+    classType: 'fundamentals',
+    instructor: 'Coach Mendes',
+    durationMinutes: 70,
+    rounds: 3,
+    giType: 'gi',
+    intensity: 'easy',
+    intensityScore: 2,
+    partners: ['David'],
+    techniques: ['closed_guard', 'hip_bump_sweep'],
+    favoriteTechnique: 'closed_guard',
+    notes: 'Easy technical rounds.',
+    rating: 3,
+    mood: 'average',
+    photoPlaceholder: true,
+  },
+  {
+    id: 'w-15',
+    date: daysAgo(62),
+    className: 'Competition Class',
+    classType: 'competition',
+    instructor: 'Coach Rivera',
+    durationMinutes: 95,
+    rounds: 7,
+    giType: 'gi',
+    intensity: 'competition_pace',
+    intensityScore: 9,
+    partners: ['Marco', 'Chris', 'James'],
+    techniques: ['single_leg', 'armbar', 'rear_naked_choke'],
+    favoriteTechnique: 'armbar',
+    notes: 'Prep for upcoming tournament.',
+    rating: 5,
+    mood: 'great',
+    photoPlaceholder: true,
+  },
+  {
+    id: 'w-16',
+    date: daysAgo(70),
+    className: 'Adult Advanced No-Gi',
+    classType: 'advanced',
+    instructor: 'Coach Park',
+    durationMinutes: 85,
+    rounds: 5,
+    giType: 'no_gi',
+    intensity: 'moderate',
+    intensityScore: 6,
+    partners: ['Alex', 'Diego'],
+    techniques: ['triangle', 'side_control_escape'],
+    favoriteTechnique: 'triangle',
+    notes: 'Escape chains.',
+    rating: 4,
+    mood: 'good',
     photoPlaceholder: true,
   },
 ];
@@ -68,6 +325,7 @@ export function createEmptyWorkoutDraft(): Omit<Workout, 'id'> {
     rounds: 4,
     giType: 'gi',
     intensity: 'moderate',
+    intensityScore: 5,
     partners: [],
     techniques: [],
     favoriteTechnique: null,
@@ -76,4 +334,45 @@ export function createEmptyWorkoutDraft(): Omit<Workout, 'id'> {
     mood: 'good',
     photoPlaceholder: true,
   };
+}
+
+export function recentTechniquesFromWorkouts(
+  workouts: Workout[],
+  limit = 6,
+): TechniqueId[] {
+  const seen = new Set<TechniqueId>();
+  const recent: TechniqueId[] = [];
+  for (const workout of workouts) {
+    for (const technique of workout.techniques) {
+      if (!seen.has(technique)) {
+        seen.add(technique);
+        recent.push(technique);
+        if (recent.length >= limit) {
+          return recent;
+        }
+      }
+    }
+  }
+  return recent;
+}
+
+export function recentPartnersFromWorkouts(
+  workouts: Workout[],
+  limit = 6,
+): string[] {
+  const seen = new Set<string>();
+  const recent: string[] = [];
+  for (const workout of workouts) {
+    for (const partner of workout.partners) {
+      const key = partner.toLowerCase();
+      if (!seen.has(key)) {
+        seen.add(key);
+        recent.push(partner);
+        if (recent.length >= limit) {
+          return recent;
+        }
+      }
+    }
+  }
+  return recent;
 }

@@ -28,6 +28,7 @@ import { useAuth, useAppTheme } from '../../hooks';
 import {
   formatMembershipPlan,
   formatMembershipStatus,
+  formatTimeAtRank,
 } from '../../lib/mocks/profile';
 import { useProfile } from '../../lib/providers/ProfileProvider';
 import { spacing } from '../../lib/theme';
@@ -84,7 +85,7 @@ export function ProfileHomeScreen({ navigation }: Props) {
   const [photoLoading, setPhotoLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const displayName = user?.fullName || 'Open Mat Athlete';
+  const displayName = user?.fullName || 'My Gi Athlete';
   const academyLine = hub.membership.academyName.toUpperCase();
 
   const handleSignOut = async () => {
@@ -249,8 +250,8 @@ export function ProfileHomeScreen({ navigation }: Props) {
         <ProfileBeltBar
           belt={hub.beltProgress.belt}
           stripes={hub.beltProgress.stripes}
-          beltLabel={beltLabel}
-          stripesLabel={stripesLabel}
+          promotedAt={hub.beltProgress.promotedAt}
+          timeAtRankLabel={formatTimeAtRank(hub.beltProgress.promotedAt)}
           onPress={() => navigation.navigate('BeltRank')}
         />
         <Spacer size="md" />

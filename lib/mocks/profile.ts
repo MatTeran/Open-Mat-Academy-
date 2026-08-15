@@ -11,7 +11,7 @@ export const DEFAULT_ATHLETE_HUB: AthleteHub = {
   membership: {
     plan: 'unlimited',
     status: 'active',
-    academyName: 'Open Mat · Tracy',
+    academyName: 'My Gi · Tracy',
     memberSince: '2024-03-01T00:00:00.000Z',
     renewsOn: '2026-08-01T00:00:00.000Z',
     priceLabel: '$179 / month',
@@ -136,4 +136,27 @@ export function formatStripeCount(stripes: number): string {
     return 'No stripes';
   }
   return `${stripes} stripe${stripes === 1 ? '' : 's'}`;
+}
+
+/** Human time since promotion / time-at-rank start (e.g. "5 Months"). */
+export function formatTimeAtRank(startedAt: string, now = new Date()): string {
+  const start = new Date(startedAt);
+  if (Number.isNaN(start.getTime())) {
+    return '—';
+  }
+  const ms = Math.max(0, now.getTime() - start.getTime());
+  const days = Math.floor(ms / (1000 * 60 * 60 * 24));
+  if (days < 30) {
+    return `${days} Day${days === 1 ? '' : 's'}`;
+  }
+  const months = Math.floor(days / 30);
+  if (months < 12) {
+    return `${months} Month${months === 1 ? '' : 's'}`;
+  }
+  const years = Math.floor(months / 12);
+  const rem = months % 12;
+  if (rem === 0) {
+    return `${years} Year${years === 1 ? '' : 's'}`;
+  }
+  return `${years}y ${rem}mo`;
 }

@@ -19,5 +19,7 @@ export { ProfileHomeScreen } from './profile/ProfileHomeScreen';
 export { SettingsScreen } from './profile/SettingsScreen';
 export { NotificationsScreen } from './notifications/NotificationsScreen';
 export { NotificationSettingsScreen } from './notifications/NotificationSettingsScreen';
+export { TechniqueDetailScreen } from './workout/TechniqueDetailScreen';
 export { WorkoutDetailsScreen } from './workout/WorkoutDetailsScreen';
 export { WorkoutLogListScreen } from './workout/WorkoutLogListScreen';
+export { YourGameScreen } from './workout/YourGameScreen';
