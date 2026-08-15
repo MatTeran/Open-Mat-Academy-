@@ -91,8 +91,8 @@ export const UPCOMING_EVENTS: UpcomingEvent[] = [
   {
     id: 'evt-1',
     title: 'Saturday Open Mat',
-    dateLabel: 'Sat · Weekly',
-    meta: 'GI / No GI · 10:00 AM – 12:00 PM',
+    dateLabel: 'Sat Weekly',
+    meta: 'Gi / No Gi · 10:00 AM – 12:00 PM',
   },
   {
     id: 'evt-2',

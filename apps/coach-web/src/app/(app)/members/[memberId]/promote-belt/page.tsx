@@ -30,7 +30,7 @@ export default async function PromoteBeltPage({
         <p className="text-xs uppercase tracking-[0.2em] text-gold">Promotion</p>
         <h1 className="font-display text-3xl text-white">Promote Belt</h1>
         <p className="text-sm text-mute">
-          Open Mat never auto-promotes. Attendance and XP are context only.
+          My Gi never auto-promotes. Attendance and XP are context only.
         </p>
       </header>
 

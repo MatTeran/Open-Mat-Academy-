@@ -88,7 +88,7 @@ export function NotificationSettingsScreen({ navigation }: Props) {
       <Text variant="hero">Notification Settings</Text>
       <Spacer size="sm" />
       <Text variant="bodyMuted">
-        Control what Open Mat can notify you about. Preferences save on this
+        Control what My Gi can notify you about. Preferences save on this
         device first.
       </Text>
 
@@ -104,7 +104,7 @@ export function NotificationSettingsScreen({ navigation }: Props) {
       <Card>
         <NotificationPreferenceRow
           label="Master notifications"
-          description="Turn off to pause all Open Mat alerts."
+          description="Turn off to pause all My Gi alerts."
           value={preferences.masterEnabled}
           onValueChange={onToggle('masterEnabled')}
         />

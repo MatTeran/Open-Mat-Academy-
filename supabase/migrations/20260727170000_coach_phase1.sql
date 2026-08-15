@@ -1,4 +1,4 @@
--- Open Mat Coach Phase 1 schema
+-- My Gi Coach Phase 1 schema
 -- Announcements, attendance, coach notes, and coach class management.
 -- Designed to coexist with the Member app without changing member UX.
 

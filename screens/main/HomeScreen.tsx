@@ -4,17 +4,22 @@ import {
 } from '@react-navigation/native';
 import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useQuery } from '@tanstack/react-query';
 import * as Haptics from 'expo-haptics';
 import { useEffect, useMemo, useState } from 'react';
-import { AccessibilityInfo, StyleSheet, View } from 'react-native';
+import { AccessibilityInfo, Linking, StyleSheet, View } from 'react-native';
 
 import {
+  AcademyAnnouncementCard,
+  AcademyUpcomingEvents,
   DashboardGrid,
   FadeIn,
   AcademyHero,
   GreetingSection,
   JourneyCard,
+  LocalEventsHomeCard,
   NotificationPermissionCard,
+  QuickActionsRow,
   Screen,
   Spacer,
   TrainingStreakCard,
@@ -25,15 +30,19 @@ import { useAuth, useNotifications, useProfile } from '../../hooks';
 import {
   HOME_USER_SUMMARY,
   NEXT_CLASS_SUMMARY,
+  QUICK_ACTIONS,
+  UPCOMING_EVENTS,
 } from '../../lib/mocks/home';
 import { scheduleClassReminder } from '../../lib/notifications';
 import { useCommunity } from '../../lib/providers/CommunityProvider';
 import { useJourney } from '../../lib/providers/JourneyProvider';
 import { spacing, w1Spacing } from '../../lib/theme';
+import { searchLocalEvents } from '../../services/events/localEventsSearch';
 import type { HomeStackParamList, MainTabParamList } from '../../types';
 import type {
   HomeUserSummary,
   NextClassReservationStatus,
+  QuickActionId,
 } from '../../types/home';
 import {
   getFirstName,
@@ -52,10 +61,10 @@ function parseAcademy(membershipName?: string | null): {
   academyName: string;
   locationLabel: string;
 } {
-  const raw = membershipName?.trim() || 'Open Mat · Tracy';
+  const raw = membershipName?.trim() || 'My Gi · Tracy';
   const [namePart, locationPart] = raw.split('·').map((part) => part.trim());
   return {
-    academyName: (namePart || 'Open Mat').toUpperCase(),
+    academyName: (namePart || 'My Gi').toUpperCase(),
     locationLabel: (locationPart || 'Tracy, California').toUpperCase(),
   };
 }
@@ -63,7 +72,7 @@ function parseAcademy(membershipName?: string | null): {
 export function HomeScreen() {
   const { user } = useAuth();
   const { hub } = useProfile();
-  const { seminars } = useCommunity();
+  const { announcements, seminars } = useCommunity();
   const { profile, streak, awardXp } = useJourney();
   const {
     permissionPromptStatus,
@@ -90,6 +99,14 @@ export function HomeScreen() {
 
   const showPermissionCard = permissionPromptStatus === 'unknown';
   const showBlockedCard = permissionPromptStatus === 'blocked';
+
+  const localEventsQuery = useQuery({
+    queryKey: ['home-local-events'],
+    queryFn: () => searchLocalEvents({ radiusMiles: 250 }),
+    staleTime: 1000 * 60 * 30,
+  });
+
+  const nearestLocalEvent = localEventsQuery.data?.events?.[0] ?? null;
 
   const { academyName, locationLabel } = useMemo(
     () => parseAcademy(hub.membership.academyName),
@@ -129,17 +146,21 @@ export function HomeScreen() {
     currentStreak: journeySummary.currentStreak,
   });
 
-  const featuredEvent = useMemo(() => {
+  const latestAnnouncement = announcements[0] ?? null;
+
+  const featuredSeminar = useMemo(() => {
     const seminar = seminars[0];
     if (seminar) {
+      const datePart = seminar.dateLabel.replace(/\s*·\s*/g, ', ').toUpperCase();
+      const timePart = seminar.timeLabel.split(/[–-]/)[0]?.trim() ?? seminar.timeLabel;
       return {
         title: seminar.title,
-        whenLabel: `${seminar.dateLabel} · ${seminar.timeLabel}`,
+        whenLabel: `${datePart} • ${timePart}`,
       };
     }
     return {
       title: 'Guard Retention Masterclass',
-      whenLabel: 'Sat, Aug 16 · 1:00 PM',
+      whenLabel: 'SAT, AUG 10 • 1:00 PM',
     };
   }, [seminars]);
 
@@ -218,6 +239,33 @@ export function HomeScreen() {
     } finally {
       setActionLoading(false);
     }
+  };
+
+  const handleQuickAction = (id: QuickActionId) => {
+    switch (id) {
+      case 'reserveClass':
+      case 'viewSchedule':
+        navigation.navigate('Schedule');
+        return;
+      case 'logTraining':
+      case 'logTechnique':
+        navigation.navigate('WorkoutLog', {
+          screen: 'WorkoutDetails',
+        });
+        return;
+      default:
+        return;
+    }
+  };
+
+  const openNearestEvent = () => {
+    if (nearestLocalEvent?.url) {
+      void Linking.openURL(nearestLocalEvent.url).catch(() => {
+        navigation.navigate('LocalEvents');
+      });
+      return;
+    }
+    navigation.navigate('LocalEvents');
   };
 
   return (
@@ -300,25 +348,74 @@ export function HomeScreen() {
         ) : null}
 
         <Spacer size="md" />
-
-        <FadeIn delay={140}>
+        <FadeIn delay={120}>
           <View style={styles.inset}>
             <UpcomingEventCard
-              title={featuredEvent.title}
-              whenLabel={featuredEvent.whenLabel}
+              title={featuredSeminar.title}
+              whenLabel={featuredSeminar.whenLabel}
               onPress={() => navigation.navigate('Community')}
             />
           </View>
         </FadeIn>
 
         <Spacer size="md" />
-
-        <FadeIn delay={180}>
+        <FadeIn delay={150}>
           <View style={styles.inset}>
             <TrainingStreakCard
               currentStreak={journeySummary.currentStreak}
               weekDays={streak.weekDays}
               onPress={() => navigation.navigate('Journey')}
+            />
+          </View>
+        </FadeIn>
+
+        {latestAnnouncement ? (
+          <>
+            <Spacer size="md" />
+            <FadeIn delay={180}>
+              <View style={styles.inset}>
+                <AcademyAnnouncementCard
+                  announcement={latestAnnouncement}
+                  onPress={() =>
+                    navigation.navigate('Community', {
+                      screen: 'AnnouncementDetail',
+                      params: { announcementId: latestAnnouncement.id },
+                    })
+                  }
+                />
+              </View>
+            </FadeIn>
+          </>
+        ) : null}
+
+        <Spacer size="md" />
+        <FadeIn delay={210}>
+          <View style={styles.inset}>
+            <LocalEventsHomeCard
+              event={nearestLocalEvent}
+              loading={localEventsQuery.isLoading}
+              onPressEvent={openNearestEvent}
+              onViewAll={() => navigation.navigate('LocalEvents')}
+            />
+          </View>
+        </FadeIn>
+
+        <Spacer size="md" />
+        <FadeIn delay={240}>
+          <View style={styles.inset}>
+            <QuickActionsRow
+              actions={QUICK_ACTIONS}
+              onAction={handleQuickAction}
+            />
+          </View>
+        </FadeIn>
+
+        <Spacer size="md" />
+        <FadeIn delay={270}>
+          <View style={styles.inset}>
+            <AcademyUpcomingEvents
+              events={UPCOMING_EVENTS}
+              onPressEvent={() => navigation.navigate('Community')}
             />
           </View>
         </FadeIn>

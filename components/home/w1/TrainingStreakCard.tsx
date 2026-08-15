@@ -25,11 +25,11 @@ export function TrainingStreakCard({
       onPress={onPress}
       accessibilityLabel={`${currentStreak} day streak`}
     >
-      <SectionLabel tone="accent">{`${currentStreak} Day Streak`}</SectionLabel>
+      <SectionLabel>{`${currentStreak} Day Streak`}</SectionLabel>
 
       <View style={styles.body}>
         <View style={styles.days}>
-          {weekDays.map((day, index) => (
+          {(weekDays ?? []).map((day, index) => (
             <DayIndicator
               key={day.key}
               label={day.label}
@@ -43,13 +43,13 @@ export function TrainingStreakCard({
         <View style={[styles.divider, { backgroundColor: colors.border }]} />
 
         <View style={styles.strong}>
-          <Text style={[styles.strongValue, { color: colors.text }]}>
+          <Text style={[styles.strongValue, { color: colors.goldAccent }]}>
             {currentStreak}
           </Text>
-          <Text style={[styles.strongLabel, { color: colors.secondaryText }]}>
+          <Text style={[styles.strongLabel, { color: colors.goldAccent }]}>
             Days
           </Text>
-          <Text style={[styles.strongLabel, { color: colors.secondaryText }]}>
+          <Text style={[styles.strongLabel, { color: colors.goldAccent }]}>
             Strong
           </Text>
         </View>

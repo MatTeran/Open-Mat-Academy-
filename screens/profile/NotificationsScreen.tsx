@@ -27,7 +27,7 @@ export function NotificationsScreen({ navigation }: Props) {
       <Spacer size="md" />
       <Text variant="hero">Notifications</Text>
       <Spacer size="sm" />
-      <Text variant="bodyMuted">Choose what Open Mat can push to you.</Text>
+      <Text variant="bodyMuted">Choose what My Gi can push to you.</Text>
 
       <Spacer size="xl" />
 

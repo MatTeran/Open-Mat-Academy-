@@ -24,7 +24,7 @@ export function GreetingSection({
       <Text style={[styles.greeting, { color: colors.text }]}>
         {`${greeting}, ${firstName}`.toUpperCase()}
       </Text>
-      <Text style={[styles.message, { color: colors.goldAccent }]}>
+      <Text style={[styles.message, { color: colors.secondaryText }]}>
         {message}
       </Text>
     </View>
@@ -34,17 +34,17 @@ export function GreetingSection({
 const styles = StyleSheet.create({
   wrap: {
     paddingHorizontal: w1Spacing.screenX,
-    gap: spacing.xs,
+    gap: 6,
   },
   greeting: {
     fontFamily: fontFamilies.bold,
-    fontSize: 24,
-    letterSpacing: 1.2,
-    lineHeight: 30,
+    fontSize: 22,
+    letterSpacing: 1.1,
+    lineHeight: 28,
   },
   message: {
-    fontFamily: fontFamilies.medium,
-    fontSize: 15,
-    lineHeight: 21,
+    fontFamily: fontFamilies.regular,
+    fontSize: 14,
+    lineHeight: 20,
   },
 });

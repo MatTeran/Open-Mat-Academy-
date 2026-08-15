@@ -1,4 +1,4 @@
--- Expand coach_classes level/gi_type checks for Open Mat Academy flyer programs.
+-- Expand coach_classes level/gi_type checks for My Gi flyer programs.
 alter table if exists public.coach_classes
   drop constraint if exists coach_classes_gi_type_check;
 

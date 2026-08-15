@@ -10,6 +10,8 @@ export type AuthStackParamList = {
 export type WorkoutStackParamList = {
   WorkoutList: undefined;
   WorkoutDetails: { workoutId?: string } | undefined;
+  YourGame: undefined;
+  TechniqueDetail: { techniqueId: string };
 };
 
 export type HomeStackParamList = {
