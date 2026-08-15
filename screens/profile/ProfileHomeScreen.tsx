@@ -28,6 +28,7 @@ import { useAuth, useAppTheme } from '../../hooks';
 import {
   formatMembershipPlan,
   formatMembershipStatus,
+  formatTimeAtRank,
 } from '../../lib/mocks/profile';
 import { useProfile } from '../../lib/providers/ProfileProvider';
 import { spacing } from '../../lib/theme';
@@ -249,8 +250,8 @@ export function ProfileHomeScreen({ navigation }: Props) {
         <ProfileBeltBar
           belt={hub.beltProgress.belt}
           stripes={hub.beltProgress.stripes}
-          beltLabel={beltLabel}
-          stripesLabel={stripesLabel}
+          promotedAt={hub.beltProgress.promotedAt}
+          timeAtRankLabel={formatTimeAtRank(hub.beltProgress.promotedAt)}
           onPress={() => navigation.navigate('BeltRank')}
         />
         <Spacer size="md" />

@@ -61,6 +61,16 @@ export {
   appearanceLabel,
 } from './profile/AppearanceSelector';
 export { BeltBadge } from './profile/BeltBadge';
+export {
+  BjjBeltDisplay,
+  formatBeltRankTitle,
+  getBeltAppearance,
+} from './profile/BjjBeltDisplay';
+export type {
+  BeltAppearance,
+  BeltStripeCount,
+  BjjBeltDisplayProps,
+} from './profile/BjjBeltDisplay';
 export { FamilyMemberCard } from './profile/FamilyMemberCard';
 export { ProfileActionButton } from './profile/ProfileActionButton';
 export { ProfileAttendanceSnapshot } from './profile/ProfileAttendanceSnapshot';
