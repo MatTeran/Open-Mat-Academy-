@@ -9,7 +9,8 @@ interface DashboardGridProps {
 }
 
 /**
- * Side-by-side cards on comfortable widths; stacks on compact phones.
+ * Primary dashboard row: ~55% Next Class / ~45% Journey.
+ * Stacks on compact phones (<390) so CTAs stay readable.
  */
 export function DashboardGrid({ left, right }: DashboardGridProps) {
   const { width } = useWindowDimensions();
@@ -17,8 +18,22 @@ export function DashboardGrid({ left, right }: DashboardGridProps) {
 
   return (
     <View style={[styles.row, stacked && styles.stack]}>
-      <View style={[styles.col, stacked && styles.colStacked]}>{left}</View>
-      <View style={[styles.col, stacked && styles.colStacked]}>{right}</View>
+      <View
+        style={[
+          styles.col,
+          stacked ? styles.colStacked : styles.colPrimary,
+        ]}
+      >
+        {left}
+      </View>
+      <View
+        style={[
+          styles.col,
+          stacked ? styles.colStacked : styles.colSecondary,
+        ]}
+      >
+        {right}
+      </View>
     </View>
   );
 }
@@ -26,6 +41,7 @@ export function DashboardGrid({ left, right }: DashboardGridProps) {
 const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
+    alignItems: 'stretch',
     gap: w1Spacing.cardGap,
     paddingHorizontal: w1Spacing.screenX,
   },
@@ -33,10 +49,16 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   col: {
-    flex: 1,
     minWidth: 0,
+  },
+  colPrimary: {
+    flex: 55,
+  },
+  colSecondary: {
+    flex: 45,
   },
   colStacked: {
     width: '100%',
+    flex: undefined,
   },
 });

@@ -33,7 +33,7 @@ export const lightColors = {
   highlightGold: '#B8844A',
   goldPressed: '#7D5329',
   text: '#20201E',
-  secondaryText: '#6F6C66',
+  secondaryText: '#5E5B55',
   error: '#DC2626',
   success: '#16A34A',
   warning: '#D97706',

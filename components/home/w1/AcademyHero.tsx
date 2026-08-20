@@ -23,6 +23,11 @@ interface AcademyHeroProps {
   onPressNotifications?: () => void;
 }
 
+/**
+ * Immersive academy photography with a balanced brand / notifications overlay.
+ * Layout: [Logo] Brand .............. [Bell]
+ *         Location
+ */
 export function AcademyHero({
   academyName,
   locationLabel,
@@ -32,7 +37,6 @@ export function AcademyHero({
   const { colors } = useAppTheme();
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
-  // Roughly half of the previous tall hero — immersive but not dominant.
   const height = Math.max(168, Math.min(210, width * 0.48));
 
   return (
@@ -42,10 +46,11 @@ export function AcademyHero({
         style={StyleSheet.absoluteFill}
         resizeMode="cover"
       >
+        {/* Light scrim for type legibility — keep photography visible */}
         <View
           style={[
             StyleSheet.absoluteFill,
-            { backgroundColor: 'rgba(18, 14, 10, 0.42)' },
+            { backgroundColor: 'rgba(18, 14, 10, 0.30)' },
           ]}
         />
         <View
@@ -58,22 +63,15 @@ export function AcademyHero({
           ]}
         >
           <View style={styles.topRow}>
-            <View style={styles.brandBlock}>
-              <View style={styles.logoRow}>
-                <Image source={brandLogo} style={styles.logo} />
-                <Text
-                  style={styles.academyName}
-                  numberOfLines={1}
-                  accessibilityRole="header"
-                >
-                  {academyName}
-                </Text>
-              </View>
-              <View style={styles.locationRow}>
-                <View style={styles.locationRule} />
-                <Text style={styles.location}>{locationLabel}</Text>
-                <View style={styles.locationRule} />
-              </View>
+            <View style={styles.brandInline}>
+              <Image source={brandLogo} style={styles.logo} />
+              <Text
+                style={styles.academyName}
+                numberOfLines={1}
+                accessibilityRole="header"
+              >
+                {academyName}
+              </Text>
             </View>
 
             <Pressable
@@ -98,6 +96,10 @@ export function AcademyHero({
               ) : null}
             </Pressable>
           </View>
+
+          <Text style={styles.location} numberOfLines={1}>
+            {locationLabel}
+          </Text>
         </View>
       </ImageBackground>
     </View>
@@ -112,64 +114,53 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     justifyContent: 'flex-start',
+    gap: spacing.xs,
   },
   topRow: {
     flexDirection: 'row',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     justifyContent: 'space-between',
     gap: spacing.md,
   },
-  brandBlock: {
+  brandInline: {
     flex: 1,
-    gap: 8,
-  },
-  logoRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
+    minWidth: 0,
   },
   logo: {
     width: 28,
     height: 28,
-    borderRadius: 6,
+    borderRadius: 8,
   },
   academyName: {
     flexShrink: 1,
     fontFamily: fontFamilies.bold,
-    fontSize: 22,
-    letterSpacing: 2.4,
+    fontSize: 20,
+    letterSpacing: 2.2,
     textTransform: 'uppercase',
     color: '#FFFFFF',
-  },
-  locationRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-    paddingLeft: 2,
-  },
-  locationRule: {
-    width: 18,
-    height: StyleSheet.hairlineWidth,
-    backgroundColor: 'rgba(255,255,255,0.55)',
   },
   location: {
     fontFamily: fontFamilies.medium,
     fontSize: 11,
-    letterSpacing: 1.8,
+    letterSpacing: 1.6,
     textTransform: 'uppercase',
     color: 'rgba(255,255,255,0.88)',
+    paddingLeft: 38,
   },
   bell: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
     alignItems: 'center',
     justifyContent: 'center',
   },
   dot: {
     position: 'absolute',
-    top: 9,
-    right: 10,
+    top: 10,
+    right: 11,
     width: 7,
     height: 7,
     borderRadius: 4,

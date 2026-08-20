@@ -38,7 +38,7 @@ export function getMotivationalMessage(input: {
     return 'Weekly goal complete. Keep the momentum going.';
   }
   if (remaining === 1) {
-    return 'You’re one class away from your weekly goal.';
+    return 'One more class completes your weekly goal.';
   }
   if (streak >= 7) {
     return `${streak}-day streak. Keep showing up.`;

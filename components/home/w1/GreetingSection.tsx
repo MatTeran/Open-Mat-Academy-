@@ -24,7 +24,7 @@ export function GreetingSection({
       <Text style={[styles.greeting, { color: colors.text }]}>
         {`${greeting}, ${firstName}`.toUpperCase()}
       </Text>
-      <Text style={[styles.message, { color: colors.goldAccent }]}>
+      <Text style={[styles.message, { color: colors.secondaryText }]}>
         {message}
       </Text>
     </View>
