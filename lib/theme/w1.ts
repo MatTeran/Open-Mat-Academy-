@@ -18,16 +18,21 @@ export const w1Colors = {
 } as const;
 
 export const w1Radii = {
-  card: 22,
-  chip: 999,
+  /** Soft controls / media thumbnails */
   control: 14,
+  /** Primary surface cards */
+  card: 24,
+  /** Day dots / circular chips */
   day: 999,
+  /** Pills / status chips */
+  chip: 999,
 } as const;
 
 export const w1Spacing = {
-  screenX: 20,
-  cardGap: 14,
-  section: 28,
+  /** Page horizontal margin — aligns greeting, dashboard, events, streak */
+  screenX: 24,
+  cardGap: 12,
+  section: 24,
   cardPad: 20,
 } as const;
 

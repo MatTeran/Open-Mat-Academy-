@@ -12,6 +12,9 @@ interface DayIndicatorProps {
   delay?: number;
 }
 
+/**
+ * Weekday letter above a checked / empty circle.
+ */
 export function DayIndicator({
   label,
   completed,
@@ -37,28 +40,37 @@ export function DayIndicator({
   }, [completed, delay, scale]);
 
   const borderColor = completed || isToday ? colors.goldAccent : colors.border;
-  const backgroundColor = completed ? colors.goldMuted : 'transparent';
+  const backgroundColor = completed ? colors.goldAccent : 'transparent';
+  const checkColor = completed ? colors.cardBackground : colors.goldAccent;
 
   return (
     <View style={styles.wrap}>
+      <Text
+        style={[
+          styles.label,
+          {
+            color: isToday ? colors.goldAccent : colors.secondaryText,
+            fontFamily: isToday ? fontFamilies.semibold : fontFamilies.medium,
+          },
+        ]}
+      >
+        {label.charAt(0)}
+      </Text>
       <Animated.View
         style={[
           styles.circle,
           {
             borderColor,
             backgroundColor,
-            borderWidth: isToday ? 2.5 : 1.5,
+            borderWidth: isToday && !completed ? 2.5 : 1.5,
             transform: [{ scale }],
           },
         ]}
       >
         {completed ? (
-          <Ionicons name="checkmark" size={14} color={colors.goldAccent} />
+          <Ionicons name="checkmark" size={14} color={checkColor} />
         ) : null}
       </Animated.View>
-      <Text style={[styles.label, { color: colors.secondaryText }]}>
-        {label.charAt(0)}
-      </Text>
     </View>
   );
 }
@@ -66,20 +78,19 @@ export function DayIndicator({
 const styles = StyleSheet.create({
   wrap: {
     alignItems: 'center',
-    gap: 6,
+    gap: 8,
     flex: 1,
   },
   circle: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
   },
   label: {
-    fontFamily: fontFamilies.medium,
-    fontSize: 10,
-    letterSpacing: 0.6,
+    fontSize: 11,
+    letterSpacing: 0.8,
     textTransform: 'uppercase',
   },
 });

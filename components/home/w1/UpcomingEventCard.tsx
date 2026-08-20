@@ -2,7 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Image, StyleSheet, Text, View } from 'react-native';
 
 import { useAppTheme } from '../../../lib/providers/ThemeProvider';
-import { fontFamilies, spacing } from '../../../lib/theme';
+import { fontFamilies, spacing, w1Radii, w1Spacing } from '../../../lib/theme';
 import { SectionLabel } from './SectionLabel';
 import { SurfaceCard } from './SurfaceCard';
 
@@ -36,7 +36,7 @@ export function UpcomingEventCard({
             style={[styles.title, { color: colors.text }]}
             numberOfLines={2}
           >
-            {title}
+            {title.toUpperCase()}
           </Text>
           <Text style={[styles.when, { color: colors.secondaryText }]}>
             {whenLabel}
@@ -49,7 +49,8 @@ export function UpcomingEventCard({
             name="chevron-forward"
             size={18}
             color={colors.secondaryText}
-            style={styles.chevron}
+            accessibilityElementsHidden
+            importantForAccessibility="no"
           />
         </View>
       </View>
@@ -62,37 +63,35 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     minHeight: 108,
+    paddingVertical: spacing.md,
+    paddingLeft: w1Spacing.cardPad,
+    paddingRight: spacing.md,
+    gap: spacing.sm,
   },
   copy: {
     flex: 1,
-    paddingVertical: spacing.md,
-    paddingLeft: spacing.md,
-    paddingRight: spacing.sm,
-    gap: 6,
+    gap: 8,
+    minWidth: 0,
   },
   title: {
     fontFamily: fontFamilies.bold,
-    fontSize: 17,
-    letterSpacing: 0.2,
-    lineHeight: 22,
+    fontSize: 16,
+    letterSpacing: 0.3,
+    lineHeight: 21,
   },
   when: {
     fontFamily: fontFamilies.medium,
-    fontSize: 12,
-    letterSpacing: 0.4,
+    fontSize: 13,
+    letterSpacing: 0.2,
   },
   mediaWrap: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    paddingRight: spacing.sm,
   },
   media: {
     width: 72,
     height: 72,
-    borderRadius: 14,
-  },
-  chevron: {
-    marginLeft: 2,
+    borderRadius: w1Radii.control,
   },
 });

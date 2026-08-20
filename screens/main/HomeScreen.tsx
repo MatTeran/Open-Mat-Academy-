@@ -16,7 +16,6 @@ import {
   JourneyCard,
   NotificationPermissionCard,
   Screen,
-  Spacer,
   TrainingStreakCard,
   UpcomingEventCard,
   W1NextClassCard,
@@ -52,11 +51,12 @@ function parseAcademy(membershipName?: string | null): {
   academyName: string;
   locationLabel: string;
 } {
-  const raw = membershipName?.trim() || 'Open Mat · Tracy';
+  // Multi-tenant: prefer membership academy · location; demo default is Central Valley.
+  const raw = membershipName?.trim() || 'My Gi · Central Valley';
   const [namePart, locationPart] = raw.split('·').map((part) => part.trim());
   return {
-    academyName: (namePart || 'Open Mat').toUpperCase(),
-    locationLabel: (locationPart || 'Tracy, California').toUpperCase(),
+    academyName: (namePart || 'My Gi').toUpperCase(),
+    locationLabel: (locationPart || 'Central Valley, California').toUpperCase(),
   };
 }
 
@@ -244,7 +244,7 @@ export function HomeScreen() {
           />
         </FadeIn>
 
-        <Spacer size="md" />
+        <View style={styles.sectionGap} />
 
         <FadeIn delay={80}>
           <DashboardGrid
@@ -271,7 +271,7 @@ export function HomeScreen() {
 
         {showPermissionCard || showBlockedCard ? (
           <>
-            <Spacer size="md" />
+            <View style={styles.sectionGap} />
             <View style={styles.inset}>
               <FadeIn delay={100}>
                 <NotificationPermissionCard
@@ -299,7 +299,7 @@ export function HomeScreen() {
           </>
         ) : null}
 
-        <Spacer size="md" />
+        <View style={styles.sectionGap} />
 
         <FadeIn delay={140}>
           <View style={styles.inset}>
@@ -311,7 +311,7 @@ export function HomeScreen() {
           </View>
         </FadeIn>
 
-        <Spacer size="md" />
+        <View style={styles.sectionGap} />
 
         <FadeIn delay={180}>
           <View style={styles.inset}>
@@ -336,6 +336,9 @@ const styles = StyleSheet.create({
   body: {
     width: '100%',
     paddingTop: spacing.lg,
+  },
+  sectionGap: {
+    height: w1Spacing.section,
   },
   inset: {
     paddingHorizontal: w1Spacing.screenX,
