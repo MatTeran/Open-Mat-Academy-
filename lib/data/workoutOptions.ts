@@ -5,6 +5,8 @@ import type {
   WorkoutMood,
 } from '../../types/workout';
 
+export const SELF_TRAINING_INSTRUCTOR = 'No Instructor / Self Training';
+
 export const CLASS_TYPE_OPTIONS: { value: WorkoutClassType; label: string }[] = [
   { value: 'fundamentals', label: 'Fundamentals' },
   { value: 'advanced', label: 'Advanced' },
@@ -19,7 +21,7 @@ export const INTENSITY_OPTIONS: { value: TrainingIntensity; label: string }[] = 
   { value: 'easy', label: 'Easy' },
   { value: 'moderate', label: 'Moderate' },
   { value: 'hard', label: 'Hard' },
-  { value: 'competition_pace', label: 'Competition Pace' },
+  { value: 'competition_pace', label: 'War' },
 ];
 
 export const TECHNIQUE_OPTIONS: { value: TechniqueId; label: string }[] = [
@@ -51,6 +53,7 @@ export const INSTRUCTOR_OPTIONS = [
   'Coach Silva',
   'Coach Park',
   'Coach Mendes',
+  SELF_TRAINING_INSTRUCTOR,
 ] as const;
 
 export function getClassTypeLabel(value: WorkoutClassType): string {
