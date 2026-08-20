@@ -1,8 +1,10 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import {
+  TechniqueDetailScreen,
   WorkoutDetailsScreen,
   WorkoutLogListScreen,
+  YourGameScreen,
 } from '../screens';
 import { useAppTheme } from '../hooks';
 import type { WorkoutStackParamList } from '../types/navigation';
@@ -22,6 +24,11 @@ export function WorkoutLogNavigator() {
     >
       <Stack.Screen name="WorkoutList" component={WorkoutLogListScreen} />
       <Stack.Screen name="WorkoutDetails" component={WorkoutDetailsScreen} />
+      <Stack.Screen name="YourGame" component={YourGameScreen} />
+      <Stack.Screen
+        name="TechniqueDetail"
+        component={TechniqueDetailScreen}
+      />
     </Stack.Navigator>
   );
 }

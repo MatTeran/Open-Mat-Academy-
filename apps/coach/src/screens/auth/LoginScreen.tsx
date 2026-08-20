@@ -55,7 +55,7 @@ export function LoginScreen(_props: Props) {
     <Screen scroll keyboard>
       <View style={styles.hero}>
         <Text variant="brand" gold>
-          OPEN MAT
+          MY GI
         </Text>
         <Text variant="hero">Coach</Text>
         <Text variant="body" muted>

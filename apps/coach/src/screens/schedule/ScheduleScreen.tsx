@@ -72,7 +72,7 @@ export function ScheduleScreen({ navigation }: Props) {
           <Text variant="hero">Schedule</Text>
           <Spacer size="sm" />
           <Text variant="body" muted>
-            Open Mat · Tracy, California
+            My Gi · Tracy, California
           </Text>
         </View>
         <Pressable

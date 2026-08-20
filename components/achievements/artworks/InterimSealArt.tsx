@@ -3,7 +3,7 @@ import { Circle, G, Path } from 'react-native-svg';
 import type { MedalArtProps } from './types';
 
 /**
- * Interim embossed Open Mat seal for non-prototype badges.
+ * Interim embossed My Gi seal for non-prototype badges.
  * Dimensional shell stays; unique centerpieces land after prototype approval.
  */
 export function InterimSealArt({ cx, cy, s, material, unlocked }: MedalArtProps) {

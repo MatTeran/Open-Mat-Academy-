@@ -64,8 +64,17 @@ export {
 export {
   createMembersRepository,
   createMemoryMembersRepository,
+  createHybridMembersRepository,
+  createSupabaseMembersRepository,
   type MembersRepository,
 } from './repositories/membersRepository';
+export {
+  ensureMemberRosterProfile,
+  listAcademyProfileRows,
+  mapProfileRowToCoachMember,
+  mergeMemberProfiles,
+} from './supabase/memberRoster';
+export type { ProfileRow } from './supabase/memberRoster';
 export {
   createMemberDevelopmentRepository,
   createMemoryMemberDevelopmentRepository,

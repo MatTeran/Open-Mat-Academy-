@@ -7,6 +7,7 @@ import {
   type StyleProp,
   type ViewStyle,
 } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import * as Haptics from 'expo-haptics';
 
 import { useAppTheme } from '../../../lib/providers/ThemeProvider';
@@ -19,6 +20,10 @@ interface SurfaceCardProps extends PropsWithChildren {
   accessibilityLabel?: string;
 }
 
+/**
+ * Soft floating card — shadow lives on an outer wrapper so iOS does not
+ * clip it (overflow:hidden on the same view kills shadows).
+ */
 export function SurfaceCard({
   children,
   onPress,
@@ -26,21 +31,33 @@ export function SurfaceCard({
   padded = true,
   accessibilityLabel,
 }: SurfaceCardProps) {
-  const { colors } = useAppTheme();
+  const { colors, isDark } = useAppTheme();
 
-  const cardStyle = [
-    styles.card,
-    w1Shadow.card,
-    {
-      backgroundColor: colors.cardBackground,
-      borderColor: colors.border,
-    },
-    padded && styles.padded,
-    style,
-  ];
+  const content = (
+    <View style={[styles.shadowHost, w1Shadow.card, style]}>
+      <LinearGradient
+        colors={
+          isDark
+            ? [colors.cardBackground, colors.cardBackground]
+            : ['#FFFFFF', '#F8F3EC']
+        }
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={[
+          styles.surface,
+          {
+            borderColor: isDark ? colors.border : 'rgba(28, 26, 23, 0.05)',
+          },
+          padded && styles.padded,
+        ]}
+      >
+        {children}
+      </LinearGradient>
+    </View>
+  );
 
   if (!onPress) {
-    return <View style={cardStyle}>{children}</View>;
+    return content;
   }
 
   return (
@@ -53,13 +70,17 @@ export function SurfaceCard({
       }}
       style={({ pressed }) => [pressed && styles.pressed]}
     >
-      <View style={cardStyle}>{children}</View>
+      {content}
     </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
-  card: {
+  shadowHost: {
+    borderRadius: w1Radii.card,
+    backgroundColor: 'transparent',
+  },
+  surface: {
     borderRadius: w1Radii.card,
     borderWidth: StyleSheet.hairlineWidth,
     overflow: 'hidden',
@@ -68,7 +89,7 @@ const styles = StyleSheet.create({
     padding: w1Spacing.cardPad,
   },
   pressed: {
-    opacity: 0.96,
+    opacity: 0.97,
     transform: [{ scale: 0.985 }],
   },
 });

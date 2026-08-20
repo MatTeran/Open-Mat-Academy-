@@ -1,4 +1,4 @@
--- Open Mat Coach Web — audit logging + academy tenant helpers
+-- My Gi Coach Web — audit logging + academy tenant helpers
 -- Additive only. Does not duplicate member_development / promotion_history.
 
 create extension if not exists "pgcrypto";

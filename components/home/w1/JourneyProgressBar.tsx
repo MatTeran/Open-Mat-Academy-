@@ -32,7 +32,7 @@ export function JourneyProgressBar({
         styles.track,
         {
           height,
-          backgroundColor: colors.border,
+          backgroundColor: 'rgba(28, 26, 23, 0.08)',
           borderRadius: w1Radii.chip,
         },
       ]}
