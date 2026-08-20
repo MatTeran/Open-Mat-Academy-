@@ -118,9 +118,16 @@ export function NextClassCard({
       </View>
 
       <View style={styles.primaryZone}>
-        <Text style={[styles.title, { color: colors.text }]} numberOfLines={2}>
-          {nextClass.title.toUpperCase()}
-        </Text>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={`View ${nextClass.title} on schedule`}
+          onPress={onOpenDetails}
+          disabled={!onOpenDetails}
+        >
+          <Text style={[styles.title, { color: colors.text }]} numberOfLines={2}>
+            {nextClass.title.toUpperCase()}
+          </Text>
+        </Pressable>
 
         <View style={styles.metaBlock}>
           <Text
