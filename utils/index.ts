@@ -8,3 +8,4 @@ export * from './schedule';
 export * from './scheduleLayout';
 export * from './validation';
 export * from './workoutMetrics';
+export * from './workoutLog';

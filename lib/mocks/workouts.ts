@@ -1,10 +1,12 @@
 import type { Workout } from '../../types/workout';
+import { SELF_TRAINING_INSTRUCTOR } from '../data/workoutOptions';
 
-/** Seed workouts for the Open Mat log — local only. */
+/** Seed workouts for the My Gi log — local only. */
 export const INITIAL_WORKOUTS: Workout[] = [
   {
     id: 'w-1',
     date: new Date(Date.now() - 1000 * 60 * 60 * 26).toISOString(),
+    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 25).toISOString(),
     className: 'Adult Advanced No-Gi',
     classType: 'advanced',
     instructor: 'Coach Rivera',
@@ -19,10 +21,12 @@ export const INITIAL_WORKOUTS: Workout[] = [
     rating: 5,
     mood: 'great',
     photoPlaceholder: true,
+    scheduleClassId: null,
   },
   {
     id: 'w-2',
     date: new Date(Date.now() - 1000 * 60 * 60 * 50).toISOString(),
+    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 49).toISOString(),
     className: 'Adult Fundamentals GI',
     classType: 'fundamentals',
     instructor: 'Coach Mendes',
@@ -37,10 +41,12 @@ export const INITIAL_WORKOUTS: Workout[] = [
     rating: 4,
     mood: 'good',
     photoPlaceholder: true,
+    scheduleClassId: null,
   },
   {
     id: 'w-3',
     date: new Date(Date.now() - 1000 * 60 * 60 * 96).toISOString(),
+    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 95).toISOString(),
     className: 'Open Mat',
     classType: 'open_mat',
     instructor: 'Coach Silva',
@@ -55,15 +61,18 @@ export const INITIAL_WORKOUTS: Workout[] = [
     rating: 4,
     mood: 'exhausted',
     photoPlaceholder: true,
+    scheduleClassId: null,
   },
 ];
 
 export function createEmptyWorkoutDraft(): Omit<Workout, 'id'> {
+  const now = new Date().toISOString();
   return {
-    date: new Date().toISOString(),
+    date: now,
+    createdAt: now,
     className: '',
     classType: 'fundamentals',
-    instructor: 'Coach Rivera',
+    instructor: SELF_TRAINING_INSTRUCTOR,
     durationMinutes: 60,
     rounds: 4,
     giType: 'gi',
@@ -75,5 +84,6 @@ export function createEmptyWorkoutDraft(): Omit<Workout, 'id'> {
     rating: 0,
     mood: 'good',
     photoPlaceholder: true,
+    scheduleClassId: null,
   };
 }

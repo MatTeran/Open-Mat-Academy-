@@ -1,19 +1,25 @@
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import * as Haptics from 'expo-haptics';
 import { useMemo, useState } from 'react';
-import { TextInput, View } from 'react-native';
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import {
   Banner,
   Button,
   ChipSelect,
-  DropdownField,
-  FormSection,
-  MoodSelector,
-  PartnerInput,
+  DurationStepper,
+  OptionSheet,
   Screen,
+  SelectorField,
+  SessionDateField,
   Spacer,
-  StarRating,
-  Text,
 } from '../../components';
 import { useAppTheme } from '../../hooks';
 import {
@@ -21,96 +27,71 @@ import {
   getClassTypeLabel,
   INSTRUCTOR_OPTIONS,
   INTENSITY_OPTIONS,
+  SELF_TRAINING_INSTRUCTOR,
   TECHNIQUE_OPTIONS,
 } from '../../lib/data/workoutOptions';
 import { createEmptyWorkoutDraft } from '../../lib/mocks/workouts';
 import { useWorkouts } from '../../lib/providers/WorkoutProvider';
-import { fontFamilies, radii, spacing } from '../../lib/theme';
-import { useThemedStyles } from '../../lib/theme/useThemedStyles';
+import {
+  fontFamilies,
+  spacing,
+  w1Radii,
+  w1Shadow,
+} from '../../lib/theme';
 import type { WorkoutStackParamList } from '../../types/navigation';
 import type {
-  GiType,
   TechniqueId,
   TrainingIntensity,
   WorkoutClassType,
   WorkoutDraft,
-  WorkoutMood,
 } from '../../types/workout';
-import { formatShortDate } from '../../utils';
+import {
+  formatClassesSectionLabel,
+  formatScheduleMeta,
+  getScheduledClassesForSessionDate,
+  isScheduleClassAlreadyLogged,
+  prefillDraftFromSchedule,
+} from '../../utils/workoutLog';
 
 type Props = NativeStackScreenProps<WorkoutStackParamList, 'WorkoutDetails'>;
 
+type SheetKind = 'classType' | 'instructor' | 'techniques' | null;
+
+/**
+ * Compact progressive Log Workout flow — session date, schedule prefills,
+ * sheet selectors, sticky save. Local mock persistence (no DB migration).
+ */
 export function WorkoutDetailsScreen({ navigation, route }: Props) {
   const { colors } = useAppTheme();
-  const { getWorkout, saveWorkout } = useWorkouts();
+  const insets = useSafeAreaInsets();
+  const { getWorkout, saveWorkout, workouts } = useWorkouts();
   const existing = route.params?.workoutId
     ? getWorkout(route.params.workoutId)
     : undefined;
 
-  const initial = useMemo<WorkoutDraft>(
-    () => existing ?? createEmptyWorkoutDraft(),
-    [existing],
-  );
+  const initial = useMemo<WorkoutDraft>(() => {
+    if (existing) {
+      return {
+        ...existing,
+        createdAt: existing.createdAt || existing.date,
+        scheduleClassId: existing.scheduleClassId ?? null,
+      };
+    }
+    return createEmptyWorkoutDraft();
+  }, [existing]);
 
   const [draft, setDraft] = useState<WorkoutDraft>(initial);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  const styles = useThemedStyles((themeColors) => ({
-    content: {},
-    row: {
-      flexDirection: 'row' as const,
-      gap: spacing.md,
-    },
-    half: {
-      flex: 1,
-    },
-    numberInput: {
-      minHeight: 52,
-      borderRadius: radii.md,
-      paddingHorizontal: spacing.md,
-      backgroundColor: themeColors.secondaryBackground,
-      borderWidth: 1,
-      borderColor: themeColors.border,
-      color: themeColors.text,
-      fontFamily: fontFamilies.regular,
-      fontSize: 16,
-    },
-    notes: {
-      minHeight: 140,
-      borderRadius: radii.md,
-      paddingHorizontal: spacing.md,
-      paddingVertical: spacing.md,
-      backgroundColor: themeColors.secondaryBackground,
-      borderWidth: 1,
-      borderColor: themeColors.border,
-      color: themeColors.text,
-      fontFamily: fontFamilies.regular,
-      fontSize: 16,
-      lineHeight: 24,
-    },
-    photoPlaceholder: {
-      minHeight: 120,
-      borderRadius: radii.lg,
-      borderWidth: 1,
-      borderColor: themeColors.border,
-      borderStyle: 'dashed' as const,
-      backgroundColor: themeColors.secondaryBackground,
-      alignItems: 'center' as const,
-      justifyContent: 'center' as const,
-      padding: spacing.lg,
-    },
-    center: {
-      textAlign: 'center' as const,
-    },
-    bottomSpace: {
-      height: spacing.xl,
-    },
-  }));
+  const [manualMode, setManualMode] = useState(Boolean(existing));
+  const [showMore, setShowMore] = useState(false);
+  const [sheet, setSheet] = useState<SheetKind>(null);
 
   const isEditing = Boolean(existing);
-  const className =
-    draft.className || getClassTypeLabel(draft.classType);
+  const scheduledClasses = useMemo(
+    () => getScheduledClassesForSessionDate(draft.date),
+    [draft.date],
+  );
 
   const update = <K extends keyof WorkoutDraft>(
     key: K,
@@ -119,19 +100,54 @@ export function WorkoutDetailsScreen({ navigation, route }: Props) {
     setDraft((current) => ({ ...current, [key]: value }));
   };
 
+  const handleSelectScheduleClass = (classId: string) => {
+    const item = scheduledClasses.find((entry) => entry.id === classId);
+    if (!item) {
+      return;
+    }
+    if (
+      isScheduleClassAlreadyLogged(
+        workouts,
+        item.id,
+        draft.date,
+        existing?.id,
+      )
+    ) {
+      setError('This class is already logged for this date.');
+      return;
+    }
+    setError(null);
+    setDraft((current) => prefillDraftFromSchedule(current, item, current.date));
+    setManualMode(true);
+    void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+  };
+
   const handleSave = () => {
     setError(null);
 
-    if (!draft.instructor.trim()) {
-      setError('Choose an instructor.');
+    if (!draft.classType) {
+      setError('Choose a class type.');
       return;
     }
-    if (draft.durationMinutes <= 0) {
+    if (draft.durationMinutes < 5) {
       setError('Enter a valid duration.');
       return;
     }
-    if (draft.rounds <= 0) {
-      setError('Enter at least one round.');
+
+    const className =
+      draft.className.trim() || getClassTypeLabel(draft.classType);
+    const instructor = draft.instructor.trim() || SELF_TRAINING_INSTRUCTOR;
+
+    if (
+      draft.scheduleClassId &&
+      isScheduleClassAlreadyLogged(
+        workouts,
+        draft.scheduleClassId,
+        draft.date,
+        existing?.id,
+      )
+    ) {
+      setError('This class is already logged for this date.');
       return;
     }
 
@@ -147,190 +163,517 @@ export function WorkoutDetailsScreen({ navigation, route }: Props) {
         {
           ...draft,
           className,
+          instructor,
           favoriteTechnique: favorite,
+          rounds: draft.rounds > 0 ? draft.rounds : 1,
+          createdAt: existing?.createdAt || draft.createdAt || new Date().toISOString(),
         },
         existing?.id,
       );
       setSaving(false);
+      void Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       navigation.goBack();
-    }, 400);
+    }, 350);
   };
 
+  const techniqueSummary =
+    draft.techniques.length === 0
+      ? ''
+      : draft.techniques.length === 1
+        ? TECHNIQUE_OPTIONS.find((item) => item.value === draft.techniques[0])
+            ?.label ?? '1 technique'
+        : `${draft.techniques.length} techniques`;
+
   return (
-    <Screen scroll keyboard contentStyle={styles.content}>
-      <Text variant="hero">{isEditing ? 'Edit Workout' : 'New Workout'}</Text>
-      <Spacer size="sm" />
-      <Text variant="bodyMuted">
-        {formatShortDate(draft.date)} · Capture the session while it’s fresh.
-      </Text>
-
-      {error ? (
-        <>
-          <Spacer size="md" />
-          <Banner message={error} />
-        </>
-      ) : null}
-
-      <Spacer size="xl" />
-
-      <FormSection title="Session">
-        <DropdownField
-          label="Class Type"
-          value={draft.classType}
-          options={CLASS_TYPE_OPTIONS}
-          onChange={(value: WorkoutClassType) => {
-            update('classType', value);
-            update('className', getClassTypeLabel(value));
-          }}
-        />
-        <Spacer size="lg" />
-        <DropdownField
-          label="Instructor"
-          value={draft.instructor as (typeof INSTRUCTOR_OPTIONS)[number]}
-          options={INSTRUCTOR_OPTIONS.map((name) => ({
-            value: name,
-            label: name,
-          }))}
-          onChange={(value) => update('instructor', value)}
-        />
-        <Spacer size="lg" />
-        <ChipSelect
-          label="Gi or No-Gi"
-          multi={false}
-          options={[
-            { value: 'gi' as GiType, label: 'Gi' },
-            { value: 'no_gi' as GiType, label: 'No-Gi' },
-          ]}
-          values={[draft.giType]}
-          onChange={(values) => update('giType', values[0] ?? 'gi')}
-        />
-      </FormSection>
-
-      <FormSection title="Load">
-        <View style={styles.row}>
-          <View style={styles.half}>
-            <Text variant="label">Duration (min)</Text>
-            <Spacer size="sm" />
-            <TextInput
-              keyboardType="number-pad"
-              value={String(draft.durationMinutes)}
-              onChangeText={(text) =>
-                update('durationMinutes', Number(text.replace(/[^0-9]/g, '')) || 0)
-              }
-              placeholderTextColor={colors.secondaryText}
-              style={styles.numberInput}
-            />
-          </View>
-          <View style={styles.half}>
-            <Text variant="label">Rounds</Text>
-            <Spacer size="sm" />
-            <TextInput
-              keyboardType="number-pad"
-              value={String(draft.rounds)}
-              onChangeText={(text) =>
-                update('rounds', Number(text.replace(/[^0-9]/g, '')) || 0)
-              }
-              placeholderTextColor={colors.secondaryText}
-              style={styles.numberInput}
-            />
-          </View>
-        </View>
-        <Spacer size="lg" />
-        <ChipSelect
-          label="Training Intensity"
-          multi={false}
-          options={INTENSITY_OPTIONS}
-          values={[draft.intensity]}
-          onChange={(values) =>
-            update('intensity', (values[0] ?? 'moderate') as TrainingIntensity)
-          }
-        />
-      </FormSection>
-
-      <FormSection title="Partners">
-        <PartnerInput
-          partners={draft.partners}
-          onChange={(partners) => update('partners', partners)}
-        />
-      </FormSection>
-
-      <FormSection title="Techniques">
-        <ChipSelect
-          label="Techniques Practiced"
-          options={TECHNIQUE_OPTIONS}
-          values={draft.techniques}
-          onChange={(techniques) =>
-            update('techniques', techniques as TechniqueId[])
-          }
-        />
-        {draft.techniques.length > 0 ? (
-          <>
-            <Spacer size="lg" />
-            <ChipSelect
-              label="Favorite Technique"
-              multi={false}
-              options={TECHNIQUE_OPTIONS.filter((item) =>
-                draft.techniques.includes(item.value),
-              )}
-              values={
-                draft.favoriteTechnique ? [draft.favoriteTechnique] : []
-              }
-              onChange={(values) =>
-                update('favoriteTechnique', values[0] ?? null)
-              }
-            />
-          </>
-        ) : null}
-      </FormSection>
-
-      <FormSection title="Notes">
-        <Text variant="label">Free Notes</Text>
-        <Spacer size="sm" />
-        <TextInput
-          multiline
-          textAlignVertical="top"
-          value={draft.notes}
-          onChangeText={(notes) => update('notes', notes)}
-          placeholder="What clicked? What needs work?"
-          placeholderTextColor={colors.secondaryText}
-          style={styles.notes}
-        />
-      </FormSection>
-
-      <FormSection title="Reflection">
-        <StarRating
-          value={draft.rating}
-          onChange={(rating) => update('rating', rating)}
-        />
-        <Spacer size="lg" />
-        <MoodSelector
-          value={draft.mood}
-          onChange={(mood: WorkoutMood) => update('mood', mood)}
-        />
-      </FormSection>
-
-      <FormSection title="Photos">
-        <View style={styles.photoPlaceholder}>
-          <Text variant="subtitle" gold>
-            Photos coming soon
+    <View style={[styles.root, { backgroundColor: colors.primaryBackground }]}>
+      <Screen
+        scroll
+        keyboard
+        padded={false}
+        contentStyle={styles.scrollContent}
+      >
+        <View style={styles.page}>
+          <Text style={[styles.hero, { color: colors.text }]}>
+            {isEditing ? 'Edit Workout' : 'New Workout'}
           </Text>
-          <Spacer size="xs" />
-          <Text variant="caption" style={styles.center}>
-            Attach mat photos in a future update.
+          <Text style={[styles.subtitle, { color: colors.secondaryText }]}>
+            Capture the session while it’s fresh.
           </Text>
-        </View>
-      </FormSection>
 
-      <Button label="Save Workout" loading={saving} onPress={handleSave} />
-      <Spacer size="sm" />
-      <Button
-        label="Cancel"
-        variant="ghost"
-        disabled={saving}
-        onPress={() => navigation.goBack()}
+          {error ? (
+            <>
+              <Spacer size="md" />
+              <Banner message={error} />
+            </>
+          ) : null}
+
+          <Spacer size="lg" />
+
+          <SessionDateField
+            valueIso={draft.date}
+            onChange={(iso) => {
+              update('date', iso);
+              update('scheduleClassId', null);
+              setManualMode(false);
+              setError(null);
+            }}
+          />
+
+          <Spacer size="lg" />
+
+          <Text style={[styles.sectionLabel, { color: colors.goldAccent }]}>
+            {formatClassesSectionLabel(draft.date)}
+          </Text>
+          <Spacer size="sm" />
+
+          {scheduledClasses.length === 0 ? (
+            <View
+              style={[
+                styles.emptyCard,
+                w1Shadow.soft,
+                {
+                  backgroundColor: colors.cardBackground,
+                  borderColor: colors.border,
+                },
+              ]}
+            >
+              <Text style={[styles.emptyTitle, { color: colors.text }]}>
+                No academy classes found for this date.
+              </Text>
+              <Spacer size="sm" />
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel="Enter workout manually"
+                onPress={() => setManualMode(true)}
+              >
+                <Text style={[styles.link, { color: colors.goldAccent }]}>
+                  Enter Workout Manually
+                </Text>
+              </Pressable>
+            </View>
+          ) : (
+            <View style={styles.classList}>
+              {scheduledClasses.map((item) => {
+                const alreadyLogged = isScheduleClassAlreadyLogged(
+                  workouts,
+                  item.id,
+                  draft.date,
+                  existing?.id,
+                );
+                const selected = draft.scheduleClassId === item.id;
+                return (
+                  <Pressable
+                    key={item.id}
+                    accessibilityRole="button"
+                    accessibilityState={{
+                      selected,
+                      disabled: alreadyLogged,
+                    }}
+                    accessibilityLabel={`${item.title}. ${formatScheduleMeta(item)}`}
+                    disabled={alreadyLogged}
+                    onPress={() => handleSelectScheduleClass(item.id)}
+                    style={({ pressed }) => [
+                      styles.classCard,
+                      w1Shadow.soft,
+                      {
+                        backgroundColor: selected
+                          ? colors.goldMuted
+                          : colors.cardBackground,
+                        borderColor: selected
+                          ? colors.goldAccent
+                          : colors.border,
+                        opacity: pressed ? 0.94 : 1,
+                      },
+                    ]}
+                  >
+                    <View style={styles.classCopy}>
+                      <Text
+                        style={[styles.classTitle, { color: colors.text }]}
+                        numberOfLines={1}
+                      >
+                        {item.title}
+                      </Text>
+                      <Text
+                        style={[
+                          styles.classMeta,
+                          { color: colors.secondaryText },
+                        ]}
+                        numberOfLines={1}
+                      >
+                        {formatScheduleMeta(item)}
+                      </Text>
+                    </View>
+                    <Text
+                      style={[
+                        styles.classAction,
+                        {
+                          color: alreadyLogged
+                            ? colors.secondaryText
+                            : colors.goldAccent,
+                        },
+                      ]}
+                    >
+                      {alreadyLogged
+                        ? 'Already logged'
+                        : selected
+                          ? 'Selected'
+                          : 'Select'}
+                    </Text>
+                  </Pressable>
+                );
+              })}
+            </View>
+          )}
+
+          {!manualMode ? (
+            <>
+              <Spacer size="md" />
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel="Can't find your session? Enter workout manually"
+                onPress={() => setManualMode(true)}
+                style={styles.manualLink}
+              >
+                <Text
+                  style={[styles.manualHint, { color: colors.secondaryText }]}
+                >
+                  Can’t find your session?
+                </Text>
+                <Text style={[styles.link, { color: colors.goldAccent }]}>
+                  Enter workout manually
+                </Text>
+              </Pressable>
+            </>
+          ) : null}
+
+          {manualMode ? (
+            <>
+              <Spacer size="xl" />
+              <Text style={[styles.sectionLabel, { color: colors.goldAccent }]}>
+                Session Details
+              </Text>
+              <Spacer size="md" />
+
+              <SelectorField
+                label="Class Type"
+                valueLabel={getClassTypeLabel(draft.classType)}
+                onPress={() => setSheet('classType')}
+              />
+              <Spacer size="md" />
+              <SelectorField
+                label="Instructor"
+                valueLabel={draft.instructor || SELF_TRAINING_INSTRUCTOR}
+                onPress={() => setSheet('instructor')}
+              />
+              <Spacer size="md" />
+              <DurationStepper
+                value={draft.durationMinutes}
+                onChange={(minutes) => update('durationMinutes', minutes)}
+              />
+              <Spacer size="md" />
+
+              <Text style={[styles.sectionLabel, { color: colors.goldAccent }]}>
+                How was training?
+              </Text>
+              <View style={styles.intensityRow}>
+                {INTENSITY_OPTIONS.map((option) => {
+                  const active = draft.intensity === option.value;
+                  return (
+                    <Pressable
+                      key={option.value}
+                      accessibilityRole="button"
+                      accessibilityState={{ selected: active }}
+                      accessibilityLabel={option.label}
+                      onPress={() =>
+                        update(
+                          'intensity',
+                          option.value as TrainingIntensity,
+                        )
+                      }
+                      style={[
+                        styles.intensityChip,
+                        {
+                          borderColor: active
+                            ? colors.goldAccent
+                            : colors.border,
+                          backgroundColor: active
+                            ? colors.goldMuted
+                            : colors.cardBackground,
+                        },
+                      ]}
+                    >
+                      <Text
+                        style={[
+                          styles.intensityLabel,
+                          {
+                            color: active
+                              ? colors.goldAccent
+                              : colors.secondaryText,
+                          },
+                        ]}
+                      >
+                        {option.label}
+                      </Text>
+                    </Pressable>
+                  );
+                })}
+              </View>
+
+              <Spacer size="md" />
+              <SelectorField
+                label="Techniques"
+                valueLabel={techniqueSummary}
+                placeholder="+ Add techniques"
+                onPress={() => setSheet('techniques')}
+              />
+              <Spacer size="md" />
+
+              <Text style={[styles.sectionLabel, { color: colors.goldAccent }]}>
+                Notes
+              </Text>
+              <Spacer size="xs" />
+              <TextInput
+                multiline
+                textAlignVertical="top"
+                value={draft.notes}
+                onChangeText={(notes) => update('notes', notes)}
+                placeholder="What did you work on?"
+                placeholderTextColor={colors.secondaryText}
+                style={[
+                  styles.notes,
+                  w1Shadow.soft,
+                  {
+                    backgroundColor: colors.cardBackground,
+                    borderColor: colors.border,
+                    color: colors.text,
+                  },
+                ]}
+              />
+
+              <Spacer size="md" />
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={
+                  showMore ? 'Hide more details' : 'Show more details'
+                }
+                onPress={() => setShowMore((current) => !current)}
+              >
+                <Text style={[styles.link, { color: colors.goldAccent }]}>
+                  {showMore ? 'Hide more details' : 'More details'}
+                </Text>
+              </Pressable>
+
+              {showMore ? (
+                <>
+                  <Spacer size="md" />
+                  <ChipSelect
+                    label="Gi or No-Gi"
+                    multi={false}
+                    options={[
+                      { value: 'gi', label: 'Gi' },
+                      { value: 'no_gi', label: 'No-Gi' },
+                    ]}
+                    values={[draft.giType]}
+                    onChange={(values) =>
+                      update('giType', values[0] ?? 'gi')
+                    }
+                  />
+                </>
+              ) : null}
+            </>
+          ) : null}
+
+          <View style={{ height: 120 + insets.bottom }} />
+        </View>
+      </Screen>
+
+      <View
+        style={[
+          styles.footer,
+          {
+            backgroundColor: colors.primaryBackground,
+            borderTopColor: colors.border,
+            paddingBottom: Math.max(insets.bottom, spacing.md),
+          },
+        ]}
+      >
+        <Button
+          label="Log Workout"
+          loading={saving}
+          loadingLabel="Saving…"
+          onPress={handleSave}
+        />
+      </View>
+
+      <OptionSheet
+        visible={sheet === 'classType'}
+        title="Select Class Type"
+        value={draft.classType}
+        options={CLASS_TYPE_OPTIONS}
+        onClose={() => setSheet(null)}
+        onSelect={(value) => {
+          update('classType', value as WorkoutClassType);
+          update('className', getClassTypeLabel(value as WorkoutClassType));
+          update('scheduleClassId', null);
+        }}
       />
 
-      <View style={styles.bottomSpace} />
-    </Screen>
+      <OptionSheet
+        visible={sheet === 'instructor'}
+        title="Select Instructor"
+        value={(draft.instructor || SELF_TRAINING_INSTRUCTOR) as string}
+        options={INSTRUCTOR_OPTIONS.map((name) => ({
+          value: name,
+          label: name,
+        }))}
+        searchable
+        searchPlaceholder="Search coaches…"
+        onClose={() => setSheet(null)}
+        onSelect={(value) => {
+          update('instructor', value);
+          update('scheduleClassId', null);
+        }}
+      />
+
+      <OptionSheet
+        visible={sheet === 'techniques'}
+        title="Add Techniques"
+        value={null}
+        values={draft.techniques}
+        options={TECHNIQUE_OPTIONS}
+        closeOnSelect={false}
+        onClose={() => setSheet(null)}
+        onSelect={(value) => {
+          const technique = value as TechniqueId;
+          setDraft((current) => {
+            const exists = current.techniques.includes(technique);
+            const techniques = exists
+              ? current.techniques.filter((item) => item !== technique)
+              : [...current.techniques, technique];
+            return { ...current, techniques };
+          });
+        }}
+      />
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
+  },
+  page: {
+    paddingHorizontal: spacing.lg,
+    paddingTop: spacing.md,
+  },
+  hero: {
+    fontFamily: fontFamilies.bold,
+    fontSize: 28,
+    letterSpacing: 0.4,
+  },
+  subtitle: {
+    marginTop: spacing.xs,
+    fontFamily: fontFamilies.medium,
+    fontSize: 15,
+    lineHeight: 21,
+  },
+  sectionLabel: {
+    fontFamily: fontFamilies.semibold,
+    fontSize: 11,
+    letterSpacing: 1.4,
+    textTransform: 'uppercase',
+  },
+  classList: {
+    gap: spacing.sm,
+  },
+  classCard: {
+    minHeight: 72,
+    borderRadius: w1Radii.card,
+    borderWidth: StyleSheet.hairlineWidth,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.md,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+  },
+  classCopy: {
+    flex: 1,
+    gap: 4,
+    minWidth: 0,
+  },
+  classTitle: {
+    fontFamily: fontFamilies.bold,
+    fontSize: 16,
+  },
+  classMeta: {
+    fontFamily: fontFamilies.regular,
+    fontSize: 13,
+  },
+  classAction: {
+    fontFamily: fontFamilies.semibold,
+    fontSize: 12,
+    letterSpacing: 0.6,
+    textTransform: 'uppercase',
+  },
+  emptyCard: {
+    borderRadius: w1Radii.card,
+    borderWidth: StyleSheet.hairlineWidth,
+    padding: spacing.md,
+  },
+  emptyTitle: {
+    fontFamily: fontFamilies.medium,
+    fontSize: 15,
+    lineHeight: 21,
+  },
+  manualLink: {
+    gap: 4,
+  },
+  manualHint: {
+    fontFamily: fontFamilies.regular,
+    fontSize: 13,
+  },
+  link: {
+    fontFamily: fontFamilies.semibold,
+    fontSize: 14,
+  },
+  intensityRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing.xs,
+    marginTop: spacing.sm,
+  },
+  intensityChip: {
+    minHeight: 44,
+    paddingHorizontal: spacing.md,
+    borderRadius: 999,
+    borderWidth: StyleSheet.hairlineWidth,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  intensityLabel: {
+    fontFamily: fontFamilies.semibold,
+    fontSize: 13,
+  },
+  notes: {
+    minHeight: 110,
+    borderRadius: w1Radii.control,
+    borderWidth: StyleSheet.hairlineWidth,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.md,
+    fontFamily: fontFamilies.regular,
+    fontSize: 16,
+    lineHeight: 22,
+  },
+  footer: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    paddingHorizontal: spacing.lg,
+    paddingTop: spacing.md,
+  },
+});

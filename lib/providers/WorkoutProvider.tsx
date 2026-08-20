@@ -38,6 +38,7 @@ export function WorkoutProvider({ children }: PropsWithChildren) {
 
     const created: Workout = {
       ...draft,
+      createdAt: draft.createdAt || new Date().toISOString(),
       id: `w-${Date.now()}`,
     };
     setWorkouts((current) => [created, ...current]);

@@ -31,7 +31,13 @@ export type GiType = 'gi' | 'no_gi';
 
 export interface Workout {
   id: string;
-  date: string; // ISO date
+  /**
+   * When the training actually happened (session date).
+   * Independent from `createdAt` so historical logs stay accurate.
+   */
+  date: string; // ISO
+  /** When the user entered the workout record. */
+  createdAt: string; // ISO
   className: string;
   classType: WorkoutClassType;
   instructor: string;
@@ -46,6 +52,8 @@ export interface Workout {
   rating: number; // 1-5
   mood: WorkoutMood;
   photoPlaceholder: boolean;
+  /** Academy schedule class id when logged from the timetable. */
+  scheduleClassId?: string | null;
 }
 
 export type WorkoutDraft = Omit<Workout, 'id'>;

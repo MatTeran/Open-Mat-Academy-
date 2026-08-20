@@ -68,7 +68,8 @@
           "locationAlwaysAndWhenInUsePermission": "Allow Open Mat Academy to use your location to remind you when you are near the gym.",
           "isAndroidBackgroundLocationEnabled": true
         }
-      ]
+      ],
+      "@react-native-community/datetimepicker"
     ],
     "extra": {
       "eas": {
