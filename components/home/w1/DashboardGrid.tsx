@@ -9,7 +9,8 @@ interface DashboardGridProps {
 }
 
 /**
- * Side-by-side cards on comfortable widths; stacks on compact phones.
+ * Side-by-side dashboard cards — equal height stretch.
+ * Stacks on compact phones (<390).
  */
 export function DashboardGrid({ left, right }: DashboardGridProps) {
   const { width } = useWindowDimensions();
@@ -26,6 +27,7 @@ export function DashboardGrid({ left, right }: DashboardGridProps) {
 const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
+    alignItems: 'stretch',
     gap: w1Spacing.cardGap,
     paddingHorizontal: w1Spacing.screenX,
   },
@@ -38,5 +40,6 @@ const styles = StyleSheet.create({
   },
   colStacked: {
     width: '100%',
+    flexGrow: 0,
   },
 });

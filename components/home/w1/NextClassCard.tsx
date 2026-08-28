@@ -23,7 +23,7 @@ interface NextClassCardProps {
 function formatClassWhen(iso: string): string {
   const date = new Date(iso);
   return date.toLocaleString(undefined, {
-    weekday: 'long',
+    weekday: 'short',
     month: 'short',
     day: 'numeric',
     hour: 'numeric',
@@ -64,6 +64,10 @@ function primaryLabel(
   }
 }
 
+/**
+ * Next Class tile — shared vertical zones with Journey for equal height.
+ * HEADER → TITLE → META → ACTION FOOTER
+ */
 export function NextClassCard({
   nextClass,
   reservationStatus,
@@ -91,87 +95,89 @@ export function NextClassCard({
         />
       </View>
 
-      <Text style={[styles.title, { color: colors.text }]} numberOfLines={2}>
-        {nextClass.title.toUpperCase()}
-      </Text>
-
-      <View style={styles.metaBlock}>
-        <MetaRow
-          icon="calendar-outline"
-          text={formatClassWhen(nextClass.startsAt)}
-        />
-        <MetaRow
-          icon="people-outline"
-          text={`${nextClass.coach} · ${nextClass.format} · ${nextClass.location}`}
-        />
-        <MetaRow icon="time-outline" text={`${nextClass.durationMinutes} min`} />
-      </View>
-
-      <Pressable
-        accessibilityRole="button"
-        accessibilityState={{ disabled }}
-        disabled={disabled}
-        onPress={onPrimaryAction}
-        style={({ pressed }) => [
-          styles.primaryBtn,
-          {
-            backgroundColor: checkedIn
-              ? colors.goldMuted
-              : colors.goldTintSurface,
-            borderColor: colors.goldAccent,
-            opacity: pressed || actionLoading ? 0.85 : 1,
-          },
-        ]}
-      >
-        {checkedIn ? (
-          <View
-            style={[styles.checkIcon, { backgroundColor: colors.goldAccent }]}
-          >
-            <Ionicons name="checkmark" size={14} color={colors.cardBackground} />
-          </View>
-        ) : null}
-        <Text style={[styles.primaryLabel, { color: colors.goldAccent }]}>
-          {primaryLabel(reservationStatus, actionLoading)}
-        </Text>
-        {xpEarnedLabel ? (
-          <Text style={[styles.xpLabel, { color: colors.goldAccent }]}>
-            {xpEarnedLabel}
-          </Text>
-        ) : null}
-      </Pressable>
-
-      <View style={styles.secondaryRow}>
-        <SecondaryAction
-          icon="calendar-outline"
-          label="Add to Calendar"
-          onPress={() => {
-            void Linking.openURL(
-              `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(nextClass.title)}`,
-            ).catch(() => onOpenDetails?.());
-          }}
-        />
-        <SecondaryAction
-          icon="navigate-outline"
-          label="Directions"
-          onPress={() => {
-            void Linking.openURL(
-              'https://maps.apple.com/?q=Open+Mat+Academy+Tracy+CA',
-            ).catch(() => onOpenDetails?.());
-          }}
-        />
-      </View>
-      {onOpenDetails ? (
+      <View style={styles.body}>
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel="View class on schedule"
+          accessibilityLabel={`View ${nextClass.title} on schedule`}
           onPress={onOpenDetails}
-          style={styles.detailsLink}
+          disabled={!onOpenDetails}
         >
-          <Text style={[styles.detailsText, { color: colors.secondaryText }]}>
-            View on schedule
+          <Text style={[styles.title, { color: colors.text }]} numberOfLines={2}>
+            {nextClass.title.toUpperCase()}
           </Text>
         </Pressable>
-      ) : null}
+
+        <View style={styles.metaBlock}>
+          <MetaRow
+            icon="calendar-outline"
+            text={formatClassWhen(nextClass.startsAt)}
+          />
+          <MetaRow
+            icon="location-outline"
+            text={`${nextClass.location} · ${nextClass.durationMinutes} min`}
+          />
+        </View>
+      </View>
+
+      <View style={styles.footer}>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityState={{ disabled }}
+          disabled={disabled}
+          onPress={onPrimaryAction}
+          style={({ pressed }) => [
+            styles.primaryBtn,
+            {
+              backgroundColor: checkedIn
+                ? colors.goldMuted
+                : colors.goldTintSurface,
+              borderColor: colors.goldAccent,
+              opacity: pressed || actionLoading ? 0.85 : 1,
+            },
+          ]}
+        >
+          {checkedIn ? (
+            <View
+              style={[styles.checkIcon, { backgroundColor: colors.goldAccent }]}
+            >
+              <Ionicons
+                name="checkmark"
+                size={14}
+                color={colors.cardBackground}
+              />
+            </View>
+          ) : null}
+          <Text style={[styles.primaryLabel, { color: colors.goldAccent }]}>
+            {primaryLabel(reservationStatus, actionLoading)}
+          </Text>
+          {xpEarnedLabel ? (
+            <Text style={[styles.xpLabel, { color: colors.goldAccent }]}>
+              {xpEarnedLabel}
+            </Text>
+          ) : null}
+        </Pressable>
+
+        <View style={styles.secondaryRow}>
+          <SecondaryAction
+            icon="calendar-outline"
+            label="Calendar"
+            onPress={() => {
+              void Linking.openURL(
+                `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(nextClass.title)}`,
+              ).catch(() => onOpenDetails?.());
+            }}
+          />
+          <SecondaryAction
+            icon="navigate-outline"
+            label="Directions"
+            onPress={() => {
+              void Linking.openURL(
+                `https://maps.apple.com/?q=Open+Mat+Academy+${encodeURIComponent(nextClass.location)}`,
+              ).catch(() => onOpenDetails?.());
+            }}
+          />
+        </View>
+      </View>
     </SurfaceCard>
   );
 }
@@ -189,7 +195,7 @@ function MetaRow({
       <Ionicons name={icon} size={14} color={colors.secondaryText} />
       <Text
         style={[styles.metaText, { color: colors.secondaryText }]}
-        numberOfLines={2}
+        numberOfLines={1}
       >
         {text}
       </Text>
@@ -210,12 +216,12 @@ function SecondaryAction({
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityLabel={label}
+      accessibilityLabel={label === 'Calendar' ? 'Add to Calendar' : label}
       onPress={onPress}
       hitSlop={8}
       style={styles.secondaryAction}
     >
-      <Ionicons name={icon} size={13} color={colors.secondaryText} />
+      <Ionicons name={icon} size={13} color={colors.goldAccent} />
       <Text style={[styles.secondaryLabel, { color: colors.secondaryText }]}>
         {label}
       </Text>
@@ -226,35 +232,43 @@ function SecondaryAction({
 const styles = StyleSheet.create({
   card: {
     flex: 1,
-    minHeight: 280,
+    minHeight: 268,
+    justifyContent: 'space-between',
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: spacing.sm,
+    minHeight: 24,
+  },
+  body: {
+    flexGrow: 1,
+    marginTop: spacing.sm,
+    gap: spacing.sm,
   },
   title: {
     fontFamily: fontFamilies.bold,
-    fontSize: 22,
-    letterSpacing: 0.6,
-    lineHeight: 26,
-    marginBottom: spacing.sm,
+    fontSize: 18,
+    letterSpacing: 0.5,
+    lineHeight: 22,
   },
   metaBlock: {
-    gap: 8,
-    marginBottom: spacing.md,
+    gap: 6,
   },
   metaRow: {
     flexDirection: 'row',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     gap: 8,
   },
   metaText: {
     flex: 1,
     fontFamily: fontFamilies.regular,
     fontSize: 12,
-    lineHeight: 17,
+    lineHeight: 16,
+  },
+  footer: {
+    marginTop: spacing.md,
+    gap: spacing.sm,
   },
   primaryBtn: {
     minHeight: 44,
@@ -265,7 +279,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 8,
     paddingHorizontal: spacing.sm,
-    marginBottom: spacing.sm,
   },
   checkIcon: {
     width: 20,
@@ -276,8 +289,8 @@ const styles = StyleSheet.create({
   },
   primaryLabel: {
     fontFamily: fontFamilies.semibold,
-    fontSize: 13,
-    letterSpacing: 1,
+    fontSize: 12,
+    letterSpacing: 0.8,
     textTransform: 'uppercase',
   },
   xpLabel: {
@@ -286,8 +299,9 @@ const styles = StyleSheet.create({
   },
   secondaryRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    gap: spacing.sm,
+    alignItems: 'center',
+    gap: spacing.md,
+    minHeight: 32,
   },
   secondaryAction: {
     flexDirection: 'row',
@@ -298,18 +312,7 @@ const styles = StyleSheet.create({
   secondaryLabel: {
     fontFamily: fontFamilies.medium,
     fontSize: 10,
-    letterSpacing: 0.7,
+    letterSpacing: 0.6,
     textTransform: 'uppercase',
-  },
-  detailsLink: {
-    marginTop: spacing.xs,
-    alignSelf: 'flex-start',
-    minHeight: 28,
-    justifyContent: 'center',
-  },
-  detailsText: {
-    fontFamily: fontFamilies.medium,
-    fontSize: 11,
-    letterSpacing: 0.4,
   },
 });

@@ -13,11 +13,14 @@ interface JourneyCardProps {
   onOpenJourney: () => void;
 }
 
+/**
+ * Journey tile — mirrors Next Class vertical zones for equal-height symmetry.
+ * HEADER → TITLE → META → METRICS FOOTER
+ */
 export function JourneyCard({ summary, onOpenJourney }: JourneyCardProps) {
   const { colors } = useAppTheme();
   const progress =
     summary.nextLevelXP > 0 ? summary.currentXP / summary.nextLevelXP : 0;
-  const remaining = Math.max(0, summary.nextLevelXP - summary.currentXP);
   const percent = Math.round(Math.min(100, progress * 100));
 
   return (
@@ -26,29 +29,26 @@ export function JourneyCard({ summary, onOpenJourney }: JourneyCardProps) {
       accessibilityLabel={`Your journey, level ${summary.level}, ${percent} percent to next level`}
       style={styles.card}
     >
-      <SectionLabel>Your Journey</SectionLabel>
-
-      <View style={styles.levelRow}>
-        <Text style={[styles.level, { color: colors.text }]}>
-          {`LEVEL ${summary.level}`}
-        </Text>
+      <View style={styles.header}>
+        <SectionLabel>Your Journey</SectionLabel>
         <Text style={[styles.percent, { color: colors.goldAccent }]}>
           {`${percent}%`}
         </Text>
       </View>
 
-      <JourneyProgressBar progress={progress} />
+      <View style={styles.body}>
+        <Text style={[styles.level, { color: colors.text }]}>
+          {`LEVEL ${summary.level}`}
+        </Text>
 
-      <View style={styles.xpBlock}>
+        <JourneyProgressBar progress={progress} />
+
         <Text style={[styles.xpLine, { color: colors.secondaryText }]}>
           {`${summary.currentXP.toLocaleString()} / ${summary.nextLevelXP.toLocaleString()} XP`}
         </Text>
-        <Text style={[styles.xpUntil, { color: colors.secondaryText }]}>
-          {`${remaining.toLocaleString()} XP UNTIL LEVEL ${summary.level + 1}`}
-        </Text>
       </View>
 
-      <View style={[styles.metrics, { borderTopColor: colors.border }]}>
+      <View style={[styles.footer, { borderTopColor: colors.border }]}>
         <MetricItem
           icon="calendar-outline"
           label="Training Days"
@@ -72,44 +72,42 @@ export function JourneyCard({ summary, onOpenJourney }: JourneyCardProps) {
 const styles = StyleSheet.create({
   card: {
     flex: 1,
-    minHeight: 280,
-  },
-  levelRow: {
-    flexDirection: 'row',
-    alignItems: 'baseline',
+    minHeight: 268,
     justifyContent: 'space-between',
-    marginTop: spacing.sm,
-    marginBottom: spacing.sm,
   },
-  level: {
-    fontFamily: fontFamilies.bold,
-    fontSize: 22,
-    letterSpacing: 0.8,
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    minHeight: 24,
   },
   percent: {
     fontFamily: fontFamilies.bold,
-    fontSize: 20,
-    letterSpacing: 0.4,
+    fontSize: 14,
+    letterSpacing: 0.3,
   },
-  xpBlock: {
+  body: {
+    flexGrow: 1,
     marginTop: spacing.sm,
-    gap: 2,
+    gap: spacing.sm,
+  },
+  level: {
+    fontFamily: fontFamilies.bold,
+    fontSize: 18,
+    letterSpacing: 0.6,
+    lineHeight: 22,
   },
   xpLine: {
     fontFamily: fontFamilies.medium,
     fontSize: 12,
-    letterSpacing: 0.3,
+    letterSpacing: 0.2,
   },
-  xpUntil: {
-    fontFamily: fontFamilies.medium,
-    fontSize: 10,
-    letterSpacing: 0.8,
-    textTransform: 'uppercase',
-  },
-  metrics: {
-    flexDirection: 'row',
+  footer: {
     marginTop: spacing.md,
     paddingTop: spacing.sm,
     borderTopWidth: StyleSheet.hairlineWidth,
+    flexDirection: 'row',
+    minHeight: 76,
+    alignItems: 'center',
   },
 });
