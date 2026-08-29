@@ -262,7 +262,7 @@ const styles = StyleSheet.create({
   },
   body: {
     flex: 1,
-    marginTop: 10,
+    marginTop: 8,
     gap: TILE.bodyGap,
     justifyContent: 'flex-start',
   },
@@ -287,9 +287,9 @@ const styles = StyleSheet.create({
   footer: {
     height: TILE.footerHeight,
     justifyContent: 'flex-end',
-    gap: 8,
+    gap: 6,
     borderTopWidth: StyleSheet.hairlineWidth,
-    paddingTop: 10,
+    paddingTop: 8,
   },
   primaryBtn: {
     height: TILE.btnHeight,

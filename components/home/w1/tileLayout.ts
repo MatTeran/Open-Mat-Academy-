@@ -8,9 +8,9 @@ import { fontFamilies } from '../../../lib/theme';
  */
 export const TILE = {
   /** Locked equal card height */
-  height: 248,
-  pad: 16,
-  headerHeight: 22,
+  height: 220,
+  pad: 14,
+  headerHeight: 20,
   /** Primary headline (class name / level) */
   titleSize: 14,
   titleLineHeight: 17,
@@ -19,13 +19,13 @@ export const TILE = {
   /** Supporting meta (when, XP, location) */
   metaSize: 11,
   metaLineHeight: 14,
-  metaGap: 5,
+  metaGap: 4,
   /** Footer block (CTA + links | metrics) */
-  footerHeight: 86,
-  btnHeight: 38,
-  secondaryHeight: 28,
-  metricsHeight: 72,
-  bodyGap: 8,
+  footerHeight: 74,
+  btnHeight: 34,
+  secondaryHeight: 24,
+  metricsHeight: 62,
+  bodyGap: 6,
 } as const;
 
 export const tileType = StyleSheet.create({
@@ -71,13 +71,13 @@ export const tileType = StyleSheet.create({
   },
   metricValue: {
     fontFamily: fontFamilies.bold,
-    fontSize: 14,
+    fontSize: 13,
     letterSpacing: 0.15,
   },
   metricLabel: {
     fontFamily: fontFamilies.medium,
     fontSize: 8,
-    letterSpacing: 0.7,
+    letterSpacing: 0.6,
     textTransform: 'uppercase',
     textAlign: 'center',
   },

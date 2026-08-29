@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
   },
   body: {
     flex: 1,
-    marginTop: 10,
+    marginTop: 8,
     gap: TILE.bodyGap,
     justifyContent: 'flex-start',
   },
@@ -136,6 +136,6 @@ const styles = StyleSheet.create({
     borderTopWidth: StyleSheet.hairlineWidth,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingTop: 10,
+    paddingTop: 8,
   },
 });
