@@ -1,12 +1,13 @@
 import { StyleSheet, Text, View } from 'react-native';
 
 import { useAppTheme } from '../../../lib/providers/ThemeProvider';
-import { fontFamilies, spacing } from '../../../lib/theme';
+import { w1Radii } from '../../../lib/theme';
 import type { HomeUserSummary } from '../../../types/home';
 import { JourneyProgressBar } from './JourneyProgressBar';
 import { MetricItem } from './MetricItem';
 import { SectionLabel } from './SectionLabel';
 import { SurfaceCard } from './SurfaceCard';
+import { TILE, tileType } from './tileLayout';
 
 interface JourneyCardProps {
   summary: HomeUserSummary;
@@ -14,8 +15,8 @@ interface JourneyCardProps {
 }
 
 /**
- * Journey tile — mirrors Next Class vertical zones for equal-height symmetry.
- * HEADER → TITLE → META → METRICS FOOTER
+ * Journey tile — locked zones match Next Class for equal height + type.
+ * HEADER → TITLE → META → FOOTER
  */
 export function JourneyCard({ summary, onOpenJourney }: JourneyCardProps) {
   const { colors } = useAppTheme();
@@ -27,43 +28,67 @@ export function JourneyCard({ summary, onOpenJourney }: JourneyCardProps) {
     <SurfaceCard
       onPress={onOpenJourney}
       accessibilityLabel={`Your journey, level ${summary.level}, ${percent} percent to next level`}
+      padded={false}
       style={styles.card}
     >
-      <View style={styles.header}>
-        <SectionLabel>Your Journey</SectionLabel>
-        <Text style={[styles.percent, { color: colors.goldAccent }]}>
-          {`${percent}%`}
-        </Text>
-      </View>
+      <View style={styles.inner}>
+        <View style={tileType.header}>
+          <SectionLabel style={styles.sectionLabel}>Your Journey</SectionLabel>
+          <View
+            style={[styles.percentChip, { backgroundColor: colors.goldMuted }]}
+          >
+            <Text style={[tileType.trailing, { color: colors.goldAccent }]}>
+              {`${percent}%`}
+            </Text>
+          </View>
+        </View>
 
-      <View style={styles.body}>
-        <Text style={[styles.level, { color: colors.text }]}>
-          {`LEVEL ${summary.level}`}
-        </Text>
+        <View style={styles.body}>
+          <View style={styles.titleSlot}>
+            <Text
+              style={[tileType.title, { color: colors.text }]}
+              numberOfLines={TILE.titleMaxLines}
+              adjustsFontSizeToFit
+              minimumFontScale={0.82}
+            >
+              {`Level ${summary.level}`}
+            </Text>
+          </View>
 
-        <JourneyProgressBar progress={progress} />
+          <View style={styles.metaBlock}>
+            <JourneyProgressBar progress={progress} height={5} />
+            <Text
+              style={[tileType.metaStrong, { color: colors.secondaryText }]}
+              numberOfLines={1}
+            >
+              {`${summary.currentXP.toLocaleString()} / ${summary.nextLevelXP.toLocaleString()} XP`}
+            </Text>
+          </View>
+        </View>
 
-        <Text style={[styles.xpLine, { color: colors.secondaryText }]}>
-          {`${summary.currentXP.toLocaleString()} / ${summary.nextLevelXP.toLocaleString()} XP`}
-        </Text>
-      </View>
-
-      <View style={[styles.footer, { borderTopColor: colors.border }]}>
-        <MetricItem
-          icon="calendar-outline"
-          label="Training Days"
-          value={`${summary.weeklyTrainingDays}`}
-        />
-        <MetricItem
-          icon="flag-outline"
-          label="Weekly Goal"
-          value={`${summary.weeklyClassesCompleted} / ${summary.weeklyClassGoal}`}
-        />
-        <MetricItem
-          icon="flame-outline"
-          label="Streak"
-          value={`${summary.currentStreak} Days`}
-        />
+        <View style={[styles.footer, { borderTopColor: colors.border }]}>
+          <MetricItem
+            compact
+            icon="calendar-outline"
+            label="Days"
+            value={`${summary.weeklyTrainingDays}`}
+            accessibilityLabel={`Training days: ${summary.weeklyTrainingDays}`}
+          />
+          <MetricItem
+            compact
+            icon="flag-outline"
+            label="Goal"
+            value={`${summary.weeklyClassesCompleted}/${summary.weeklyClassGoal}`}
+            accessibilityLabel={`Weekly goal: ${summary.weeklyClassesCompleted} of ${summary.weeklyClassGoal}`}
+          />
+          <MetricItem
+            compact
+            icon="flame-outline"
+            label="Streak"
+            value={`${summary.currentStreak}d`}
+            accessibilityLabel={`Streak: ${summary.currentStreak} days`}
+          />
+        </View>
       </View>
     </SurfaceCard>
   );
@@ -72,42 +97,44 @@ export function JourneyCard({ summary, onOpenJourney }: JourneyCardProps) {
 const styles = StyleSheet.create({
   card: {
     flex: 1,
-    minHeight: 268,
+    height: TILE.height,
+    minHeight: TILE.height,
+  },
+  inner: {
+    flex: 1,
+    padding: TILE.pad,
     justifyContent: 'space-between',
   },
-  header: {
-    flexDirection: 'row',
+  sectionLabel: {
+    fontSize: 10,
+    letterSpacing: 1.2,
+  },
+  percentChip: {
+    borderRadius: w1Radii.chip,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    minWidth: 40,
     alignItems: 'center',
-    justifyContent: 'space-between',
-    minHeight: 24,
-  },
-  percent: {
-    fontFamily: fontFamilies.bold,
-    fontSize: 14,
-    letterSpacing: 0.3,
   },
   body: {
-    flexGrow: 1,
-    marginTop: spacing.sm,
-    gap: spacing.sm,
+    flex: 1,
+    marginTop: 10,
+    gap: TILE.bodyGap,
+    justifyContent: 'flex-start',
   },
-  level: {
-    fontFamily: fontFamilies.bold,
-    fontSize: 18,
-    letterSpacing: 0.6,
-    lineHeight: 22,
+  titleSlot: {
+    minHeight: TILE.titleLineHeight * TILE.titleMaxLines,
+    justifyContent: 'center',
   },
-  xpLine: {
-    fontFamily: fontFamilies.medium,
-    fontSize: 12,
-    letterSpacing: 0.2,
+  metaBlock: {
+    gap: TILE.metaGap + 2,
+    justifyContent: 'center',
   },
   footer: {
-    marginTop: spacing.md,
-    paddingTop: spacing.sm,
+    height: TILE.footerHeight,
     borderTopWidth: StyleSheet.hairlineWidth,
     flexDirection: 'row',
-    minHeight: 76,
     alignItems: 'center',
+    paddingTop: 8,
   },
 });
