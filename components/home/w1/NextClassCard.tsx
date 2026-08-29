@@ -2,7 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Linking, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { useAppTheme } from '../../../lib/providers/ThemeProvider';
-import { fontFamilies, spacing } from '../../../lib/theme';
+import { w1Radii } from '../../../lib/theme';
 import type {
   NextClassReservationStatus,
   NextClassSummary,
@@ -10,6 +10,7 @@ import type {
 import { SectionLabel } from './SectionLabel';
 import { StatusChip } from './StatusChip';
 import { SurfaceCard } from './SurfaceCard';
+import { TILE, tileType } from './tileLayout';
 
 interface NextClassCardProps {
   nextClass: NextClassSummary;
@@ -23,7 +24,7 @@ interface NextClassCardProps {
 function formatClassWhen(iso: string): string {
   const date = new Date(iso);
   return date.toLocaleString(undefined, {
-    weekday: 'long',
+    weekday: 'short',
     month: 'short',
     day: 'numeric',
     hour: 'numeric',
@@ -58,12 +59,16 @@ function primaryLabel(
     case 'checked_in':
       return 'Checked In';
     case 'class_full':
-      return 'Join Waitlist';
+      return 'Waitlist';
     default:
       return 'Reserve Spot';
   }
 }
 
+/**
+ * Next Class tile — locked zones match Journey for equal height + type.
+ * HEADER → TITLE → META → FOOTER
+ */
 export function NextClassCard({
   nextClass,
   reservationStatus,
@@ -82,96 +87,110 @@ export function NextClassCard({
   return (
     <SurfaceCard
       accessibilityLabel={`Next class ${nextClass.title}`}
+      padded={false}
       style={styles.card}
     >
-      <View style={styles.header}>
-        <SectionLabel>Next Class</SectionLabel>
-        <StatusChip
-          label={statusChipLabel(nextClass.status, reservationStatus)}
-        />
-      </View>
+      <View style={styles.inner}>
+        <View style={tileType.header}>
+          <SectionLabel style={styles.sectionLabel}>Next Class</SectionLabel>
+          <StatusChip
+            label={statusChipLabel(nextClass.status, reservationStatus)}
+          />
+        </View>
 
-      <Text style={[styles.title, { color: colors.text }]} numberOfLines={2}>
-        {nextClass.title.toUpperCase()}
-      </Text>
-
-      <View style={styles.metaBlock}>
-        <MetaRow
-          icon="calendar-outline"
-          text={formatClassWhen(nextClass.startsAt)}
-        />
-        <MetaRow
-          icon="people-outline"
-          text={`${nextClass.coach} · ${nextClass.format} · ${nextClass.location}`}
-        />
-        <MetaRow icon="time-outline" text={`${nextClass.durationMinutes} min`} />
-      </View>
-
-      <Pressable
-        accessibilityRole="button"
-        accessibilityState={{ disabled }}
-        disabled={disabled}
-        onPress={onPrimaryAction}
-        style={({ pressed }) => [
-          styles.primaryBtn,
-          {
-            backgroundColor: checkedIn
-              ? colors.goldMuted
-              : colors.goldTintSurface,
-            borderColor: colors.goldAccent,
-            opacity: pressed || actionLoading ? 0.85 : 1,
-          },
-        ]}
-      >
-        {checkedIn ? (
-          <View
-            style={[styles.checkIcon, { backgroundColor: colors.goldAccent }]}
+        <View style={styles.body}>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={`View ${nextClass.title} on schedule`}
+            onPress={onOpenDetails}
+            disabled={!onOpenDetails}
+            style={styles.titleSlot}
           >
-            <Ionicons name="checkmark" size={14} color={colors.cardBackground} />
-          </View>
-        ) : null}
-        <Text style={[styles.primaryLabel, { color: colors.goldAccent }]}>
-          {primaryLabel(reservationStatus, actionLoading)}
-        </Text>
-        {xpEarnedLabel ? (
-          <Text style={[styles.xpLabel, { color: colors.goldAccent }]}>
-            {xpEarnedLabel}
-          </Text>
-        ) : null}
-      </Pressable>
+            <Text
+              style={[tileType.title, { color: colors.text }]}
+              numberOfLines={TILE.titleMaxLines}
+              adjustsFontSizeToFit
+              minimumFontScale={0.82}
+            >
+              {nextClass.title}
+            </Text>
+          </Pressable>
 
-      <View style={styles.secondaryRow}>
-        <SecondaryAction
-          icon="calendar-outline"
-          label="Add to Calendar"
-          onPress={() => {
-            void Linking.openURL(
-              `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(nextClass.title)}`,
-            ).catch(() => onOpenDetails?.());
-          }}
-        />
-        <SecondaryAction
-          icon="navigate-outline"
-          label="Directions"
-          onPress={() => {
-            void Linking.openURL(
-              'https://maps.apple.com/?q=Open+Mat+Academy+Tracy+CA',
-            ).catch(() => onOpenDetails?.());
-          }}
-        />
+          <View style={styles.metaBlock}>
+            <MetaRow
+              icon="calendar-outline"
+              text={formatClassWhen(nextClass.startsAt)}
+            />
+            <MetaRow
+              icon="location-outline"
+              text={`${nextClass.location} · ${nextClass.durationMinutes} min`}
+            />
+          </View>
+        </View>
+
+        <View style={[styles.footer, { borderTopColor: colors.border }]}>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityState={{ disabled }}
+            disabled={disabled}
+            onPress={onPrimaryAction}
+            style={({ pressed }) => [
+              styles.primaryBtn,
+              {
+                backgroundColor: checkedIn
+                  ? colors.goldMuted
+                  : colors.goldTintSurface,
+                borderColor: colors.goldAccent,
+                opacity: pressed || actionLoading ? 0.85 : 1,
+              },
+            ]}
+          >
+            {checkedIn ? (
+              <View
+                style={[
+                  styles.checkIcon,
+                  { backgroundColor: colors.goldAccent },
+                ]}
+              >
+                <Ionicons
+                  name="checkmark"
+                  size={12}
+                  color={colors.cardBackground}
+                />
+              </View>
+            ) : null}
+            <Text style={[tileType.cta, { color: colors.goldAccent }]}>
+              {primaryLabel(reservationStatus, actionLoading)}
+            </Text>
+            {xpEarnedLabel ? (
+              <Text style={[styles.xpLabel, { color: colors.goldAccent }]}>
+                {xpEarnedLabel}
+              </Text>
+            ) : null}
+          </Pressable>
+
+          <View style={styles.secondaryRow}>
+            <SecondaryAction
+              icon="calendar-outline"
+              label="Calendar"
+              onPress={() => {
+                void Linking.openURL(
+                  `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(nextClass.title)}`,
+                ).catch(() => onOpenDetails?.());
+              }}
+            />
+            <SecondaryAction
+              icon="navigate-outline"
+              label="Directions"
+              onPress={() => {
+                void Linking.openURL(
+                  `https://maps.apple.com/?q=Open+Mat+Academy+${encodeURIComponent(nextClass.location)}`,
+                ).catch(() => onOpenDetails?.());
+              }}
+            />
+          </View>
+        </View>
       </View>
-      {onOpenDetails ? (
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel="View class on schedule"
-          onPress={onOpenDetails}
-          style={styles.detailsLink}
-        >
-          <Text style={[styles.detailsText, { color: colors.secondaryText }]}>
-            View on schedule
-          </Text>
-        </Pressable>
-      ) : null}
     </SurfaceCard>
   );
 }
@@ -186,10 +205,10 @@ function MetaRow({
   const { colors } = useAppTheme();
   return (
     <View style={styles.metaRow}>
-      <Ionicons name={icon} size={14} color={colors.secondaryText} />
+      <Ionicons name={icon} size={12} color={colors.secondaryText} />
       <Text
-        style={[styles.metaText, { color: colors.secondaryText }]}
-        numberOfLines={2}
+        style={[tileType.meta, styles.metaText, { color: colors.secondaryText }]}
+        numberOfLines={1}
       >
         {text}
       </Text>
@@ -210,13 +229,16 @@ function SecondaryAction({
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityLabel={label}
+      accessibilityLabel={label === 'Calendar' ? 'Add to Calendar' : label}
       onPress={onPress}
       hitSlop={8}
       style={styles.secondaryAction}
     >
-      <Ionicons name={icon} size={13} color={colors.secondaryText} />
-      <Text style={[styles.secondaryLabel, { color: colors.secondaryText }]}>
+      <Ionicons name={icon} size={12} color={colors.goldAccent} />
+      <Text
+        style={[tileType.secondary, { color: colors.secondaryText }]}
+        numberOfLines={1}
+      >
         {label}
       </Text>
     </Pressable>
@@ -226,90 +248,81 @@ function SecondaryAction({
 const styles = StyleSheet.create({
   card: {
     flex: 1,
-    minHeight: 280,
+    height: TILE.height,
+    minHeight: TILE.height,
   },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
+  inner: {
+    flex: 1,
+    padding: TILE.pad,
     justifyContent: 'space-between',
-    marginBottom: spacing.sm,
   },
-  title: {
-    fontFamily: fontFamilies.bold,
-    fontSize: 22,
-    letterSpacing: 0.6,
-    lineHeight: 26,
-    marginBottom: spacing.sm,
+  sectionLabel: {
+    fontSize: 10,
+    letterSpacing: 1.2,
+  },
+  body: {
+    flex: 1,
+    marginTop: 8,
+    gap: TILE.bodyGap,
+    justifyContent: 'flex-start',
+  },
+  titleSlot: {
+    minHeight: TILE.titleLineHeight * TILE.titleMaxLines,
+    justifyContent: 'flex-start',
   },
   metaBlock: {
-    gap: 8,
-    marginBottom: spacing.md,
+    gap: TILE.metaGap,
+    minHeight: TILE.metaLineHeight * 2 + TILE.metaGap,
+    justifyContent: 'center',
   },
   metaRow: {
     flexDirection: 'row',
-    alignItems: 'flex-start',
-    gap: 8,
+    alignItems: 'center',
+    gap: 6,
   },
   metaText: {
     flex: 1,
-    fontFamily: fontFamilies.regular,
-    fontSize: 12,
-    lineHeight: 17,
+    minWidth: 0,
+  },
+  footer: {
+    height: TILE.footerHeight,
+    justifyContent: 'flex-end',
+    gap: 6,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    paddingTop: 8,
   },
   primaryBtn: {
-    minHeight: 44,
-    borderRadius: 14,
+    height: TILE.btnHeight,
+    borderRadius: w1Radii.control,
     borderWidth: StyleSheet.hairlineWidth,
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
-    gap: 8,
-    paddingHorizontal: spacing.sm,
-    marginBottom: spacing.sm,
+    gap: 6,
+    paddingHorizontal: 10,
   },
   checkIcon: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
+    width: 16,
+    height: 16,
+    borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  primaryLabel: {
-    fontFamily: fontFamilies.semibold,
-    fontSize: 13,
-    letterSpacing: 1,
-    textTransform: 'uppercase',
-  },
   xpLabel: {
-    fontFamily: fontFamilies.medium,
-    fontSize: 12,
+    fontFamily: tileType.meta.fontFamily,
+    fontSize: 10,
   },
   secondaryRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    gap: spacing.sm,
+    alignItems: 'center',
+    height: TILE.secondaryHeight,
+    gap: 12,
   },
   secondaryAction: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    minHeight: 32,
-  },
-  secondaryLabel: {
-    fontFamily: fontFamilies.medium,
-    fontSize: 10,
-    letterSpacing: 0.7,
-    textTransform: 'uppercase',
-  },
-  detailsLink: {
-    marginTop: spacing.xs,
-    alignSelf: 'flex-start',
-    minHeight: 28,
-    justifyContent: 'center',
-  },
-  detailsText: {
-    fontFamily: fontFamilies.medium,
-    fontSize: 11,
-    letterSpacing: 0.4,
+    flexShrink: 1,
+    minWidth: 0,
   },
 });
