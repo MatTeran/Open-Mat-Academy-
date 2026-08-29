@@ -128,7 +128,7 @@ export function NextClassCard({
           </View>
         </View>
 
-        <View style={styles.footer}>
+        <View style={[styles.footer, { borderTopColor: colors.border }]}>
           <Pressable
             accessibilityRole="button"
             accessibilityState={{ disabled }}
@@ -272,6 +272,8 @@ const styles = StyleSheet.create({
   },
   metaBlock: {
     gap: TILE.metaGap,
+    minHeight: TILE.metaLineHeight * 2 + TILE.metaGap,
+    justifyContent: 'center',
   },
   metaRow: {
     flexDirection: 'row',
@@ -286,6 +288,8 @@ const styles = StyleSheet.create({
     height: TILE.footerHeight,
     justifyContent: 'flex-end',
     gap: 8,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    paddingTop: 10,
   },
   primaryBtn: {
     height: TILE.btnHeight,

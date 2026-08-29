@@ -12,9 +12,9 @@ export const TILE = {
   pad: 16,
   headerHeight: 22,
   /** Primary headline (class name / level) */
-  titleSize: 15,
-  titleLineHeight: 18,
-  titleLetterSpacing: 0.35,
+  titleSize: 14,
+  titleLineHeight: 17,
+  titleLetterSpacing: 0.4,
   titleMaxLines: 2,
   /** Supporting meta (when, XP, location) */
   metaSize: 11,

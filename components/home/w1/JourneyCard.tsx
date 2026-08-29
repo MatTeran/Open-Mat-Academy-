@@ -128,6 +128,7 @@ const styles = StyleSheet.create({
   },
   metaBlock: {
     gap: TILE.metaGap + 2,
+    minHeight: TILE.metaLineHeight * 2 + TILE.metaGap,
     justifyContent: 'center',
   },
   footer: {
@@ -135,6 +136,6 @@ const styles = StyleSheet.create({
     borderTopWidth: StyleSheet.hairlineWidth,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingTop: 8,
+    paddingTop: 10,
   },
 });
