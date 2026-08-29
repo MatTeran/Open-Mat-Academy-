@@ -268,7 +268,7 @@ const styles = StyleSheet.create({
   },
   titleSlot: {
     minHeight: TILE.titleLineHeight * TILE.titleMaxLines,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
   },
   metaBlock: {
     gap: TILE.metaGap,
