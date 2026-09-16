@@ -8,7 +8,7 @@ export const ACADEMY = {
   name: 'My Gi',
   brandName: 'My Gi',
   discipline: 'Brazilian Jiu-Jitsu',
-  city: 'Tracy, CA',
+  city: 'Central Valley, CA',
   address: '3200 Naglee Rd, STE #106, Tracy CA',
   phone: '(209) 752-8013',
   website: 'openmatacademy.com',

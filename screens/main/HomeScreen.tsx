@@ -57,19 +57,11 @@ function parseAcademy(membershipName?: string | null): {
   academyName: string;
   locationLabel: string;
 } {
-<<<<<<< HEAD
   const raw = membershipName?.trim() || 'My Gi · Central Valley';
   const [namePart, locationPart] = raw.split('·').map((part) => part.trim());
   return {
     academyName: (namePart || 'My Gi').toUpperCase(),
     locationLabel: (locationPart || 'Central Valley, California').toUpperCase(),
-=======
-  const raw = membershipName?.trim() || 'My Gi · Tracy';
-  const [namePart, locationPart] = raw.split('·').map((part) => part.trim());
-  return {
-    academyName: (namePart || 'My Gi').toUpperCase(),
-    locationLabel: (locationPart || 'Tracy, California').toUpperCase(),
->>>>>>> e637d0c (feat(brand): display-only My Gi rename across Member and Coach)
   };
 }
 

@@ -11,11 +11,7 @@ export const DEFAULT_ATHLETE_HUB: AthleteHub = {
   membership: {
     plan: 'unlimited',
     status: 'active',
-<<<<<<< HEAD
     academyName: 'My Gi · Central Valley',
-=======
-    academyName: 'My Gi · Tracy',
->>>>>>> e637d0c (feat(brand): display-only My Gi rename across Member and Coach)
     memberSince: '2024-03-01T00:00:00.000Z',
     renewsOn: '2026-08-01T00:00:00.000Z',
     priceLabel: '$179 / month',
