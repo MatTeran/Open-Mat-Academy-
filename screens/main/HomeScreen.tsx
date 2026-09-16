@@ -9,8 +9,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { AccessibilityInfo, StyleSheet, View } from 'react-native';
 
 import {
-  AcademyAnnouncementCard,
   AcademyHero,
+  AcademyPulseSection,
   DashboardGrid,
   FadeIn,
   GreetingSection,
@@ -19,8 +19,8 @@ import {
   NotificationPermissionCard,
   Screen,
   Spacer,
+  TodaySchedulePeek,
   TrainingStreakCard,
-  UpcomingEventCard,
   W1NextClassCard,
 } from '../../components';
 import { useAuth, useNotifications, useProfile } from '../../hooks';
@@ -38,10 +38,12 @@ import type {
   NextClassReservationStatus,
 } from '../../types/home';
 import {
-  formatShortDate,
+  formatClock,
+  getClassesForDay,
   getFirstName,
   getGreeting,
   getMotivationalMessage,
+  getWeekdayFromDate,
 } from '../../utils';
 
 type HomeNavigation = CompositeNavigationProp<
@@ -143,20 +145,27 @@ export function HomeScreen() {
   });
 
   const featuredAnnouncement = announcements[0] ?? null;
+  const featuredSeminar = seminars[0] ?? null;
 
-  const featuredSeminar = useMemo(() => {
-    const seminar = seminars[0];
-    if (seminar) {
-      return {
-        title: seminar.title,
-        whenLabel: `${seminar.dateLabel} · ${seminar.timeLabel}`,
-      };
+  const announcementUnread = useMemo(() => {
+    if (!featuredAnnouncement) {
+      return false;
     }
-    return {
-      title: 'Guard Retention Intensive',
-      whenLabel: 'Sat · Aug 9 · 1:00 – 3:00 PM',
-    };
-  }, [seminars]);
+    const ageMs = Date.now() - new Date(featuredAnnouncement.createdAt).getTime();
+    return ageMs < 1000 * 60 * 60 * 36;
+  }, [featuredAnnouncement]);
+
+  const todayClasses = useMemo(() => {
+    return getClassesForDay(getWeekdayFromDate(new Date()), 'all');
+  }, []);
+
+  const todayPeekNextLabel = useMemo(() => {
+    if (todayClasses.length === 0) {
+      return null;
+    }
+    const first = todayClasses[0];
+    return `${formatClock(first.startTime)} · ${first.title}`;
+  }, [todayClasses]);
 
   useEffect(() => {
     if (!xpEarnedLabel) {
@@ -255,6 +264,18 @@ export function HomeScreen() {
           />
         </FadeIn>
 
+        <Spacer size="sm" />
+
+        <FadeIn delay={60}>
+          <View style={styles.inset}>
+            <TodaySchedulePeek
+              classCount={todayClasses.length}
+              nextLabel={todayPeekNextLabel}
+              onPress={() => navigation.navigate('Schedule')}
+            />
+          </View>
+        </FadeIn>
+
         <Spacer size="md" />
 
         <FadeIn delay={80}>
@@ -322,39 +343,24 @@ export function HomeScreen() {
           </View>
         </FadeIn>
 
-        {featuredAnnouncement ? (
-          <>
-            <Spacer size="md" />
-            <FadeIn delay={150}>
-              <View style={styles.inset}>
-                <AcademyAnnouncementCard
-                  title={featuredAnnouncement.title}
-                  body={featuredAnnouncement.body}
-                  authorName={featuredAnnouncement.authorName}
-                  whenLabel={formatShortDate(featuredAnnouncement.createdAt)}
-                  onPress={() => navigation.navigate('Community')}
-                />
-              </View>
-            </FadeIn>
-          </>
-        ) : null}
-
         <Spacer size="md" />
 
-        <FadeIn delay={180}>
+        <FadeIn delay={160}>
           <View style={styles.inset}>
-            <UpcomingEventCard
-              eyebrow="Upcoming Seminars"
-              title={featuredSeminar.title}
-              whenLabel={featuredSeminar.whenLabel}
-              onPress={() => navigation.navigate('Community')}
+            <AcademyPulseSection
+              announcement={featuredAnnouncement}
+              seminar={featuredSeminar}
+              announcementUnread={announcementUnread}
+              onSeeAll={() => navigation.navigate('Community')}
+              onPressAnnouncement={() => navigation.navigate('Community')}
+              onPressSeminar={() => navigation.navigate('Community')}
             />
           </View>
         </FadeIn>
 
         <Spacer size="md" />
 
-        <FadeIn delay={210}>
+        <FadeIn delay={200}>
           <View style={styles.inset}>
             <LocalEventsCard
               onPress={() => navigation.navigate('LocalEvents')}

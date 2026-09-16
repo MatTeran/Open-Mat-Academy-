@@ -83,10 +83,10 @@ export function JourneyCard({ summary, onOpenJourney }: JourneyCardProps) {
           />
           <MetricItem
             compact
-            icon="flame-outline"
-            label="Streak"
-            value={`${summary.currentStreak}d`}
-            accessibilityLabel={`Streak: ${summary.currentStreak} days`}
+            icon="flash-outline"
+            label="To go"
+            value={`${Math.max(0, summary.nextLevelXP - summary.currentXP)}`}
+            accessibilityLabel={`${Math.max(0, summary.nextLevelXP - summary.currentXP)} XP until next level`}
           />
         </View>
       </View>

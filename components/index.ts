@@ -21,6 +21,7 @@ export { UpcomingEvents } from './home/UpcomingEvents';
 export {
   AcademyAnnouncementCard,
   AcademyHero,
+  AcademyPulseSection,
   DashboardGrid,
   DayIndicator,
   GreetingSection,
@@ -32,6 +33,7 @@ export {
   SectionLabel,
   StatusChip,
   SurfaceCard,
+  TodaySchedulePeek,
   TrainingStreakCard,
   UpcomingEventCard,
   W1NextClassCard,

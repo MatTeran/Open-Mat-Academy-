@@ -1,5 +1,6 @@
 export { AcademyAnnouncementCard } from './AcademyAnnouncementCard';
 export { AcademyHero } from './AcademyHero';
+export { AcademyPulseSection } from './AcademyPulseSection';
 export { DashboardGrid } from './DashboardGrid';
 export { DayIndicator } from './DayIndicator';
 export { GreetingSection } from './GreetingSection';
@@ -13,5 +14,6 @@ export type { QuickLogActionId } from './QuickLogSheet';
 export { SectionLabel } from './SectionLabel';
 export { StatusChip } from './StatusChip';
 export { SurfaceCard } from './SurfaceCard';
+export { TodaySchedulePeek } from './TodaySchedulePeek';
 export { TrainingStreakCard } from './TrainingStreakCard';
 export { UpcomingEventCard } from './UpcomingEventCard';
