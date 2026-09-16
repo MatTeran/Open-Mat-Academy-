@@ -19,17 +19,21 @@ export { QuickActions } from './home/QuickActions';
 export { RecentActivity } from './home/RecentActivity';
 export { UpcomingEvents } from './home/UpcomingEvents';
 export {
+  AcademyAnnouncementCard,
   AcademyHero,
+  AcademyPulseSection,
   DashboardGrid,
   DayIndicator,
   GreetingSection,
   JourneyCard,
   JourneyProgressBar,
+  LocalEventsCard,
   MetricItem,
   QuickLogSheet,
   SectionLabel,
   StatusChip,
   SurfaceCard,
+  TodaySchedulePeek,
   TrainingStreakCard,
   UpcomingEventCard,
   W1NextClassCard,

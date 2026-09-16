@@ -84,7 +84,7 @@ export function ProfileHomeScreen({ navigation }: Props) {
   const [photoLoading, setPhotoLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const displayName = user?.fullName || 'Open Mat Athlete';
+  const displayName = user?.fullName || 'My Gi Athlete';
   const academyLine = hub.membership.academyName.toUpperCase();
 
   const handleSignOut = async () => {

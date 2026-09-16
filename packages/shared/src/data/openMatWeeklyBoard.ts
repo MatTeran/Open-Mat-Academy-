@@ -32,7 +32,7 @@ const INSTRUCTOR_IDS: Record<string, string> = {
   'Coach MT': 'coach-mt',
   'Coach Wrestling': 'coach-wrestling',
   'Coach TKD': 'coach-tkd',
-  'Open Mat Staff': 'open-mat-staff',
+  'My Gi Staff': 'open-mat-staff',
 };
 
 function seed(
@@ -62,7 +62,7 @@ function seed(
 }
 
 /**
- * Official Open Mat Academy weekly class board
+ * Official My Gi weekly class board
  * (3200 Naglee Rd STE #106, Tracy CA).
  */
 export const OPEN_MAT_WEEKLY_BOARD: OpenMatClassSeed[] = [
@@ -71,7 +71,7 @@ export const OPEN_MAT_WEEKLY_BOARD: OpenMatClassSeed[] = [
     note: 'Roll Call · Band App',
     capacity: 24,
   }),
-  seed('mon', '10:00', '11:00', 'Peak Performance', 'peak_performance', 'none', 'all', 'Open Mat Staff'),
+  seed('mon', '10:00', '11:00', 'Peak Performance', 'peak_performance', 'none', 'all', 'My Gi Staff'),
   seed('mon', '11:00', '12:30', 'Jiu Jitsu GI', 'adult_bjj', 'gi', 'adults', 'Coach Silva', {
     id: 'mon-1100-jiu-jitsu-gi',
     capacity: 24,
@@ -90,7 +90,7 @@ export const OPEN_MAT_WEEKLY_BOARD: OpenMatClassSeed[] = [
     id: 'mon-1630-youth-boxing',
     capacity: 16,
   }),
-  seed('mon', '16:30', '17:30', 'Peak Performance', 'peak_performance', 'none', 'all', 'Open Mat Staff', {
+  seed('mon', '16:30', '17:30', 'Peak Performance', 'peak_performance', 'none', 'all', 'My Gi Staff', {
     id: 'mon-1630-peak',
   }),
   seed('mon', '17:00', '18:30', 'Muay Thai (Teens/Adults)', 'muay_thai', 'none', 'adults', 'Coach MT', {
@@ -103,7 +103,7 @@ export const OPEN_MAT_WEEKLY_BOARD: OpenMatClassSeed[] = [
   seed('mon', '17:30', '18:15', 'Tae Kwon Do (Beginner)', 'taekwondo', 'none', 'all', 'Coach TKD', {
     capacity: 18,
   }),
-  seed('mon', '17:30', '18:30', 'Peak Performance', 'peak_performance', 'none', 'all', 'Open Mat Staff', {
+  seed('mon', '17:30', '18:30', 'Peak Performance', 'peak_performance', 'none', 'all', 'My Gi Staff', {
     id: 'mon-1730-peak',
   }),
   seed('mon', '18:15', '19:00', 'Tae Kwon Do (Inter/Adv)', 'taekwondo', 'none', 'all', 'Coach TKD', {
@@ -119,14 +119,14 @@ export const OPEN_MAT_WEEKLY_BOARD: OpenMatClassSeed[] = [
   }),
 
   // —— Tuesday ——
-  seed('tue', '10:00', '11:00', 'Peak Performance', 'peak_performance', 'none', 'all', 'Open Mat Staff'),
+  seed('tue', '10:00', '11:00', 'Peak Performance', 'peak_performance', 'none', 'all', 'My Gi Staff'),
   seed('tue', '16:00', '16:30', 'Pee Wee BJJ (Ages 4–7)', 'pee_wee_bjj', 'gi', 'kids', 'Coach Park', {
     capacity: 16,
   }),
   seed('tue', '16:30', '17:30', 'Youth BJJ (Ages 8–12)', 'youth_bjj', 'gi', 'kids', 'Coach Park', {
     capacity: 18,
   }),
-  seed('tue', '16:30', '17:30', 'Peak Performance', 'peak_performance', 'none', 'all', 'Open Mat Staff', {
+  seed('tue', '16:30', '17:30', 'Peak Performance', 'peak_performance', 'none', 'all', 'My Gi Staff', {
     id: 'tue-1630-peak',
   }),
   seed('tue', '17:00', '18:30', 'Muay Thai (Youth/Adults)', 'muay_thai', 'none', 'all', 'Coach MT', {
@@ -135,7 +135,7 @@ export const OPEN_MAT_WEEKLY_BOARD: OpenMatClassSeed[] = [
   seed('tue', '17:30', '18:00', 'Wrestling (Ages 5–11)', 'wrestling', 'none', 'kids', 'Coach Wrestling', {
     capacity: 16,
   }),
-  seed('tue', '17:30', '18:30', 'Peak Performance', 'peak_performance', 'none', 'all', 'Open Mat Staff', {
+  seed('tue', '17:30', '18:30', 'Peak Performance', 'peak_performance', 'none', 'all', 'My Gi Staff', {
     id: 'tue-1730-peak',
   }),
   seed('tue', '18:00', '19:00', 'Wrestling (Ages 12–17)', 'wrestling', 'none', 'kids', 'Coach Wrestling', {
@@ -154,7 +154,7 @@ export const OPEN_MAT_WEEKLY_BOARD: OpenMatClassSeed[] = [
     note: 'Roll Call · Band App',
     capacity: 24,
   }),
-  seed('wed', '10:00', '11:00', 'Peak Performance', 'peak_performance', 'none', 'all', 'Open Mat Staff'),
+  seed('wed', '10:00', '11:00', 'Peak Performance', 'peak_performance', 'none', 'all', 'My Gi Staff'),
   seed('wed', '10:00', '11:00', "Women's BJJ", 'womens_bjj', 'gi', 'adults', 'Coach Mendes', {
     id: 'wed-1000-womens-bjj',
     capacity: 16,
@@ -173,7 +173,7 @@ export const OPEN_MAT_WEEKLY_BOARD: OpenMatClassSeed[] = [
     id: 'wed-1630-youth-boxing',
     capacity: 16,
   }),
-  seed('wed', '16:30', '17:30', 'Peak Performance', 'peak_performance', 'none', 'all', 'Open Mat Staff', {
+  seed('wed', '16:30', '17:30', 'Peak Performance', 'peak_performance', 'none', 'all', 'My Gi Staff', {
     id: 'wed-1630-peak',
   }),
   seed('wed', '17:00', '18:30', 'Muay Thai (Teens/Adults)', 'muay_thai', 'none', 'adults', 'Coach MT', {
@@ -186,7 +186,7 @@ export const OPEN_MAT_WEEKLY_BOARD: OpenMatClassSeed[] = [
   seed('wed', '17:30', '18:15', 'Tae Kwon Do (Beginner)', 'taekwondo', 'none', 'all', 'Coach TKD', {
     capacity: 18,
   }),
-  seed('wed', '17:30', '18:30', 'Peak Performance', 'peak_performance', 'none', 'all', 'Open Mat Staff', {
+  seed('wed', '17:30', '18:30', 'Peak Performance', 'peak_performance', 'none', 'all', 'My Gi Staff', {
     id: 'wed-1730-peak',
   }),
   seed('wed', '18:15', '19:00', 'Tae Kwon Do (Inter/Adv)', 'taekwondo', 'none', 'all', 'Coach TKD', {
@@ -202,14 +202,14 @@ export const OPEN_MAT_WEEKLY_BOARD: OpenMatClassSeed[] = [
   }),
 
   // —— Thursday ——
-  seed('thu', '10:00', '11:00', 'Peak Performance', 'peak_performance', 'none', 'all', 'Open Mat Staff'),
+  seed('thu', '10:00', '11:00', 'Peak Performance', 'peak_performance', 'none', 'all', 'My Gi Staff'),
   seed('thu', '16:00', '16:30', 'Pee Wee BJJ (No GI Ages 4–7)', 'pee_wee_bjj', 'no_gi', 'kids', 'Coach Park', {
     capacity: 16,
   }),
   seed('thu', '16:30', '17:30', 'Youth BJJ (No GI Ages 8–12)', 'youth_bjj', 'no_gi', 'kids', 'Coach Park', {
     capacity: 18,
   }),
-  seed('thu', '16:30', '17:30', 'Peak Performance', 'peak_performance', 'none', 'all', 'Open Mat Staff', {
+  seed('thu', '16:30', '17:30', 'Peak Performance', 'peak_performance', 'none', 'all', 'My Gi Staff', {
     id: 'thu-1630-peak',
   }),
   seed('thu', '17:00', '18:30', 'Muay Thai (Teens/Adults)', 'muay_thai', 'none', 'adults', 'Coach MT', {
@@ -222,7 +222,7 @@ export const OPEN_MAT_WEEKLY_BOARD: OpenMatClassSeed[] = [
   seed('thu', '17:30', '18:00', 'Wrestling (Ages 5–11)', 'wrestling', 'none', 'kids', 'Coach Wrestling', {
     capacity: 16,
   }),
-  seed('thu', '17:30', '18:30', 'Peak Performance', 'peak_performance', 'none', 'all', 'Open Mat Staff', {
+  seed('thu', '17:30', '18:30', 'Peak Performance', 'peak_performance', 'none', 'all', 'My Gi Staff', {
     id: 'thu-1730-peak',
   }),
   seed('thu', '18:00', '19:00', 'Wrestling (Ages 12–17)', 'wrestling', 'none', 'kids', 'Coach Wrestling', {
@@ -281,20 +281,20 @@ export const OPEN_MAT_WEEKLY_BOARD: OpenMatClassSeed[] = [
   seed('sat', '10:00', '12:00', 'Open Mat (GI / No GI)', 'open_mat', 'gi_no_gi', 'all', 'Coach Silva', {
     capacity: 40,
   }),
-  seed('sat', '10:00', '17:30', 'Open Gym', 'open_mat', 'none', 'all', 'Open Mat Staff', {
+  seed('sat', '10:00', '17:30', 'Open Gym', 'open_mat', 'none', 'all', 'My Gi Staff', {
     id: 'sat-1000-open-gym',
     capacity: 50,
     note: 'Boxing open during gym hours (except during class)',
   }),
 
   // —— Sunday ——
-  seed('sun', '10:00', '17:30', 'Open Gym', 'open_mat', 'none', 'all', 'Open Mat Staff', {
+  seed('sun', '10:00', '17:30', 'Open Gym', 'open_mat', 'none', 'all', 'My Gi Staff', {
     capacity: 50,
   }),
 ];
 
 export const OPEN_MAT_SCHEDULE_META = {
-  academy: 'Open Mat Academy',
+  academy: 'My Gi',
   address: '3200 Naglee Rd, STE #106, Tracy CA',
   phone: '(209) 752-8013',
   website: 'openmatacademy.com',

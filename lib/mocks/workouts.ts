@@ -1,6 +1,6 @@
 import type { Workout } from '../../types/workout';
 
-/** Seed workouts for the Open Mat log — local only. */
+/** Seed workouts for the My Gi log — local only. */
 export const INITIAL_WORKOUTS: Workout[] = [
   {
     id: 'w-1',

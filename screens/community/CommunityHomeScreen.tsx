@@ -129,7 +129,7 @@ export function CommunityHomeScreen({ navigation }: Props) {
         />
         <Card onPress={() => navigation.navigate('TeamChat')}>
           <Text variant="caption" gold>
-            Open Mat Team
+            My Gi Team
           </Text>
           <Spacer size="xs" />
           <Text variant="body" numberOfLines={2}>

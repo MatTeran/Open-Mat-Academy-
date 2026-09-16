@@ -1,28 +1,30 @@
 import { Ionicons } from '@expo/vector-icons';
 import {
-  Image,
   ImageBackground,
   Pressable,
   StyleSheet,
-  Text,
   View,
   useWindowDimensions,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useAppTheme } from '../../../lib/providers/ThemeProvider';
-import { fontFamilies, spacing, w1Spacing } from '../../../lib/theme';
+import { spacing, w1Spacing } from '../../../lib/theme';
 
-const heroImage = require('../../../assets/home-hero.png');
-const brandLogo = require('../../../assets/brand-logo.png');
+const heroImage = require('../../../assets/home-hero.jpg');
 
 interface AcademyHeroProps {
+  /** Kept for callers / a11y; brand + location live in the hero photo. */
   academyName: string;
   locationLabel: string;
   unreadCount?: number;
   onPressNotifications?: () => void;
 }
 
+/**
+ * Full-bleed academy hero. Branding is in the photo (My Gi · Central Valley);
+ * UI chrome is limited to notifications so the first viewport stays light.
+ */
 export function AcademyHero({
   academyName,
   locationLabel,
@@ -32,22 +34,23 @@ export function AcademyHero({
   const { colors } = useAppTheme();
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
-  // Roughly half of the previous tall hero — immersive but not dominant.
-  const height = Math.max(168, Math.min(210, width * 0.48));
+  // Wide academy interior — immersive but not taller than the tiles below.
+  const height = Math.max(176, Math.min(220, width * 0.52));
 
   return (
-    <View style={[styles.wrap, { height: height + insets.top }]}>
+    <View
+      style={[styles.wrap, { height: height + insets.top }]}
+      accessibilityRole="header"
+      accessibilityLabel={`${academyName}, ${locationLabel}`}
+    >
       <ImageBackground
         source={heroImage}
         style={StyleSheet.absoluteFill}
         resizeMode="cover"
       >
-        <View
-          style={[
-            StyleSheet.absoluteFill,
-            { backgroundColor: 'rgba(18, 14, 10, 0.42)' },
-          ]}
-        />
+        {/* Soft top veil only — keep wall branding readable */}
+        <View style={styles.topVeil} />
+
         <View
           style={[
             styles.content,
@@ -58,24 +61,7 @@ export function AcademyHero({
           ]}
         >
           <View style={styles.topRow}>
-            <View style={styles.brandBlock}>
-              <View style={styles.logoRow}>
-                <Image source={brandLogo} style={styles.logo} />
-                <Text
-                  style={styles.academyName}
-                  numberOfLines={1}
-                  accessibilityRole="header"
-                >
-                  {academyName}
-                </Text>
-              </View>
-              <View style={styles.locationRow}>
-                <View style={styles.locationRule} />
-                <Text style={styles.location}>{locationLabel}</Text>
-                <View style={styles.locationRule} />
-              </View>
-            </View>
-
+            <View style={styles.spacer} />
             <Pressable
               accessibilityRole="button"
               accessibilityLabel={
@@ -87,7 +73,7 @@ export function AcademyHero({
               hitSlop={12}
               style={[
                 styles.bell,
-                { backgroundColor: 'rgba(255,255,255,0.14)' },
+                { backgroundColor: 'rgba(20,18,14,0.28)' },
               ]}
             >
               <Ionicons name="notifications-outline" size={20} color="#FFFFFF" />
@@ -109,6 +95,10 @@ const styles = StyleSheet.create({
     width: '100%',
     overflow: 'hidden',
   },
+  topVeil: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(18, 14, 10, 0.12)',
+  },
   content: {
     flex: 1,
     justifyContent: 'flex-start',
@@ -116,48 +106,10 @@ const styles = StyleSheet.create({
   topRow: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    justifyContent: 'space-between',
-    gap: spacing.md,
+    justifyContent: 'flex-end',
   },
-  brandBlock: {
+  spacer: {
     flex: 1,
-    gap: 8,
-  },
-  logoRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-  },
-  logo: {
-    width: 28,
-    height: 28,
-    borderRadius: 6,
-  },
-  academyName: {
-    flexShrink: 1,
-    fontFamily: fontFamilies.bold,
-    fontSize: 22,
-    letterSpacing: 2.4,
-    textTransform: 'uppercase',
-    color: '#FFFFFF',
-  },
-  locationRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-    paddingLeft: 2,
-  },
-  locationRule: {
-    width: 18,
-    height: StyleSheet.hairlineWidth,
-    backgroundColor: 'rgba(255,255,255,0.55)',
-  },
-  location: {
-    fontFamily: fontFamilies.medium,
-    fontSize: 11,
-    letterSpacing: 1.8,
-    textTransform: 'uppercase',
-    color: 'rgba(255,255,255,0.88)',
   },
   bell: {
     width: 40,

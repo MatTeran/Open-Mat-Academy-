@@ -6,7 +6,7 @@ import { fontFamilies, spacing } from '../../../lib/theme';
 import { SectionLabel } from './SectionLabel';
 import { SurfaceCard } from './SurfaceCard';
 
-const eventImage = require('../../../assets/home-hero.png');
+const eventImage = require('../../../assets/home-hero.jpg');
 
 interface UpcomingEventCardProps {
   eyebrow?: string;

@@ -1,4 +1,4 @@
-# Open Mat Academy — Friend Demo Guide
+# My Gi — Friend Demo Guide
 
 Offline sample data + demo logins so you can walk a friend through both apps without Supabase.
 

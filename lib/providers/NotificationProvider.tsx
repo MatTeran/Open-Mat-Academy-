@@ -177,7 +177,7 @@ export function NotificationProvider({ children }: PropsWithChildren) {
 
       const item = buildHistoryItem({
         userId,
-        title: title?.trim() || 'Open Mat',
+        title: title?.trim() || 'My Gi',
         body: body?.trim() || '',
         category: data.category,
         eventType: data.eventType,

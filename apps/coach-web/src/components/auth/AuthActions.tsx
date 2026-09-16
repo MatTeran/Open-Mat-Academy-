@@ -33,7 +33,7 @@ export function SignOutButton() {
 export function BrandMark({ href = '/' }: { href?: string }) {
   return (
     <Link href={href} className="font-display text-xl tracking-[0.18em] text-gold">
-      OPEN MAT
+      MY GI
     </Link>
   );
 }

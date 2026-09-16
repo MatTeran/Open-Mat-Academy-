@@ -12,7 +12,7 @@ export type TextStyleLike = {
 };
 
 /**
- * Type scale for Open Mat — expressive display + clean UI body.
+ * Type scale for My Gi — expressive display + clean UI body.
  * Fonts: Syne (brand/display), Outfit (UI).
  */
 export const fontFamilies = {

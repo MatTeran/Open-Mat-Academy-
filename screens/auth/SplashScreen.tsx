@@ -3,7 +3,6 @@ import { useEffect, useRef } from 'react';
 import { Animated, Easing, Image, StyleSheet, View } from 'react-native';
 
 import { Text } from '../../components';
-import { useAppTheme } from '../../hooks';
 import { APP_TAGLINE, AUTH_SPLASH_DURATION_MS } from '../../lib/constants';
 import { spacing } from '../../lib/theme';
 import type { AuthStackParamList } from '../../types';
@@ -14,7 +13,6 @@ type Props = NativeStackScreenProps<AuthStackParamList, 'Splash'>;
  * Branded launch moment — then soft transition into Login.
  */
 export function SplashScreen({ navigation }: Props) {
-  const { colors } = useAppTheme();
   const opacity = useRef(new Animated.Value(0)).current;
   const translateY = useRef(new Animated.Value(12)).current;
 
@@ -42,9 +40,7 @@ export function SplashScreen({ navigation }: Props) {
   }, [navigation, opacity, translateY]);
 
   return (
-    <View
-      style={[styles.container, { backgroundColor: colors.primaryBackground }]}
-    >
+    <View style={[styles.container, { backgroundColor: '#000000' }]}>
       <Animated.View
         style={[
           styles.content,
@@ -58,9 +54,9 @@ export function SplashScreen({ navigation }: Props) {
           source={require('../../assets/brand-logo.png')}
           style={styles.logo}
           resizeMode="contain"
-          accessibilityLabel="Open Mat"
+          accessibilityLabel="My Gi"
         />
-        <Text variant="bodyMuted" style={styles.tagline}>
+        <Text variant="bodyMuted" style={[styles.tagline, { color: '#C4C0B8' }]}>
           {APP_TAGLINE}
         </Text>
       </Animated.View>

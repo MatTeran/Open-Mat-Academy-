@@ -19,7 +19,7 @@ export default async function LoginPage() {
           Coach Web
         </h1>
         <p className="mt-3 text-sm leading-6 text-mute">
-          Desktop mission control for Open Mat academies. Members cannot access
+          Desktop mission control for My Gi academies. Members cannot access
           this dashboard.
         </p>
         <div className="mt-8 space-y-4">

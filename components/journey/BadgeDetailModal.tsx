@@ -80,8 +80,8 @@ export function BadgeDetailModal({
 
   const handleShare = async () => {
     const message = badge.isUnlocked
-      ? `I unlocked ${badge.name} on Open Mat — ${badge.description}`
-      : `Working toward ${badge.name} on Open Mat — ${progress.current}/${progress.target} ${badge.requirementLabel}.`;
+      ? `I unlocked ${badge.name} on My Gi — ${badge.description}`
+      : `Working toward ${badge.name} on My Gi — ${progress.current}/${progress.target} ${badge.requirementLabel}.`;
     try {
       await Share.share({ message });
     } catch {

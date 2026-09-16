@@ -3,7 +3,7 @@ import { Circle, Defs, G, LinearGradient, Path, Polygon, Stop } from 'react-nati
 import { materialPalette } from '../../../lib/achievements/materials';
 import type { MedalArtProps } from './types';
 
-/** Founders Crest — ancient coin aesthetic, Open Mat seal, legendary. */
+/** Founders Crest — ancient coin aesthetic, My Gi seal, legendary. */
 export function FoundersCrestArt({
   cx,
   cy,
