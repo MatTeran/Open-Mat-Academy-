@@ -11,7 +11,7 @@ export const DEFAULT_ATHLETE_HUB: AthleteHub = {
   membership: {
     plan: 'unlimited',
     status: 'active',
-    academyName: 'Open Mat · Tracy',
+    academyName: 'My Gi · Central Valley',
     memberSince: '2024-03-01T00:00:00.000Z',
     renewsOn: '2026-08-01T00:00:00.000Z',
     priceLabel: '$179 / month',

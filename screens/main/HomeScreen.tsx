@@ -9,11 +9,13 @@ import { useEffect, useMemo, useState } from 'react';
 import { AccessibilityInfo, StyleSheet, View } from 'react-native';
 
 import {
+  AcademyAnnouncementCard,
+  AcademyHero,
   DashboardGrid,
   FadeIn,
-  AcademyHero,
   GreetingSection,
   JourneyCard,
+  LocalEventsCard,
   NotificationPermissionCard,
   Screen,
   Spacer,
@@ -36,6 +38,7 @@ import type {
   NextClassReservationStatus,
 } from '../../types/home';
 import {
+  formatShortDate,
   getFirstName,
   getGreeting,
   getMotivationalMessage,
@@ -52,18 +55,28 @@ function parseAcademy(membershipName?: string | null): {
   academyName: string;
   locationLabel: string;
 } {
-  const raw = membershipName?.trim() || 'Open Mat · Tracy';
+  const raw = membershipName?.trim() || 'My Gi · Central Valley';
   const [namePart, locationPart] = raw.split('·').map((part) => part.trim());
   return {
-    academyName: (namePart || 'Open Mat').toUpperCase(),
-    locationLabel: (locationPart || 'Tracy, California').toUpperCase(),
+    academyName: (namePart || 'My Gi').toUpperCase(),
+    locationLabel: (locationPart || 'Central Valley, California').toUpperCase(),
   };
+}
+
+function withCalifornia(locationLabel: string): string {
+  if (locationLabel.includes(',')) {
+    return locationLabel;
+  }
+  if (/california/i.test(locationLabel)) {
+    return locationLabel;
+  }
+  return `${locationLabel}, CALIFORNIA`;
 }
 
 export function HomeScreen() {
   const { user } = useAuth();
   const { hub } = useProfile();
-  const { seminars } = useCommunity();
+  const { seminars, announcements } = useCommunity();
   const { profile, streak, awardXp } = useJourney();
   const {
     permissionPromptStatus,
@@ -129,7 +142,9 @@ export function HomeScreen() {
     currentStreak: journeySummary.currentStreak,
   });
 
-  const featuredEvent = useMemo(() => {
+  const featuredAnnouncement = announcements[0] ?? null;
+
+  const featuredSeminar = useMemo(() => {
     const seminar = seminars[0];
     if (seminar) {
       return {
@@ -138,8 +153,8 @@ export function HomeScreen() {
       };
     }
     return {
-      title: 'Guard Retention Masterclass',
-      whenLabel: 'Sat, Aug 16 · 1:00 PM',
+      title: 'Guard Retention Intensive',
+      whenLabel: 'Sat · Aug 9 · 1:00 – 3:00 PM',
     };
   }, [seminars]);
 
@@ -224,11 +239,7 @@ export function HomeScreen() {
     <Screen scroll padded={false} flushTop contentStyle={styles.content}>
       <AcademyHero
         academyName={academyName}
-        locationLabel={
-          locationLabel.includes(',')
-            ? locationLabel
-            : `${locationLabel}, CALIFORNIA`
-        }
+        locationLabel={withCalifornia(locationLabel)}
         unreadCount={unreadCount}
         onPressNotifications={() =>
           navigation.navigate('Profile', { screen: 'Notifications' })
@@ -301,11 +312,41 @@ export function HomeScreen() {
 
         <Spacer size="md" />
 
-        <FadeIn delay={140}>
+        <FadeIn delay={120}>
+          <View style={styles.inset}>
+            <TrainingStreakCard
+              currentStreak={journeySummary.currentStreak}
+              weekDays={streak.weekDays}
+              onPress={() => navigation.navigate('Journey')}
+            />
+          </View>
+        </FadeIn>
+
+        {featuredAnnouncement ? (
+          <>
+            <Spacer size="md" />
+            <FadeIn delay={150}>
+              <View style={styles.inset}>
+                <AcademyAnnouncementCard
+                  title={featuredAnnouncement.title}
+                  body={featuredAnnouncement.body}
+                  authorName={featuredAnnouncement.authorName}
+                  whenLabel={formatShortDate(featuredAnnouncement.createdAt)}
+                  onPress={() => navigation.navigate('Community')}
+                />
+              </View>
+            </FadeIn>
+          </>
+        ) : null}
+
+        <Spacer size="md" />
+
+        <FadeIn delay={180}>
           <View style={styles.inset}>
             <UpcomingEventCard
-              title={featuredEvent.title}
-              whenLabel={featuredEvent.whenLabel}
+              eyebrow="Upcoming Seminars"
+              title={featuredSeminar.title}
+              whenLabel={featuredSeminar.whenLabel}
               onPress={() => navigation.navigate('Community')}
             />
           </View>
@@ -313,12 +354,10 @@ export function HomeScreen() {
 
         <Spacer size="md" />
 
-        <FadeIn delay={180}>
+        <FadeIn delay={210}>
           <View style={styles.inset}>
-            <TrainingStreakCard
-              currentStreak={journeySummary.currentStreak}
-              weekDays={streak.weekDays}
-              onPress={() => navigation.navigate('Journey')}
+            <LocalEventsCard
+              onPress={() => navigation.navigate('LocalEvents')}
             />
           </View>
         </FadeIn>

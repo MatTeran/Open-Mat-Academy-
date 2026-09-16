@@ -19,12 +19,14 @@ export { QuickActions } from './home/QuickActions';
 export { RecentActivity } from './home/RecentActivity';
 export { UpcomingEvents } from './home/UpcomingEvents';
 export {
+  AcademyAnnouncementCard,
   AcademyHero,
   DashboardGrid,
   DayIndicator,
   GreetingSection,
   JourneyCard,
   JourneyProgressBar,
+  LocalEventsCard,
   MetricItem,
   QuickLogSheet,
   SectionLabel,

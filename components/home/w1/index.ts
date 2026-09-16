@@ -1,9 +1,11 @@
+export { AcademyAnnouncementCard } from './AcademyAnnouncementCard';
 export { AcademyHero } from './AcademyHero';
 export { DashboardGrid } from './DashboardGrid';
 export { DayIndicator } from './DayIndicator';
 export { GreetingSection } from './GreetingSection';
 export { JourneyCard } from './JourneyCard';
 export { JourneyProgressBar } from './JourneyProgressBar';
+export { LocalEventsCard } from './LocalEventsCard';
 export { MetricItem } from './MetricItem';
 export { NextClassCard as W1NextClassCard } from './NextClassCard';
 export { QuickLogSheet } from './QuickLogSheet';
