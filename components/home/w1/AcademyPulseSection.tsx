@@ -7,7 +7,7 @@ import type { Announcement, Seminar } from '../../../types/community';
 import { SectionLabel } from './SectionLabel';
 import { SurfaceCard } from './SurfaceCard';
 
-const eventImage = require('../../../assets/home-hero.png');
+const eventImage = require('../../../assets/home-hero.jpg');
 
 interface AcademyPulseSectionProps {
   announcement: Announcement | null;
