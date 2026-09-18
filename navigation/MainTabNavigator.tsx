@@ -3,6 +3,7 @@ import {
   type NavigationProp,
 } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import * as Haptics from 'expo-haptics';
 import { useRef, useState } from 'react';
 
 import {
@@ -54,9 +55,6 @@ export function MainTabNavigator() {
       case 'logCompetition':
       case 'addNote':
         navigation.navigate('WorkoutLog', { screen: 'WorkoutDetails' });
-        break;
-      case 'viewLog':
-        navigation.navigate('WorkoutLog', { screen: 'WorkoutList' });
         break;
       default:
         break;
@@ -110,9 +108,10 @@ export function MainTabNavigator() {
           name="WorkoutLog"
           component={WorkoutLogNavigator}
           listeners={({ navigation }) => ({
-            tabPress: (event) => {
-              event.preventDefault();
+            // Tap opens Training Log; long-press opens Add entry sheet.
+            tabLongPress: () => {
               navigationRef.current = navigation;
+              void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
               setQuickLogOpen(true);
             },
             focus: () => {
@@ -127,6 +126,7 @@ export function MainTabNavigator() {
             return {
               title: 'Log',
               tabBarLabel: 'Log',
+              tabBarAccessibilityLabel: 'Log. Long press to add an entry.',
               tabBarStyle: hideTabBar ? { display: 'none' } : tabBarStyle,
               tabBarIcon: ({ focused }) => (
                 <CenterLogTabIcon focused={focused} />

@@ -19,17 +19,21 @@ export { QuickActions } from './home/QuickActions';
 export { RecentActivity } from './home/RecentActivity';
 export { UpcomingEvents } from './home/UpcomingEvents';
 export {
+  AcademyAnnouncementCard,
   AcademyHero,
+  AcademyPulseSection,
   DashboardGrid,
   DayIndicator,
   GreetingSection,
   JourneyCard,
   JourneyProgressBar,
+  LocalEventsCard,
   MetricItem,
   QuickLogSheet,
   SectionLabel,
   StatusChip,
   SurfaceCard,
+  TodaySchedulePeek,
   TrainingStreakCard,
   UpcomingEventCard,
   W1NextClassCard,
@@ -77,6 +81,9 @@ export { NotificationHost } from './notifications/NotificationHost';
 export { NotificationPermissionCard } from './notifications/NotificationPermissionCard';
 export { NotificationPreferenceRow } from './notifications/NotificationPreferenceRow';
 export { ClassCard } from './schedule/ClassCard';
+export { MyClassesStrip } from './schedule/MyClassesStrip';
+export type { MyClassItem } from './schedule/MyClassesStrip';
+export { ScheduleFilterSheet } from './schedule/ScheduleFilterSheet';
 export { ScheduleFilters } from './schedule/ScheduleFilters';
 export { ScheduleGiFilters } from './schedule/ScheduleGiFilters';
 export { ScheduleViewToggle } from './schedule/ScheduleViewToggle';
@@ -100,13 +107,22 @@ export { ChipSelect } from './workout/ChipSelect';
 export { DropdownField } from './workout/DropdownField';
 export { FloatingActionButton } from './workout/FloatingActionButton';
 export { FormSection } from './workout/FormSection';
+export { InsightsEmptyState } from './workout/InsightsEmptyState';
+export { IntensitySlider } from './workout/IntensitySlider';
+export { IntensityTrendChart } from './workout/IntensityTrendChart';
 export { LogSegmentControl } from './workout/LogSegmentControl';
 export { MoodSelector } from './workout/MoodSelector';
+export { PartnerDetailSheet } from './workout/PartnerDetailSheet';
 export { PartnerInput } from './workout/PartnerInput';
 export { ProgressInsightCard } from './workout/ProgressInsightCard';
+export { RankedBarList } from './workout/RankedBarList';
 export { StarRating } from './workout/StarRating';
 export { StreaksMiniCard } from './workout/StreaksMiniCard';
+export { TrainingInsightsSection } from './workout/TrainingInsightsSection';
+export { TrainingIntensityCard } from './workout/TrainingIntensityCard';
 export { TrainingLogMiniCard } from './workout/TrainingLogMiniCard';
+export { TrainingPartnersCard } from './workout/TrainingPartnersCard';
 export { WeeklyProgressChart } from './workout/WeeklyProgressChart';
 export { WorkoutCard } from './workout/WorkoutCard';
 export { WorkoutProgressCard } from './workout/WorkoutProgressCard';
+export { YourGameCard } from './workout/YourGameCard';

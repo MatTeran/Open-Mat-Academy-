@@ -1,4 +1,4 @@
-# Open Mat Coach
+# My Gi Coach
 
 Phase 1 Expo app for academy coaches and staff.
 

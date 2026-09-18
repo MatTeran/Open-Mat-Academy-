@@ -23,18 +23,17 @@ const scheduleNext = toNextClassCardModel();
 
 /**
  * Prefer live schedule next class; enrich with Home interaction fields.
- * Location is Tracy — schedule `room` historically encoded "Gi · Tracy",
- * so we do not reuse the first segment as location (that duplicated Gi).
+ * Demo location: Central Valley (not room/format as location).
  */
 export const NEXT_CLASS_SUMMARY: NextClassSummary = {
   id: scheduleNext?.id ?? 'next-competition-positional',
   title: scheduleNext?.title ?? 'Competition Positional',
   coach: scheduleNext?.coach ?? 'Coach Mendes',
   startsAt: scheduleNext?.startsAt ?? new Date().toISOString(),
-  room: 'Tracy',
+  room: 'Central Valley',
   durationMinutes: scheduleNext?.durationMinutes ?? 60,
   format: 'Gi',
-  location: 'Tracy',
+  location: 'Central Valley',
   status: 'soon',
   reservationStatus: 'available',
 };

@@ -73,7 +73,7 @@ export function RegisterScreen({ navigation }: Props) {
 
   return (
     <AuthScreen
-      title="Join Open Mat"
+      title="Join My Gi"
       subtitle="Create your athlete profile and start logging mat time."
       footer={
         <View>

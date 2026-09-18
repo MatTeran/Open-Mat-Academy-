@@ -24,10 +24,11 @@ interface WorkoutProgressCardProps {
 const FILTERS: Array<{
   key: WorkoutMetricFilter;
   label: string;
-  icon: keyof typeof Ionicons.glyphMap;
+  icon?: keyof typeof Ionicons.glyphMap;
+  emoji?: string;
 }> = [
   { key: 'all', label: 'All', icon: 'grid-outline' },
-  { key: 'gi', label: 'Gi', icon: 'shirt-outline' },
+  { key: 'gi', label: 'Gi', emoji: '🥋' },
   { key: 'no_gi', label: 'No-Gi', icon: 'flash-outline' },
 ];
 
@@ -67,11 +68,15 @@ export function WorkoutProgressCard({
                   },
                 ]}
               >
-                <Ionicons
-                  name={item.icon}
-                  size={14}
-                  color={active ? colors.goldAccent : colors.secondaryText}
-                />
+                {item.emoji ? (
+                  <Text style={styles.filterEmoji}>{item.emoji}</Text>
+                ) : item.icon ? (
+                  <Ionicons
+                    name={item.icon}
+                    size={14}
+                    color={active ? colors.goldAccent : colors.secondaryText}
+                  />
+                ) : null}
                 <Text
                   variant="caption"
                   style={{
@@ -101,7 +106,7 @@ export function WorkoutProgressCard({
         </View>
 
         <Spacer size="sm" />
-        <WeeklyProgressChart points={metrics.pastTwelveWeeks} />
+        <WeeklyProgressChart points={metrics.pastTwelveWeeks} filter={filter} />
 
         <Spacer size="xs" />
         <Pressable
@@ -161,6 +166,10 @@ const styles = StyleSheet.create({
     borderRadius: radii.pill,
     paddingHorizontal: spacing.sm,
     paddingVertical: 5,
+  },
+  filterEmoji: {
+    fontSize: 13,
+    lineHeight: 16,
   },
   statsRow: {
     flexDirection: 'row',

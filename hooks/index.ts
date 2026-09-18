@@ -8,3 +8,4 @@ export { useNotifications } from '../lib/providers/NotificationProvider';
 export type { DevTestKind } from '../lib/providers/NotificationProvider';
 export { useProfile } from '../lib/providers/ProfileProvider';
 export { useWorkouts } from '../lib/providers/WorkoutProvider';
+export { useReservations } from '../lib/providers/ReservationProvider';

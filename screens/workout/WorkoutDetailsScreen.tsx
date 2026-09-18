@@ -1,6 +1,6 @@
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useMemo, useState } from 'react';
-import { TextInput, View } from 'react-native';
+import { Pressable, ScrollView, TextInput, View } from 'react-native';
 
 import {
   Banner,
@@ -8,6 +8,7 @@ import {
   ChipSelect,
   DropdownField,
   FormSection,
+  IntensitySlider,
   MoodSelector,
   PartnerInput,
   Screen,
@@ -19,17 +20,24 @@ import { useAppTheme } from '../../hooks';
 import {
   CLASS_TYPE_OPTIONS,
   getClassTypeLabel,
+  getTechniqueLabel,
   INSTRUCTOR_OPTIONS,
-  INTENSITY_OPTIONS,
+  intensityCategoryToScore,
+  TECHNIQUE_FILTER_OPTIONS,
   TECHNIQUE_OPTIONS,
 } from '../../lib/data/workoutOptions';
-import { createEmptyWorkoutDraft } from '../../lib/mocks/workouts';
+import {
+  createEmptyWorkoutDraft,
+  recentPartnersFromWorkouts,
+  recentTechniquesFromWorkouts,
+} from '../../lib/mocks/workouts';
 import { useWorkouts } from '../../lib/providers/WorkoutProvider';
 import { fontFamilies, radii, spacing } from '../../lib/theme';
 import { useThemedStyles } from '../../lib/theme/useThemedStyles';
 import type { WorkoutStackParamList } from '../../types/navigation';
 import type {
   GiType,
+  TechniqueCategory,
   TechniqueId,
   TrainingIntensity,
   WorkoutClassType,
@@ -42,19 +50,53 @@ type Props = NativeStackScreenProps<WorkoutStackParamList, 'WorkoutDetails'>;
 
 export function WorkoutDetailsScreen({ navigation, route }: Props) {
   const { colors } = useAppTheme();
-  const { getWorkout, saveWorkout } = useWorkouts();
+  const { workouts, getWorkout, saveWorkout } = useWorkouts();
   const existing = route.params?.workoutId
     ? getWorkout(route.params.workoutId)
     : undefined;
 
-  const initial = useMemo<WorkoutDraft>(
-    () => existing ?? createEmptyWorkoutDraft(),
-    [existing],
-  );
+  const initial = useMemo<WorkoutDraft>(() => {
+    if (!existing) {
+      return createEmptyWorkoutDraft();
+    }
+    return {
+      ...existing,
+      intensityScore:
+        existing.intensityScore === undefined
+          ? intensityCategoryToScore(existing.intensity)
+          : existing.intensityScore,
+    };
+  }, [existing]);
 
   const [draft, setDraft] = useState<WorkoutDraft>(initial);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [techniqueFilter, setTechniqueFilter] = useState<
+    'all' | TechniqueCategory
+  >('all');
+  const [techniqueQuery, setTechniqueQuery] = useState('');
+
+  const recentPartners = useMemo(
+    () => recentPartnersFromWorkouts(workouts),
+    [workouts],
+  );
+  const recentTechniques = useMemo(
+    () => recentTechniquesFromWorkouts(workouts),
+    [workouts],
+  );
+
+  const techniqueOptions = useMemo(() => {
+    const query = techniqueQuery.trim().toLowerCase();
+    return TECHNIQUE_OPTIONS.filter((option) => {
+      if (techniqueFilter !== 'all' && option.category !== techniqueFilter) {
+        return false;
+      }
+      if (!query) {
+        return true;
+      }
+      return option.label.toLowerCase().includes(query);
+    });
+  }, [techniqueFilter, techniqueQuery]);
 
   const styles = useThemedStyles((themeColors) => ({
     content: {},
@@ -105,6 +147,17 @@ export function WorkoutDetailsScreen({ navigation, route }: Props) {
     },
     bottomSpace: {
       height: spacing.xl,
+    },
+    chipWrap: {
+      flexDirection: 'row' as const,
+      flexWrap: 'wrap' as const,
+      gap: spacing.xs,
+    },
+    quickChip: {
+      borderRadius: radii.pill,
+      borderWidth: 1,
+      paddingHorizontal: spacing.md,
+      paddingVertical: spacing.xs,
     },
   }));
 
@@ -236,28 +289,155 @@ export function WorkoutDetailsScreen({ navigation, route }: Props) {
           </View>
         </View>
         <Spacer size="lg" />
-        <ChipSelect
-          label="Training Intensity"
-          multi={false}
-          options={INTENSITY_OPTIONS}
-          values={[draft.intensity]}
-          onChange={(values) =>
-            update('intensity', (values[0] ?? 'moderate') as TrainingIntensity)
+        <IntensitySlider
+          value={
+            draft.intensityScore === undefined
+              ? null
+              : draft.intensityScore
           }
+          onChange={(score, intensity: TrainingIntensity) => {
+            setDraft((current) => ({
+              ...current,
+              intensityScore: score,
+              intensity,
+            }));
+          }}
+          onClear={() => {
+            setDraft((current) => ({
+              ...current,
+              intensityScore: null,
+            }));
+          }}
         />
       </FormSection>
 
       <FormSection title="Partners">
         <PartnerInput
           partners={draft.partners}
+          recentPartners={recentPartners}
           onChange={(partners) => update('partners', partners)}
         />
       </FormSection>
 
       <FormSection title="Techniques">
+        <Text variant="label">Techniques Used</Text>
+        <Spacer size="xs" />
+        <Text variant="caption" muted>
+          Optional · Multi-select what you practiced
+        </Text>
+        {recentTechniques.length > 0 ? (
+          <>
+            <Spacer size="sm" />
+            <Text variant="caption" muted>
+              Recent
+            </Text>
+            <Spacer size="xs" />
+            <View style={styles.chipWrap}>
+              {recentTechniques.map((techniqueId) => {
+                const active = draft.techniques.includes(techniqueId);
+                return (
+                  <Pressable
+                    key={techniqueId}
+                    onPress={() => {
+                      if (active) {
+                        update(
+                          'techniques',
+                          draft.techniques.filter(
+                            (item) => item !== techniqueId,
+                          ),
+                        );
+                        return;
+                      }
+                      update('techniques', [
+                        ...draft.techniques,
+                        techniqueId,
+                      ]);
+                    }}
+                    style={[
+                      styles.quickChip,
+                      {
+                        backgroundColor: active
+                          ? colors.goldMuted
+                          : colors.elevatedSurface,
+                        borderColor: active
+                          ? colors.goldAccent
+                          : colors.border,
+                      },
+                    ]}
+                  >
+                    <Text
+                      variant="caption"
+                      style={{
+                        color: active
+                          ? colors.goldAccent
+                          : colors.secondaryText,
+                      }}
+                    >
+                      {getTechniqueLabel(techniqueId)}
+                    </Text>
+                  </Pressable>
+                );
+              })}
+            </View>
+          </>
+        ) : null}
+        <Spacer size="sm" />
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.chipWrap}
+        >
+          {TECHNIQUE_FILTER_OPTIONS.map((option) => {
+            const active = techniqueFilter === option.value;
+            return (
+              <Pressable
+                key={option.value}
+                onPress={() =>
+                  setTechniqueFilter(
+                    option.value as 'all' | TechniqueCategory,
+                  )
+                }
+                style={[
+                  styles.quickChip,
+                  {
+                    backgroundColor: active
+                      ? colors.goldAccent
+                      : colors.elevatedSurface,
+                    borderColor: active
+                      ? colors.goldAccent
+                      : colors.border,
+                  },
+                ]}
+              >
+                <Text
+                  variant="caption"
+                  style={{
+                    color: active
+                      ? colors.elevatedSurface
+                      : colors.secondaryText,
+                  }}
+                >
+                  {option.label}
+                </Text>
+              </Pressable>
+            );
+          })}
+        </ScrollView>
+        <Spacer size="sm" />
+        <TextInput
+          value={techniqueQuery}
+          onChangeText={setTechniqueQuery}
+          placeholder="Search techniques"
+          placeholderTextColor={colors.secondaryText}
+          style={styles.numberInput}
+        />
+        <Spacer size="sm" />
         <ChipSelect
-          label="Techniques Practiced"
-          options={TECHNIQUE_OPTIONS}
+          label="Select techniques"
+          options={techniqueOptions.map(({ value, label }) => ({
+            value,
+            label,
+          }))}
           values={draft.techniques}
           onChange={(techniques) =>
             update('techniques', techniques as TechniqueId[])
@@ -271,7 +451,7 @@ export function WorkoutDetailsScreen({ navigation, route }: Props) {
               multi={false}
               options={TECHNIQUE_OPTIONS.filter((item) =>
                 draft.techniques.includes(item.value),
-              )}
+              ).map(({ value, label }) => ({ value, label }))}
               values={
                 draft.favoriteTechnique ? [draft.favoriteTechnique] : []
               }

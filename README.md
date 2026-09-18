@@ -1,8 +1,8 @@
-# Open Mat Academy
+# My Gi
 
-Premium Brazilian Jiu-Jitsu academy apps for **Open Mat Academy** (Tracy, CA).
+Premium Brazilian Jiu-Jitsu academy apps for **My Gi** (Tracy, CA).
 
-Cloned and rebranded from Open Mat with the official Gracie Fighter / Open Mat Academy black-and-white identity. Built with React Native, Expo SDK 54, TypeScript, Supabase, NativeWind, React Navigation, Stripe, and React Query.
+Cloned and rebranded from Open Mat with the official Gracie Fighter / My Gi black-and-white identity. Built with React Native, Expo SDK 54, TypeScript, Supabase, NativeWind, React Navigation, Stripe, and React Query.
 
 > **Note:** Mobile apps target **Expo SDK 54** so they open in the App Store / Play Store Expo Go app.
 
@@ -25,7 +25,7 @@ docs/                 Architecture notes
 
 ## Brand
 
-Black & white athletic identity matching the official Gracie Fighter / Open Mat Academy seal.
+Black & white athletic identity matching the official Gracie Fighter / My Gi seal.
 
 | Token | Value |
 | --- | --- |
@@ -37,9 +37,9 @@ Black & white athletic identity matching the official Gracie Fighter / Open Mat 
 | Error | `#FF4D4D` |
 | Success | `#22C55E` |
 
-- **Brand name:** Open Mat  
-- **Academy:** Open Mat Academy  
-- **Logo:** Official Gracie Fighter / Open Mat Academy seal (black & white)  
+- **Brand name:** My Gi  
+- **Academy:** My Gi  
+- **Logo:** Official Gracie Fighter / My Gi seal (black & white)  
 - **Typography:** Syne (display) + Outfit (UI)
 
 ## Scripts

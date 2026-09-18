@@ -1,4 +1,4 @@
-# My Gi / Open Mat — Local Development
+# My Gi — Local Development
 
 Use this workflow for day-to-day UI work. **Do not cut a TestFlight build** for normal JavaScript/TypeScript/layout changes.
 

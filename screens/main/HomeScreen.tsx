@@ -9,24 +9,26 @@ import { useEffect, useMemo, useState } from 'react';
 import { AccessibilityInfo, StyleSheet, View } from 'react-native';
 
 import {
+  AcademyHero,
+  AcademyPulseSection,
+  AchievementsBarCard,
   DashboardGrid,
   FadeIn,
-  AcademyHero,
   GreetingSection,
   JourneyCard,
+  LocalEventsCard,
   NotificationPermissionCard,
   Screen,
   Spacer,
+  TodaySchedulePeek,
   TrainingStreakCard,
-  UpcomingEventCard,
   W1NextClassCard,
 } from '../../components';
-import { useAuth, useNotifications, useProfile } from '../../hooks';
+import { useAuth, useNotifications, useProfile, useReservations } from '../../hooks';
 import {
   HOME_USER_SUMMARY,
   NEXT_CLASS_SUMMARY,
 } from '../../lib/mocks/home';
-import { scheduleClassReminder } from '../../lib/notifications';
 import { useCommunity } from '../../lib/providers/CommunityProvider';
 import { useJourney } from '../../lib/providers/JourneyProvider';
 import { spacing, w1Spacing } from '../../lib/theme';
@@ -36,9 +38,13 @@ import type {
   NextClassReservationStatus,
 } from '../../types/home';
 import {
+  formatClock,
+  getClassesForDay,
   getFirstName,
   getGreeting,
   getMotivationalMessage,
+  getScheduleClassById,
+  getWeekdayFromDate,
 } from '../../utils';
 
 type HomeNavigation = CompositeNavigationProp<
@@ -52,19 +58,29 @@ function parseAcademy(membershipName?: string | null): {
   academyName: string;
   locationLabel: string;
 } {
-  const raw = membershipName?.trim() || 'Open Mat · Tracy';
+  const raw = membershipName?.trim() || 'My Gi · Central Valley';
   const [namePart, locationPart] = raw.split('·').map((part) => part.trim());
   return {
-    academyName: (namePart || 'Open Mat').toUpperCase(),
-    locationLabel: (locationPart || 'Tracy, California').toUpperCase(),
+    academyName: (namePart || 'My Gi').toUpperCase(),
+    locationLabel: (locationPart || 'Central Valley, California').toUpperCase(),
   };
+}
+
+function withCalifornia(locationLabel: string): string {
+  if (locationLabel.includes(',')) {
+    return locationLabel;
+  }
+  if (/california/i.test(locationLabel)) {
+    return locationLabel;
+  }
+  return `${locationLabel}, CALIFORNIA`;
 }
 
 export function HomeScreen() {
   const { user } = useAuth();
   const { hub } = useProfile();
-  const { seminars } = useCommunity();
-  const { profile, streak, awardXp } = useJourney();
+  const { seminars, announcements } = useCommunity();
+  const { profile, streak, awardXp, badges } = useJourney();
   const {
     permissionPromptStatus,
     enableNotifications,
@@ -72,12 +88,12 @@ export function HomeScreen() {
     openSettings,
     unreadCount,
   } = useNotifications();
+  const { isReserved, reserveClass } = useReservations();
   const navigation = useNavigation<HomeNavigation>();
 
-  const [reservationStatus, setReservationStatus] =
-    useState<NextClassReservationStatus>(
-      NEXT_CLASS_SUMMARY.reservationStatus,
-    );
+  const [checkInPhase, setCheckInPhase] = useState<
+    'idle' | 'check_in' | 'checked_in'
+  >('idle');
   const [actionLoading, setActionLoading] = useState(false);
   const [xpEarnedLabel, setXpEarnedLabel] = useState<string | null>(null);
   const [weeklyClassesCompleted, setWeeklyClassesCompleted] = useState(
@@ -87,6 +103,25 @@ export function HomeScreen() {
   const [permissionMessage, setPermissionMessage] = useState<string | null>(
     null,
   );
+
+  const reservationStatus: NextClassReservationStatus = useMemo(() => {
+    if (checkInPhase === 'checked_in') {
+      return 'checked_in';
+    }
+    if (checkInPhase === 'check_in') {
+      return 'check_in';
+    }
+    if (isReserved(NEXT_CLASS_SUMMARY.id)) {
+      return 'reserved';
+    }
+    return 'available';
+  }, [checkInPhase, isReserved]);
+
+  useEffect(() => {
+    if (!isReserved(NEXT_CLASS_SUMMARY.id) && checkInPhase === 'check_in') {
+      setCheckInPhase('idle');
+    }
+  }, [checkInPhase, isReserved]);
 
   const showPermissionCard = permissionPromptStatus === 'unknown';
   const showBlockedCard = permissionPromptStatus === 'blocked';
@@ -129,19 +164,28 @@ export function HomeScreen() {
     currentStreak: journeySummary.currentStreak,
   });
 
-  const featuredEvent = useMemo(() => {
-    const seminar = seminars[0];
-    if (seminar) {
-      return {
-        title: seminar.title,
-        whenLabel: `${seminar.dateLabel} · ${seminar.timeLabel}`,
-      };
+  const featuredAnnouncement = announcements[0] ?? null;
+  const featuredSeminar = seminars[0] ?? null;
+
+  const announcementUnread = useMemo(() => {
+    if (!featuredAnnouncement) {
+      return false;
     }
-    return {
-      title: 'Guard Retention Masterclass',
-      whenLabel: 'Sat, Aug 16 · 1:00 PM',
-    };
-  }, [seminars]);
+    const ageMs = Date.now() - new Date(featuredAnnouncement.createdAt).getTime();
+    return ageMs < 1000 * 60 * 60 * 36;
+  }, [featuredAnnouncement]);
+
+  const todayClasses = useMemo(() => {
+    return getClassesForDay(getWeekdayFromDate(new Date()), 'all');
+  }, []);
+
+  const todayPeekNextLabel = useMemo(() => {
+    if (todayClasses.length === 0) {
+      return null;
+    }
+    const first = todayClasses[0];
+    return `${formatClock(first.startTime)} · ${first.title}`;
+  }, [todayClasses]);
 
   useEffect(() => {
     if (!xpEarnedLabel) {
@@ -170,20 +214,20 @@ export function HomeScreen() {
     setActionLoading(true);
     try {
       if (reservationStatus === 'available') {
-        await wait(500);
-        setReservationStatus('reserved');
+        const scheduleClass = getScheduleClassById(NEXT_CLASS_SUMMARY.id);
+        if (scheduleClass) {
+          await reserveClass(
+            scheduleClass,
+            new Date(NEXT_CLASS_SUMMARY.startsAt),
+          );
+        }
         AccessibilityInfo.announceForAccessibility?.(
           `Reserved ${NEXT_CLASS_SUMMARY.title}.`,
         );
         await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-        void scheduleClassReminder({
-          classId: NEXT_CLASS_SUMMARY.id,
-          classTitle: NEXT_CLASS_SUMMARY.title,
-          startsAt: new Date(NEXT_CLASS_SUMMARY.startsAt),
-        });
         if (NEXT_CLASS_SUMMARY.status === 'soon') {
           await wait(900);
-          setReservationStatus('check_in');
+          setCheckInPhase('check_in');
           AccessibilityInfo.announceForAccessibility?.(
             `Check in is now available for ${NEXT_CLASS_SUMMARY.title}.`,
           );
@@ -193,7 +237,7 @@ export function HomeScreen() {
 
       if (reservationStatus === 'check_in') {
         await wait(450);
-        setReservationStatus('checked_in');
+        setCheckInPhase('checked_in');
         setWeeklyClassesCompleted((current) =>
           Math.min(current + 1, HOME_USER_SUMMARY.weeklyClassGoal),
         );
@@ -224,11 +268,7 @@ export function HomeScreen() {
     <Screen scroll padded={false} flushTop contentStyle={styles.content}>
       <AcademyHero
         academyName={academyName}
-        locationLabel={
-          locationLabel.includes(',')
-            ? locationLabel
-            : `${locationLabel}, CALIFORNIA`
-        }
+        locationLabel={withCalifornia(locationLabel)}
         unreadCount={unreadCount}
         onPressNotifications={() =>
           navigation.navigate('Profile', { screen: 'Notifications' })
@@ -242,6 +282,18 @@ export function HomeScreen() {
             firstName={firstName}
             message={motivationalMessage}
           />
+        </FadeIn>
+
+        <Spacer size="sm" />
+
+        <FadeIn delay={60}>
+          <View style={styles.inset}>
+            <TodaySchedulePeek
+              classCount={todayClasses.length}
+              nextLabel={todayPeekNextLabel}
+              onPress={() => navigation.navigate('Schedule')}
+            />
+          </View>
         </FadeIn>
 
         <Spacer size="md" />
@@ -301,24 +353,48 @@ export function HomeScreen() {
 
         <Spacer size="md" />
 
-        <FadeIn delay={140}>
+        <FadeIn delay={120}>
           <View style={styles.inset}>
-            <UpcomingEventCard
-              title={featuredEvent.title}
-              whenLabel={featuredEvent.whenLabel}
-              onPress={() => navigation.navigate('Community')}
+            <TrainingStreakCard
+              currentStreak={journeySummary.currentStreak}
+              weekDays={streak.weekDays}
+              onPress={() => navigation.navigate('Journey')}
             />
           </View>
         </FadeIn>
 
         <Spacer size="md" />
 
-        <FadeIn delay={180}>
+        <FadeIn delay={140}>
           <View style={styles.inset}>
-            <TrainingStreakCard
-              currentStreak={journeySummary.currentStreak}
-              weekDays={streak.weekDays}
-              onPress={() => navigation.navigate('Journey')}
+            <AchievementsBarCard
+              badges={badges}
+              onPress={() => navigation.navigate('AchievementGallery')}
+            />
+          </View>
+        </FadeIn>
+
+        <Spacer size="md" />
+
+        <FadeIn delay={160}>
+          <View style={styles.inset}>
+            <AcademyPulseSection
+              announcement={featuredAnnouncement}
+              seminar={featuredSeminar}
+              announcementUnread={announcementUnread}
+              onSeeAll={() => navigation.navigate('Community')}
+              onPressAnnouncement={() => navigation.navigate('Community')}
+              onPressSeminar={() => navigation.navigate('Community')}
+            />
+          </View>
+        </FadeIn>
+
+        <Spacer size="md" />
+
+        <FadeIn delay={200}>
+          <View style={styles.inset}>
+            <LocalEventsCard
+              onPress={() => navigation.navigate('LocalEvents')}
             />
           </View>
         </FadeIn>

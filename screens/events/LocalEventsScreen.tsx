@@ -123,7 +123,7 @@ export function LocalEventsScreen({ navigation }: Props) {
         <>
           <Banner
             tone="info"
-            message="Location permission is off — showing events near Tracy, CA (Open Mat). Enable location for results around you."
+            message="Location permission is off — showing events near Tracy, CA (My Gi). Enable location for results around you."
           />
           <Spacer size="md" />
         </>

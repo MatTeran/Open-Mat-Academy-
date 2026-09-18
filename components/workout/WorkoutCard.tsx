@@ -35,7 +35,7 @@ export function WorkoutCard({ workout, onPress }: WorkoutCardProps) {
           ]}
         >
           <Text variant="caption" style={{ color: colors.text }}>
-            {workout.giType === 'gi' ? 'Gi' : 'No-Gi'}
+            {workout.giType === 'gi' ? '🥋 Gi' : 'No-Gi'}
           </Text>
         </View>
       </View>

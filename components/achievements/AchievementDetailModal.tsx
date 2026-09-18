@@ -76,8 +76,8 @@ export function AchievementDetailModal({
 
   const handleShare = async () => {
     const message = badge.isUnlocked
-      ? `I earned the ${badge.name} ${rarityLabel(badge.rarity)} medal on Open Mat Academy — ${badge.description}`
-      : `Working toward ${badge.name} on Open Mat Academy — ${progress.current} of ${progress.target} ${badge.requirementLabel}.`;
+      ? `I earned the ${badge.name} ${rarityLabel(badge.rarity)} medal on My Gi — ${badge.description}`
+      : `Working toward ${badge.name} on My Gi — ${progress.current} of ${progress.target} ${badge.requirementLabel}.`;
     try {
       await Share.share({ message, title: badge.name });
     } catch {

@@ -10,7 +10,7 @@ export type Weekday =
 export type GiType = 'gi' | 'no_gi' | 'gi_no_gi' | 'none';
 
 /**
- * Color-coded programs from the Open Mat Academy weekly flyer.
+ * Color-coded programs from the My Gi weekly flyer.
  * Kept as ClassLevel for existing ScheduleFilter naming.
  */
 export type ClassLevel =

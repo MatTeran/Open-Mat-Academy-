@@ -78,6 +78,8 @@ export type {
 export type { BeltRank, UserProfile } from './user';
 export type {
   GiType,
+  IntensityBand,
+  TechniqueCategory,
   TechniqueId,
   TrainingIntensity,
   Workout,
@@ -85,6 +87,17 @@ export type {
   WorkoutDraft,
   WorkoutMood,
 } from './workout';
+export type {
+  IntensityInsight,
+  IntensityWeekPoint,
+  PartnerInsight,
+  PartnersInsight,
+  TechniqueCategoryHighlight,
+  TechniqueFilterId,
+  TechniqueInsight,
+  TechniquesInsight,
+  TrainingInsights,
+} from './trainingInsights';
 export type {
   LogTabSegment,
   WeekDayDot,

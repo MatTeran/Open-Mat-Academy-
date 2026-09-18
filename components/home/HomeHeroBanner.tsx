@@ -13,7 +13,7 @@ import { useAppTheme } from '../../lib/providers/ThemeProvider';
 import { radii, spacing } from '../../lib/theme';
 import { HomeGreeting } from './HomeGreeting';
 
-const HERO_IMAGE = require('../../assets/home-hero.png');
+const HERO_IMAGE = require('../../assets/home-hero.jpg');
 const BANNER_BODY_HEIGHT = 240;
 
 interface HomeHeroBannerProps {

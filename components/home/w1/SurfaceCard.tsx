@@ -51,14 +51,23 @@ export function SurfaceCard({
         void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
         onPress?.(event);
       }}
-      style={({ pressed }) => [pressed && styles.pressed]}
+      style={({ pressed }) => [
+        styles.pressable,
+        pressed && styles.pressed,
+      ]}
     >
-      <View style={cardStyle}>{children}</View>
+      <View style={[cardStyle, styles.fill]}>{children}</View>
     </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
+  pressable: {
+    flex: 1,
+  },
+  fill: {
+    flex: 1,
+  },
   card: {
     borderRadius: w1Radii.card,
     borderWidth: StyleSheet.hairlineWidth,

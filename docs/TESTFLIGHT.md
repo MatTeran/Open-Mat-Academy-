@@ -1,4 +1,4 @@
-# Open Mat → TestFlight setup
+# My Gi → TestFlight setup
 
 This repo is wired for **EAS Build + EAS Submit** so both iOS apps can land on TestFlight:
 
@@ -20,8 +20,8 @@ We cannot finish the upload from this cloud agent without these:
    - Team ID (10-character, e.g. `ABCD123456`) from [developer.apple.com/account](https://developer.apple.com/account)
 3. **App Store Connect**
    - Create two iOS apps (or let EAS create them on first submit):
-     - Open Mat Academy → `com.openmat.academy`
-     - Open Mat Coach → `com.openmat.coach`
+     - My Gi (Member) → `com.openmat.academy`
+     - My Gi Coach → `OpenMatCoach`
    - Copy each numeric **Apple ID / ascAppId** from App Information
 4. **Preferred for CI / non-interactive submit:** App Store Connect API key
    - Keys → App Store Connect API → Generate

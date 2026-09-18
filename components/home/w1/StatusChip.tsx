@@ -27,13 +27,13 @@ export function StatusChip({ label }: StatusChipProps) {
 const styles = StyleSheet.create({
   chip: {
     borderRadius: w1Radii.chip,
-    paddingHorizontal: 10,
-    paddingVertical: 4,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
   },
   text: {
     fontFamily: fontFamilies.semibold,
     fontSize: 10,
-    letterSpacing: 1.1,
+    letterSpacing: 0.8,
     textTransform: 'uppercase',
   },
 });

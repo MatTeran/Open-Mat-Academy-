@@ -10,11 +10,11 @@ import {
   FadeIn,
   FloatingActionButton,
   LogSegmentControl,
-  ProgressInsightCard,
   Screen,
   Spacer,
   StreaksMiniCard,
   Text,
+  TrainingInsightsSection,
   TrainingLogMiniCard,
   WorkoutCard,
   WorkoutProgressCard,
@@ -27,6 +27,7 @@ import type {
   LogTabSegment,
   WorkoutMetricFilter,
 } from '../../types/workoutMetrics';
+import { buildTrainingInsights } from '../../utils/trainingInsights';
 import { buildWorkoutProgressMetrics } from '../../utils/workoutMetrics';
 
 type Props = NativeStackScreenProps<WorkoutStackParamList, 'WorkoutList'>;
@@ -44,6 +45,11 @@ export function WorkoutLogListScreen({ navigation }: Props) {
 
   const metrics = useMemo(
     () => buildWorkoutProgressMetrics(workouts, filter),
+    [workouts, filter],
+  );
+
+  const insights = useMemo(
+    () => buildTrainingInsights(workouts, filter),
     [workouts, filter],
   );
 
@@ -104,6 +110,12 @@ export function WorkoutLogListScreen({ navigation }: Props) {
               onPress={openAchievements}
             />
 
+            <Spacer size="lg" />
+            <TrainingInsightsSection
+              insights={insights}
+              onLogTraining={createNewLog}
+            />
+
             <Spacer size="md" />
             <View style={styles.miniRow}>
               <View style={styles.miniCol}>
@@ -120,11 +132,6 @@ export function WorkoutLogListScreen({ navigation }: Props) {
                 />
               </View>
             </View>
-
-            <Spacer size="md" />
-            <ProgressInsightCard
-              sessionsToInsight={metrics.sessionsToInsight}
-            />
           </FadeIn>
         ) : workouts.length === 0 ? (
           <FadeIn delay={80}>
