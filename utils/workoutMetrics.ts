@@ -63,17 +63,26 @@ function summarizeWorkouts(workouts: Workout[]): WorkoutWeekSummary {
 function countGiSplit(workouts: Workout[]): {
   giSessions: number;
   noGiSessions: number;
+  giMatMinutes: number;
+  noGiMatMinutes: number;
 } {
   return workouts.reduce(
     (acc, workout) => {
       if (workout.giType === 'gi') {
         acc.giSessions += 1;
+        acc.giMatMinutes += workout.durationMinutes;
       } else {
         acc.noGiSessions += 1;
+        acc.noGiMatMinutes += workout.durationMinutes;
       }
       return acc;
     },
-    { giSessions: 0, noGiSessions: 0 },
+    {
+      giSessions: 0,
+      noGiSessions: 0,
+      giMatMinutes: 0,
+      noGiMatMinutes: 0,
+    },
   );
 }
 
@@ -144,8 +153,15 @@ function buildPastTwelveWeeks(
       weekEnd,
       filter,
     );
+    // Always compute Gi / No-Gi split from unfiltered week logs for dual-line All.
+    const weekAllWorkouts = workoutsInRange(
+      workouts,
+      weekStart,
+      weekEnd,
+      'all',
+    );
     const fromLogs = summarizeWorkouts(weekWorkouts);
-    const split = countGiSplit(weekWorkouts);
+    const split = countGiSplit(weekAllWorkouts);
     const baseline = MOCK_WEEKLY_METRIC_BASELINE[11 - i];
     const isCurrentWeek = i === 0;
 
@@ -174,6 +190,13 @@ function buildPastTwelveWeeks(
           ? Math.round(baseline.rounds * 0.45)
           : baseline.rounds;
 
+    const giMatMinutes = useLive
+      ? split.giMatMinutes
+      : Math.round(baseline.matMinutes * 0.55);
+    const noGiMatMinutes = useLive
+      ? split.noGiMatMinutes
+      : Math.round(baseline.matMinutes * 0.45);
+
     points.push({
       weekStartIso: weekIso,
       monthLabel: monthLabel(weekStart),
@@ -182,6 +205,10 @@ function buildPastTwelveWeeks(
       rounds,
       giSessions: useLive ? split.giSessions : baseline.giSessions,
       noGiSessions: useLive ? split.noGiSessions : baseline.noGiSessions,
+      giMatMinutes:
+        filter === 'no_gi' ? 0 : filter === 'gi' ? matMinutes : giMatMinutes,
+      noGiMatMinutes:
+        filter === 'gi' ? 0 : filter === 'no_gi' ? matMinutes : noGiMatMinutes,
     });
   }
 

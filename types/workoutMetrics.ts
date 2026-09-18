@@ -12,6 +12,10 @@ export interface WeeklyMetricPoint {
   rounds: number;
   giSessions: number;
   noGiSessions: number;
+  /** Mat minutes from Gi sessions (for dual-line All chart). */
+  giMatMinutes: number;
+  /** Mat minutes from No-Gi sessions (for dual-line All chart). */
+  noGiMatMinutes: number;
 }
 
 export interface WeekDayDot {

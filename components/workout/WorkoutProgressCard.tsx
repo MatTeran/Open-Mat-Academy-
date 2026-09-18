@@ -101,7 +101,7 @@ export function WorkoutProgressCard({
         </View>
 
         <Spacer size="sm" />
-        <WeeklyProgressChart points={metrics.pastTwelveWeeks} />
+        <WeeklyProgressChart points={metrics.pastTwelveWeeks} filter={filter} />
 
         <Spacer size="xs" />
         <Pressable
