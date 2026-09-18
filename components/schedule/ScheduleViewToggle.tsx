@@ -2,7 +2,7 @@ import * as Haptics from 'expo-haptics';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { useAppTheme } from '../../lib/providers/ThemeProvider';
-import { spacing } from '../../lib/theme';
+import { fontFamilies, spacing } from '../../lib/theme';
 import type { ScheduleViewMode } from '../../types/schedule';
 import { Text } from '../ui/Text';
 
@@ -17,8 +17,7 @@ const VIEWS: Array<{ key: ScheduleViewMode; label: string }> = [
 ];
 
 /**
- * Day / Week presentation toggle for the Schedule tab.
- * Layout styles live on inner Views for NativeWind Pressable safety.
+ * Compact Day / Week segment for Schedule.
  */
 export function ScheduleViewToggle({
   value,
@@ -28,7 +27,7 @@ export function ScheduleViewToggle({
 
   return (
     <View
-      style={[styles.row, { borderBottomColor: colors.border }]}
+      style={[styles.row, { backgroundColor: 'rgba(0,0,0,0.04)' }]}
       accessibilityRole="tablist"
     >
       {VIEWS.map((view) => {
@@ -45,26 +44,27 @@ export function ScheduleViewToggle({
               void Haptics.selectionAsync();
               onChange(view.key);
             }}
-            style={styles.tab}
+            style={[
+              styles.tab,
+              active && {
+                backgroundColor: colors.elevatedSurface,
+                shadowColor: '#000',
+                shadowOpacity: 0.06,
+                shadowRadius: 3,
+                shadowOffset: { width: 0, height: 1 },
+                elevation: 1,
+              },
+            ]}
           >
-            <View style={styles.tabInner}>
-              <Text
-                variant="subtitle"
-                style={{ color: active ? colors.text : colors.secondaryText }}
-              >
-                {view.label}
-              </Text>
-              <View
-                style={[
-                  styles.underline,
-                  {
-                    backgroundColor: active
-                      ? colors.goldAccent
-                      : 'transparent',
-                  },
-                ]}
-              />
-            </View>
+            <Text
+              style={{
+                fontFamily: fontFamilies.semibold,
+                fontSize: 12,
+                color: active ? colors.text : colors.secondaryText,
+              }}
+            >
+              {view.label}
+            </Text>
           </Pressable>
         );
       })}
@@ -74,22 +74,15 @@ export function ScheduleViewToggle({
 
 const styles = StyleSheet.create({
   row: {
+    alignSelf: 'flex-start',
     flexDirection: 'row',
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    marginHorizontal: -spacing.lg,
-    paddingHorizontal: spacing.lg,
+    borderRadius: 10,
+    padding: 3,
+    gap: 2,
   },
   tab: {
-    flex: 1,
-  },
-  tabInner: {
-    alignItems: 'center',
-    paddingTop: spacing.xs,
-    gap: spacing.sm,
-  },
-  underline: {
-    height: 2,
-    width: '100%',
-    borderRadius: 2,
+    paddingHorizontal: spacing.md,
+    paddingVertical: 7,
+    borderRadius: 8,
   },
 });

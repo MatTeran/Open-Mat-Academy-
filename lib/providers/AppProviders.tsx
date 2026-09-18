@@ -9,6 +9,7 @@ import { CommunityProvider } from './CommunityProvider';
 import { JourneyProvider } from './JourneyProvider';
 import { NotificationProvider } from './NotificationProvider';
 import { ProfileProvider } from './ProfileProvider';
+import { ReservationProvider } from './ReservationProvider';
 import { ThemeProvider, useAppTheme } from './ThemeProvider';
 import { WorkoutProvider } from './WorkoutProvider';
 
@@ -24,9 +25,11 @@ function ThemedRoot({ children }: PropsWithChildren) {
             <NotificationProvider>
               <CommunityProvider>
                 <WorkoutProvider>
-                  <ProfileProvider>
-                    <JourneyProvider>{children}</JourneyProvider>
-                  </ProfileProvider>
+                  <ReservationProvider>
+                    <ProfileProvider>
+                      <JourneyProvider>{children}</JourneyProvider>
+                    </ProfileProvider>
+                  </ReservationProvider>
                 </WorkoutProvider>
               </CommunityProvider>
             </NotificationProvider>

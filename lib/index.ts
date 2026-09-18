@@ -21,5 +21,9 @@ export {
 } from './providers/ThemeProvider';
 export type { AppearancePreference } from './providers/ThemeProvider';
 export { WorkoutProvider, useWorkouts } from './providers/WorkoutProvider';
+export {
+  ReservationProvider,
+  useReservations,
+} from './providers/ReservationProvider';
 export { useThemedStyles } from './theme/useThemedStyles';
 

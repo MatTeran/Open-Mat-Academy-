@@ -76,6 +76,27 @@ export function getNextWeekAnchor(from = new Date()): Date {
   return date;
 }
 
+/** Monday of the week containing `from` (this week). */
+export function getThisWeekAnchor(from = new Date()): Date {
+  const date = new Date(from);
+  date.setHours(12, 0, 0, 0);
+  const jsDay = date.getDay();
+  const mondayOffset = jsDay === 0 ? -6 : 1 - jsDay;
+  date.setDate(date.getDate() + mondayOffset);
+  return date;
+}
+
+export function getClassDurationMinutes(
+  startTime: string,
+  endTime: string,
+): number {
+  return durationMinutes(startTime, endTime);
+}
+
+export function getScheduleClassById(id: string): ScheduleClass | undefined {
+  return WEEKLY_SCHEDULE.find((item) => item.id === id);
+}
+
 function matchesGiFilter(
   giType: GiType,
   giFilter: ScheduleGiFilter,

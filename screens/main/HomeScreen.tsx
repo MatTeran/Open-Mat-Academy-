@@ -23,12 +23,11 @@ import {
   TrainingStreakCard,
   W1NextClassCard,
 } from '../../components';
-import { useAuth, useNotifications, useProfile } from '../../hooks';
+import { useAuth, useNotifications, useProfile, useReservations } from '../../hooks';
 import {
   HOME_USER_SUMMARY,
   NEXT_CLASS_SUMMARY,
 } from '../../lib/mocks/home';
-import { scheduleClassReminder } from '../../lib/notifications';
 import { useCommunity } from '../../lib/providers/CommunityProvider';
 import { useJourney } from '../../lib/providers/JourneyProvider';
 import { spacing, w1Spacing } from '../../lib/theme';
@@ -43,6 +42,7 @@ import {
   getFirstName,
   getGreeting,
   getMotivationalMessage,
+  getScheduleClassById,
   getWeekdayFromDate,
 } from '../../utils';
 
@@ -87,12 +87,12 @@ export function HomeScreen() {
     openSettings,
     unreadCount,
   } = useNotifications();
+  const { isReserved, reserveClass } = useReservations();
   const navigation = useNavigation<HomeNavigation>();
 
-  const [reservationStatus, setReservationStatus] =
-    useState<NextClassReservationStatus>(
-      NEXT_CLASS_SUMMARY.reservationStatus,
-    );
+  const [checkInPhase, setCheckInPhase] = useState<
+    'idle' | 'check_in' | 'checked_in'
+  >('idle');
   const [actionLoading, setActionLoading] = useState(false);
   const [xpEarnedLabel, setXpEarnedLabel] = useState<string | null>(null);
   const [weeklyClassesCompleted, setWeeklyClassesCompleted] = useState(
@@ -102,6 +102,25 @@ export function HomeScreen() {
   const [permissionMessage, setPermissionMessage] = useState<string | null>(
     null,
   );
+
+  const reservationStatus: NextClassReservationStatus = useMemo(() => {
+    if (checkInPhase === 'checked_in') {
+      return 'checked_in';
+    }
+    if (checkInPhase === 'check_in') {
+      return 'check_in';
+    }
+    if (isReserved(NEXT_CLASS_SUMMARY.id)) {
+      return 'reserved';
+    }
+    return 'available';
+  }, [checkInPhase, isReserved]);
+
+  useEffect(() => {
+    if (!isReserved(NEXT_CLASS_SUMMARY.id) && checkInPhase === 'check_in') {
+      setCheckInPhase('idle');
+    }
+  }, [checkInPhase, isReserved]);
 
   const showPermissionCard = permissionPromptStatus === 'unknown';
   const showBlockedCard = permissionPromptStatus === 'blocked';
@@ -194,20 +213,20 @@ export function HomeScreen() {
     setActionLoading(true);
     try {
       if (reservationStatus === 'available') {
-        await wait(500);
-        setReservationStatus('reserved');
+        const scheduleClass = getScheduleClassById(NEXT_CLASS_SUMMARY.id);
+        if (scheduleClass) {
+          await reserveClass(
+            scheduleClass,
+            new Date(NEXT_CLASS_SUMMARY.startsAt),
+          );
+        }
         AccessibilityInfo.announceForAccessibility?.(
           `Reserved ${NEXT_CLASS_SUMMARY.title}.`,
         );
         await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-        void scheduleClassReminder({
-          classId: NEXT_CLASS_SUMMARY.id,
-          classTitle: NEXT_CLASS_SUMMARY.title,
-          startsAt: new Date(NEXT_CLASS_SUMMARY.startsAt),
-        });
         if (NEXT_CLASS_SUMMARY.status === 'soon') {
           await wait(900);
-          setReservationStatus('check_in');
+          setCheckInPhase('check_in');
           AccessibilityInfo.announceForAccessibility?.(
             `Check in is now available for ${NEXT_CLASS_SUMMARY.title}.`,
           );
@@ -217,7 +236,7 @@ export function HomeScreen() {
 
       if (reservationStatus === 'check_in') {
         await wait(450);
-        setReservationStatus('checked_in');
+        setCheckInPhase('checked_in');
         setWeeklyClassesCompleted((current) =>
           Math.min(current + 1, HOME_USER_SUMMARY.weeklyClassGoal),
         );
