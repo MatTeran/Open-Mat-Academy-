@@ -8,7 +8,7 @@ interface CenterLogTabIconProps {
 }
 
 /**
- * Raised center ⊕ for the Log tab — My Gi W.1 bronze accent.
+ * Raised center ⊕ for the Log tab — tap opens Training Log; long-press adds.
  */
 export function CenterLogTabIcon({ focused }: CenterLogTabIconProps) {
   const { colors } = useAppTheme();
