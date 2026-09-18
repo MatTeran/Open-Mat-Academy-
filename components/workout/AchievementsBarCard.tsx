@@ -15,7 +15,7 @@ interface AchievementsBarCardProps {
   onPress: () => void;
 }
 
-const MEDAL_SIZE = 46;
+const MEDAL_SIZE = 56;
 
 /**
  * Compact horizontal achievements strip for the Progress tab —

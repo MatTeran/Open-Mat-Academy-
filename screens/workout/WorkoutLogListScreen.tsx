@@ -10,7 +10,6 @@ import {
   FadeIn,
   FloatingActionButton,
   LogSegmentControl,
-  ProgressInsightCard,
   Screen,
   Spacer,
   StreaksMiniCard,
@@ -105,16 +104,16 @@ export function WorkoutLogListScreen({ navigation }: Props) {
               onSeeMore={openJourney}
             />
 
-            <Spacer size="lg" />
-            <TrainingInsightsSection
-              insights={insights}
-              onLogTraining={createNewLog}
-            />
-
             <Spacer size="md" />
             <AchievementsBarCard
               badges={badges}
               onPress={openAchievements}
+            />
+
+            <Spacer size="lg" />
+            <TrainingInsightsSection
+              insights={insights}
+              onLogTraining={createNewLog}
             />
 
             <Spacer size="md" />
@@ -133,11 +132,6 @@ export function WorkoutLogListScreen({ navigation }: Props) {
                 />
               </View>
             </View>
-
-            <Spacer size="md" />
-            <ProgressInsightCard
-              sessionsToInsight={metrics.sessionsToInsight}
-            />
           </FadeIn>
         ) : workouts.length === 0 ? (
           <FadeIn delay={80}>
