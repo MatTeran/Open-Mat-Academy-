@@ -1,4 +1,3 @@
-import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import {
   Modal,
@@ -11,6 +10,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useAppTheme } from '../../../lib/providers/ThemeProvider';
 import { fontFamilies, spacing, w1Radii, w1Shadow } from '../../../lib/theme';
+import { QuickLogIcon } from './QuickLogIcons';
 
 export type QuickLogActionId =
   | 'logTraining'
@@ -28,31 +28,26 @@ const ACTIONS: Array<{
   id: QuickLogActionId;
   label: string;
   subtitle: string;
-  icon: keyof typeof Ionicons.glyphMap;
 }> = [
   {
     id: 'logTraining',
     label: 'Training',
     subtitle: 'Rounds, mat time, notes',
-    icon: 'barbell-outline',
   },
   {
     id: 'logTechnique',
     label: 'Technique',
     subtitle: 'What you learned',
-    icon: 'bulb-outline',
   },
   {
     id: 'logCompetition',
     label: 'Competition',
     subtitle: 'Matches and results',
-    icon: 'trophy-outline',
   },
   {
     id: 'addNote',
     label: 'Note',
     subtitle: 'Quick thought from the mat',
-    icon: 'create-outline',
   },
 ];
 
@@ -128,12 +123,14 @@ export function QuickLogSheet({
                     pressed && { backgroundColor: colors.goldMuted },
                   ]}
                 >
-                  <Ionicons
-                    name={action.icon}
-                    size={22}
-                    color={colors.goldAccent}
-                    style={styles.rowIcon}
-                  />
+                  <View
+                    style={[
+                      styles.iconWell,
+                      { backgroundColor: colors.goldMuted },
+                    ]}
+                  >
+                    <QuickLogIcon id={action.id} color={colors.goldAccent} />
+                  </View>
                   <View style={styles.copy}>
                     <Text style={[styles.rowTitle, { color: colors.text }]}>
                       {action.label}
@@ -215,18 +212,22 @@ const styles = StyleSheet.create({
   },
   divider: {
     height: StyleSheet.hairlineWidth,
-    marginLeft: spacing.md + 22 + spacing.sm,
+    marginLeft: spacing.md + 40 + spacing.sm,
   },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.sm,
     paddingHorizontal: spacing.md,
-    paddingVertical: 14,
-    minHeight: 58,
+    paddingVertical: 12,
+    minHeight: 64,
   },
-  rowIcon: {
-    width: 22,
+  iconWell: {
+    width: 40,
+    height: 40,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   copy: {
     flex: 1,
