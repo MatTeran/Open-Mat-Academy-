@@ -138,7 +138,7 @@ export function WeeklyProgressChart({
                 style={[styles.swatch, { backgroundColor: colors.goldAccent }]}
               />
               <Text variant="caption" style={{ color: colors.secondaryText }}>
-                Gi
+                🥋 Gi
               </Text>
             </View>
             <View style={styles.legendItem}>
