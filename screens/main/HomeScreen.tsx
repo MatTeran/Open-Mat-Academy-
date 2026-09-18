@@ -11,6 +11,7 @@ import { AccessibilityInfo, StyleSheet, View } from 'react-native';
 import {
   AcademyHero,
   AcademyPulseSection,
+  AchievementsBarCard,
   DashboardGrid,
   FadeIn,
   GreetingSection,
@@ -79,7 +80,7 @@ export function HomeScreen() {
   const { user } = useAuth();
   const { hub } = useProfile();
   const { seminars, announcements } = useCommunity();
-  const { profile, streak, awardXp } = useJourney();
+  const { profile, streak, awardXp, badges } = useJourney();
   const {
     permissionPromptStatus,
     enableNotifications,
@@ -358,6 +359,17 @@ export function HomeScreen() {
               currentStreak={journeySummary.currentStreak}
               weekDays={streak.weekDays}
               onPress={() => navigation.navigate('Journey')}
+            />
+          </View>
+        </FadeIn>
+
+        <Spacer size="md" />
+
+        <FadeIn delay={140}>
+          <View style={styles.inset}>
+            <AchievementsBarCard
+              badges={badges}
+              onPress={() => navigation.navigate('AchievementGallery')}
             />
           </View>
         </FadeIn>
